@@ -114,6 +114,9 @@ $(document).ready(function () {
     /* Активация чекбоксов */
     $('.ui.checkbox').length && $('.ui.checkbox').checkbox();
 
+    /* Активация Dropdown */
+    $('.ui.dropdown').length && $('.ui.dropdown').dropdown();
+
     activeFormSubmit();
     activateDataAction();
     activateCustomPopup();

@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => 'Авторизация :: ' . config('app.name')
+    'title' => 'Регистрация :: ' . config('app.name')
 ])
 
 @section('content')
@@ -10,13 +10,20 @@
 
                     <h2 class="ui teal header">
                         <div class="content">
-                            Авторизация
+                            Регистрация
                         </div>
                     </h2>
 
                     @include('partials.error-message')
 
-                    <form class="ui form" action="/login" method="POST">
+                    <form class="ui form" action="/register" method="POST">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <input type="text" name="name" placeholder="Имя" value="{{ old('name') }}">
+                                <i class="user icon"></i>
+                            </div>
+                        </div>
+
                         <div class="field">
                             <div class="ui left icon input">
                                 <input type="text" name="email" placeholder="Email" value="{{ old('email') }}">
@@ -32,22 +39,20 @@
                         </div>
 
                         <div class="field">
-                            <div class="ui checkbox">
-                                <input name="remember" type="checkbox" tabindex="0" class="hidden">
-                                <label>Запомнить меня</label>
+                            <div class="ui left icon input">
+                                <input type="password" name="password_confirmation" placeholder="Подтвердите пароль">
+                                <i class="lock icon"></i>
                             </div>
                         </div>
 
                         {{ csrf_field() }}
 
                         <button class="ui basic large button" type="submit">
-                            Войти <i class="sign in icon"></i>
+                            <i class="user icon"></i> Зарегистрироваться
                         </button>
                     </form>
                     <div class="ui message">
-                        <i class="user grey icon"></i><a href="/register">Зарегистрироваться?</a>
-                        <br>
-                        <i class="unlock grey icon"></i><a href="/password/email">Забыли пароль?</a>
+                        <i class="key grey icon"></i><a href="/login">Уже зарегистрированы?</a>
                     </div>
                 </div>
             </div>

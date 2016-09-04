@@ -21,9 +21,27 @@
             <i class="dashboard icon"></i>
             Dashboard
         </a>
-        <div class="right menu">
-            <a href="/logout" class="ui item">Logout</a>
-        </div>
+
+        @if(!Auth::guest())
+            <div class="right menu">
+                <div class="ui top right dropdown item">
+                    <strong>{{ Auth::user()->name }}</strong>
+                    <i class="dropdown icon menu-avatar-dropdown"></i>
+
+                    <div class="menu">
+                        <a href="/logout"
+                           class="item"
+                           onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                        >
+                            Logout
+                        </a>
+                        <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        @endif
     </div>
 
     <div class="ui hidden divider"></div>
