@@ -1,0 +1,15 @@
+.hide {
+    display: none !important;
+}
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.item .extra a {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.item .extra a:hover {
+    color: rgba(0, 0, 0, 0.8);
+}

@@ -1,0 +1,8 @@
+/node_modules
+/vendor
+/.idea
+.env
+/_ide_helper.php
+/composer.lock
+public/assets/b/
+/.phpstorm.meta.php
