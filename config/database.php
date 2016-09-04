@@ -114,6 +114,9 @@ return [
             'password' => env('REDIS_PASSWORD', null),
             'port' => env('REDIS_PORT', 6379),
             'database' => 0,
+            'path' => env('REDIS_PATH', '/tmp/redis.sock'),
+            'scheme' => env('REDIS_SCHEME', 'tcp'),
+            'prefix' => env('REDIS_PREFIX', 'laravel'),
         ],
 
     ],
