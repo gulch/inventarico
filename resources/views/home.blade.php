@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Welcome to INVENTARICO</title>
+        <title>INVENTARICO</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.2.4/semantic.css">
@@ -19,7 +19,7 @@
                                 INVENTARICO
                             </div>
                             <p>
-                                <a href="/register">Sign Up</a>
+                                <a href="/register">{{ trans('app.do_register') }}</a>
                             </p>
                         </div>
                     </div>

@@ -1,16 +1,16 @@
 @extends('template', [
-    'title' => 'Авторизация :: ' . config('app.name')
+    'title' => trans('app.authorization').' :: '.config('app.name')
 ])
 
 @section('content')
     <div class="ui container">
         <div class="ui centered stackable grid">
             <div class="six wide column">
-                <div class="ui left aligned segment">
+                <div class="ui left aligned raised segment">
 
                     <h2 class="ui teal header">
                         <div class="content">
-                            Авторизация
+                            {{ trans('app.authorization') }}
                         </div>
                     </h2>
 
@@ -26,7 +26,7 @@
 
                         <div class="field">
                             <div class="ui left icon input">
-                                <input type="password" name="password" placeholder="Пароль">
+                                <input type="password" name="password" placeholder="{{ trans('app.password') }}">
                                 <i class="lock icon"></i>
                             </div>
                         </div>
@@ -34,22 +34,24 @@
                         <div class="field">
                             <div class="ui checkbox">
                                 <input name="remember" type="checkbox" tabindex="0" class="hidden">
-                                <label>Запомнить меня</label>
+                                <label>{{ trans('app.remember_me') }}</label>
                             </div>
                         </div>
 
                         {{ csrf_field() }}
 
                         <button class="ui basic large button" type="submit">
-                            Войти <i class="sign in icon"></i>
+                            {{ trans('app.do_login') }} <i class="sign in icon"></i>
                         </button>
                     </form>
-                    <div class="ui message">
-                        <i class="user grey icon"></i><a href="/register">Зарегистрироваться?</a>
-                        <br>
-                        <i class="unlock grey icon"></i><a href="/password/email">Забыли пароль?</a>
-                    </div>
                 </div>
+
+                <div class="ui message">
+                    <i class="user grey icon"></i><a href="/register">{{ trans('app.do_register') }}?</a>
+                    <br>
+                    <i class="unlock grey icon"></i><a href="/password/reset">{{ trans('app.q_forgot_password') }}</a>
+                </div>
+
             </div>
         </div>
     </div>

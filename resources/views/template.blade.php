@@ -17,12 +17,12 @@
         <a href="/" class="header item">
             <b>INVENTARICO</b>
         </a>
-        <a href="/dashboard" class="item">
-            <i class="dashboard icon"></i>
-            Dashboard
-        </a>
-
         @if(!Auth::guest())
+            <a href="/dashboard" class="item">
+                <i class="dashboard icon"></i>
+                {{ trans('app.dashboard') }}
+            </a>
+
             <div class="right menu">
                 <div class="ui top right dropdown item">
                     <strong>{{ Auth::user()->name }}</strong>
@@ -33,7 +33,7 @@
                            class="item"
                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
                         >
-                            Logout
+                            {{ trans('app.logout') }}
                         </a>
                         <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
                             {{ csrf_field() }}

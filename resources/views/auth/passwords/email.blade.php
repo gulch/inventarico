@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => 'Восстановление пароля :: ' . config('app.name')
+    'title' => trans('app.password_recovery').' :: '.config('app.name')
 ])
 
 @section('content')
@@ -10,7 +10,7 @@
 
                     <h2 class="ui teal header">
                         <div class="content">
-                            Восстановление пароля
+                            {{ trans('app.password_recovery') }}
                         </div>
                     </h2>
 
@@ -41,7 +41,7 @@
 
                         <button class="ui basic large button" type="submit">
                             <i class="undo icon"></i>
-                            Восстановить
+                            {{ trans('app.do_recovery') }}
                         </button>
                     </form>
                 </div>

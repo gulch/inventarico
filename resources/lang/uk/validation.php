@@ -112,8 +112,13 @@ return [
     |
     */
 
-    'attributes'           => [
-        //
+    'attributes' => [
+        'title' => 'Назва',
+        'description' => 'Опис',
+        'name' => 'Ім\'я',
+        'email' => 'Email',
+        'password' => 'Пароль',
+        'g-recaptcha-response' => 'капча',
     ],
 
 ];
