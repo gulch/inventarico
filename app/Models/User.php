@@ -28,4 +28,26 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /* -------------- Relations -------------- */
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'id__User');
+    }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class, 'id__User');
+    }
+
+    public function photos()
+    {
+        return $this->hasMany(Photo::class, 'id__User');
+    }
+
+    public function operationTypes()
+    {
+        return $this->hasMany(OperationType::class, 'id__User');
+    }
 }
