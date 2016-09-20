@@ -17,7 +17,7 @@
         <a href="/" class="header item">
             <b>INVENTARICO</b>
         </a>
-        @if(!Auth::guest())
+        @if(!auth()->guest())
             <a href="/dashboard" class="item">
                 <i class="dashboard icon"></i>
                 {{ trans('app.dashboard') }}
@@ -25,7 +25,7 @@
 
             <div class="right menu">
                 <div class="ui top right dropdown item">
-                    <strong>{{ Auth::user()->name }}</strong>
+                    <strong>{{ auth()->user()->name }}</strong>
                     <i class="dropdown icon menu-avatar-dropdown"></i>
 
                     <div class="menu">
@@ -45,6 +45,7 @@
     </div>
 
     <div class="ui hidden divider"></div>
+
     <div class="ui container">
         @yield('content')
     </div>

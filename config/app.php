@@ -156,7 +156,7 @@ return [
         Illuminate\Pagination\PaginationServiceProvider::class,
         Illuminate\Pipeline\PipelineServiceProvider::class,
         Illuminate\Queue\QueueServiceProvider::class,
-        Illuminate\Redis\RedisServiceProvider::class,
+        /*Illuminate\Redis\RedisServiceProvider::class,*/
         Illuminate\Auth\Passwords\PasswordResetServiceProvider::class,
         Illuminate\Session\SessionServiceProvider::class,
         Illuminate\Translation\TranslationServiceProvider::class,
@@ -200,7 +200,7 @@ return [
 
         //'App' => Illuminate\Support\Facades\App::class,
         //'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        'Auth' => Illuminate\Support\Facades\Auth::class,
+        // 'Auth' => Illuminate\Support\Facades\Auth::class,
         //'Blade' => Illuminate\Support\Facades\Blade::class,
         //'Cache' => Illuminate\Support\Facades\Cache::class,
         //'Config' => Illuminate\Support\Facades\Config::class,
