@@ -2,6 +2,12 @@
 
 return [
     'dashboard' => 'Головна панель',
+    'categories' => 'Категорії',
+    'items' => 'Предмети',
+    'operations' => 'Операції',
+    'photos' => 'Фотографії',
+    'operation_types' => 'Типи операцій',
+
     'logout' => 'Вийти',
     'registration' => 'Реєстрація',
     'authorization' => 'Авторизація',

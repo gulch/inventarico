@@ -19,9 +19,9 @@
                                 INVENTARICO
                             </div>
                             <p>
-                                <a href="/register">{{ trans('app.do_register') }}</a>
-                                |
                                 <a href="/login">{{ trans('app.do_login') }}</a>
+                                |
+                                <a href="/register">{{ trans('app.do_register') }}</a>
                             </p>
                         </div>
                     </div>

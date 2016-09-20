@@ -23,6 +23,31 @@
                 {{ trans('app.dashboard') }}
             </a>
 
+            <a href="/categories" class="item">
+                <i class="folder outline icon"></i>
+                {{ trans('app.categories') }}
+            </a>
+
+            <a href="/items" class="item">
+                <i class="gift icon"></i>
+                {{ trans('app.items') }}
+            </a>
+
+            <a href="/operations" class="item">
+                <i class="file text outline icon"></i>
+                {{ trans('app.operations') }}
+            </a>
+
+            <a href="/operation-types" class="item">
+                <i class="cubes icon"></i>
+                {{ trans('app.operation_types') }}
+            </a>
+
+            <a href="/photos" class="item">
+                <i class="photo icon"></i>
+                {{ trans('app.photos') }}
+            </a>
+
             <div class="right menu">
                 <div class="ui top right dropdown item">
                     <strong>{{ auth()->user()->name }}</strong>
