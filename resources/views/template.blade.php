@@ -76,6 +76,7 @@
         @yield('content')
     </div>
 
+    <script defer src="/assets/vendor/lazysizes/2.0.2/lazysizes.min.js"></script>
     <script defer src="/assets/vendor/semantic/2.2.4/semantic.js"></script>
     <script defer src="/assets/js/app.js"></script>
 </body>

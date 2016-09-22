@@ -15,13 +15,11 @@ class CreateOperationTable extends Migration
     {
         Schema::create('Operation', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('condition', ['NEW', 'USED'])->default('NEW');;
+            $table->enum('condition', ['NEW', 'USED'])->default('NEW');
             $table->float('price')->default(0);
             $table->text('note')->nullable();
             $table->integer('id__OperationType')->unsigned();
             $table->timestamps();
-
-            /*$table->foreign('id__OperationType')->references('id')->on('OperationType')->onDelete('cascade');*/
         });
     }
 

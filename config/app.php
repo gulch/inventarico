@@ -238,4 +238,9 @@ return [
 
     ],
 
+    'assets_img_path' => '/assets/img',
+    'thumb_image_upload_path' => '/uploads/img/thumb',
+    'photo_image_upload_path' => '/uploads/img/photo',
+    'original_image_upload_path' => '/uploads/img/original',
+
 ];

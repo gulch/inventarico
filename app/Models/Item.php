@@ -10,8 +10,8 @@ class Item extends BaseModel
         'title',
         'description',
         'overview',
-        'id__User',
-        'id__Photo'
+        'id__Photo',
+        'id__Category'
     ];
 
     /* -------------- Relations -------------- */

@@ -17,6 +17,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->patch('photos/{id}', 'PhotosController@update');
     $router->delete('photos/{id}', 'PhotosController@destroy');
     $router->post('photos/upload', 'PhotosController@upload');
+    $router->post('photos/upload/getid', 'PhotosController@uploadAndCreate');
+    $router->post('photos/all/list', 'PhotosController@getAllImagesList');
 
     /* Categories */
     $router->get('categories', 'CategoriesController@index');
@@ -33,4 +35,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('operation-types', 'OperationTypesController@store');
     $router->patch('operation-types/{id}', 'OperationTypesController@update');
     $router->delete('operation-types/{id}', 'OperationTypesController@destroy');
+
+    /* Items */
+    $router->get('items', 'ItemsController@index');
+    $router->get('items/create', 'ItemsController@create');
+    $router->get('items/{id}/edit', 'ItemsController@edit');
+    $router->post('items', 'ItemsController@store');
+    $router->patch('items/{id}', 'ItemsController@update');
+    $router->delete('items/{id}', 'ItemsController@destroy');
 });

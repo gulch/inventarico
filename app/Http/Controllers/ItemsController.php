@@ -3,33 +3,38 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
-use App\Models\OperationType;
+use App\Models\{Item, Category};
 
-class OperationTypesController extends Controller
+class ItemsController extends Controller
 {
     public function index()
     {
         $data = [
-            'operationTypes' => OperationType::paginate(24)
+            'items' => Item::ofCurrentUser()->paginate(24)
         ];
 
-        return view('operation-types.index', $data);
+        return view('items.index', $data);
     }
 
     public function create()
     {
-        return view('operation-types.create');
+        $data = [
+            'categories' => $this->getCategoriesForDropdown()
+        ];
+
+        return view('items.create', $data);
     }
 
     public function edit($id)
     {
-        $operationTypes = OperationTypes::findOrFail($id);
-        $this->ownerAccess($operationTypes);
+        $item = Item::findOrFail($id);
+        $this->ownerAccess($item);
         $data = [
-            'operationTypes' => $operationTypes
+            'item' => $item,
+            'categories' => $this->getCategoriesForDropdown()
         ];
 
-        return view('operation-types.edit', $data);
+        return view('items.edit', $data);
     }
 
     public function store()
@@ -44,13 +49,13 @@ class OperationTypesController extends Controller
 
     public function destroy($id)
     {
-        $operationType = OperationType::find($id);
-        $this->ownerAccess($operationType);
+        $item = Item::find($id);
+        $this->ownerAccess($item);
 
-        if (is_null($operationType)) {
+        if (is_null($item)) {
             return json_encode(['message' => trans('app.item_not_found')]);
         } else {
-            $operationType->delete();
+            $item->delete();
         }
 
         return json_encode(['success' => 'OK']);
@@ -65,21 +70,21 @@ class OperationTypesController extends Controller
         $validation = $this->validateData();
 
         if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>'.trans('app.saved');
+            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/operation-types');
+                $validation['redirect'] = Session::pull('url.intended', '/categories');
             }
 
             if ($id) {
-                $operationType = OperationType::findOrFail($id);
-                $this->ownerAccess($operationType);
+                $item = Item::findOrFail($id);
+                $this->ownerAccess($item);
             } else {
-                $operationType = new OperationType;
-                $operationType->setUserId();
-                $operationType->save();
+                $item = new Item;
+                $item->setUserId();
+                $item->save();
             }
-            $operationType->update($this->request->all());
-            $validation['id'] = $operationType->id;
+            $item->update($this->request->all());
+            $validation['id'] = $item->id;
         }
 
         return $this->jsonResponse($validation);
@@ -89,7 +94,10 @@ class OperationTypesController extends Controller
     {
         $data = [];
 
-        $v = $this->getValidationFactory()->make($this->request->all(), ['title' => 'required']);
+        $v = $this->getValidationFactory()->make($this->request->all(), [
+            'title' => 'required',
+            'id__Category' => 'required|numeric|min:1',
+        ]);
 
         if ($v->fails()) {
             $data['success'] = 0;
@@ -104,5 +112,12 @@ class OperationTypesController extends Controller
         }
 
         return $data;
+    }
+
+    private function getCategoriesForDropdown()
+    {
+        $categories = ['0' => '---'] + Category::ofCurrentUser()->pluck('title', 'id')->all();
+
+        return $categories;
     }
 }

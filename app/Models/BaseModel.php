@@ -17,4 +17,9 @@ abstract class BaseModel extends Eloquent
         }
         $this->id__User = $id;
     }
+
+    public function scopeOfCurrentUser($query)
+    {
+        return $query = $query->where('id__User', auth()->user()->id);
+    }
 }

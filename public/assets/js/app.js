@@ -1,26 +1,3 @@
-function activeFormSubmit() {
-    $('.button.form-submit-btn').click(function () {
-        var form = $(this).closest('form');
-        form.append("<div class=\"ui active inverted dimmer\"><div class=\"ui loader\"></div></div>");
-        $.post(form.attr('action'), form.serialize(), function (result) {
-            if (result.success == 1) {
-                form[0].outerHTML = '<div class="ui message">' +
-                    '<h2 class="ui icon green header">' +
-                    '<i class="fi-check icon"></i>' +
-                    '<div class="content">Успешно!' +
-                    '<div class="sub header">' + result.message + '</div>' +
-                    '</div>' +
-                    '</h2>' +
-                    '</div>';
-            } else {
-                form.find('.message').html(result.message).removeClass('hide');
-            }
-
-            form.find('.dimmer').remove();
-        }, "json");
-    });
-}
-
 function activateDataAction()
 {
     $('span[data-action], a[data-action], div[data-action]').on('click', function () {
@@ -45,12 +22,6 @@ function activateDataAction()
                         switch (action_name) {
                             case 'remove':
                                 segment.remove();
-                                break;
-                            case 'publish':
-                                elem[0].outerHTML = '<i class="check icon"></i>Опубликовано';
-                                break;
-                            case 'unpublish':
-                                elem[0].outerHTML = '<i class="check icon"></i>Снято с публикации';
                                 break;
                         }
                     }
@@ -117,7 +88,6 @@ $(document).ready(function () {
     /* Активация Dropdown */
     $('.ui.dropdown').length && $('.ui.dropdown').dropdown();
 
-    activeFormSubmit();
     activateDataAction();
     activateCustomPopup();
 });

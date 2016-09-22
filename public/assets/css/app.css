@@ -13,3 +13,33 @@
 .item .extra a:hover {
     color: rgba(0, 0, 0, 0.8);
 }
+
+/* Pagination styles --START-- */
+.pagination {
+    padding: 0px;
+}
+
+.pagination li {
+    display: inline-block;
+    min-width: 40px;
+    min-height: 35px;
+    line-height: 36px;
+    font-size: 22px;
+    margin: 1px;
+    text-align: center;
+    vertical-align: middle;
+    color: gray;
+}
+
+.pagination li a {
+    padding: 8px;
+    line-height: 36px;
+}
+
+.pagination li:not(.active):not(.disabled){
+    border: 1px solid rgba(34,36,38,.15);
+    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+    border-radius: 4px;
+    color: black;
+}
+/* Pagination styles --END-- */

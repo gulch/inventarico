@@ -4,18 +4,18 @@
 
     <h1 class="ui header">
         <div class="content">
-            {{ trans('app.operation_types') }}
-            <div class="sub header">{{ trans('app.operation_types_list') }}</div>
+            {{ trans('app.items') }}
+            <div class="sub header">{{ trans('app.items_list') }}</div>
         </div>
     </h1>
 
     <div class="ui stackable menu">
         <div class="item">
-            <i class="cubes large icon"></i>
+            <i class="gift large icon"></i>
         </div>
 
         <div class="right menu">
-            <a href="/operation-types/create" class="item">
+            <a href="/items/create" class="item">
                 <i class="add icon"></i>
                 {{ trans('app.do_add') }}
             </a>
@@ -24,27 +24,37 @@
 
     <div class="ui clearing divider"></div>
 
-    @if (!is_null($operationTypes))
-        <div class="ui relaxed items">
-            @foreach($operationTypes as $operationType)
+    @if (!is_null($items))
+        <div class="ui relaxed divided items">
+            @foreach($items as $item)
                 <div class="item"
-                     data-id="{{ $operationType->id }}"
+                     data-id="{{ $item->id }}"
                      data-action-element="1"
                 >
+                    <div class="image">
+                        @if($item->photo)
+                            <img src="{{ config('app.thumb_image_upload_path') . $item->photo->path }}">
+                        @else
+                            <img src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg">
+                        @endif
+                    </div>
+
                     <div class="content">
-                        <div class="ui segment raised">
+                        <div class="ui basic segment">
 
                             <div class="ui large header">
-                                {{ $operationType->title }}
+                                {{ $item->title }}
                             </div>
 
                             <div class="meta">
-                                {{ trans('app.created_at') }}: {{ $operationType->created_at->format('d.m.Y H:i:s') }}
+                                {{ trans('app.created_at') }}: {{ $item->created_at->format('d.m.Y H:i:s') }}
+                                <br>
+                                {{ trans('app.updated_at') }}: {{ $item->updated_at->format('d.m.Y H:i:s') }}
                             </div>
 
                             <div class="extra">
 
-                                <a href="/categories/{{ $operationType->id }}/edit">
+                                <a href="/items/{{ $item->id }}/edit">
                                     <i class="edit icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
@@ -54,7 +64,7 @@
                                     <div class="ui huge header center aligned">{{ trans('app.q_delete') }}</div>
                                     <span class="ui negative button"
                                           data-action-name="remove"
-                                          data-action="/operation-types/{{ $operationType->id }}"
+                                          data-action="/items/{{ $item->id }}"
                                           data-method="DELETE">{{ trans('app.yes') }}
                                         </span>
                                     <span class="ui button">{{ trans('app.no') }}</span>
@@ -71,9 +81,10 @@
 
         <div class="ui middle aligned stackable centered grid container">
             <div class="ui row">
-                {!! $operationTypes->render() !!}
+                {!! $items->render() !!}
             </div>
         </div>
+
     @else
         @include('partials.nothing-found')
     @endif

@@ -18,8 +18,6 @@ class CreatePhotoTable extends Migration
             $table->text('description')->nullable();
             $table->integer('id__User')->unsigned();
             $table->timestamps();
-
-            /*$table->foreign('id__User')->references('id')->on('User')->onDelete('cascade');*/
         });
     }
 

@@ -9,6 +9,7 @@ return [
     'operation_types' => 'Типи операцій',
     'categories_list' => 'Список категорій',
     'operation_types_list' => 'Список типів операцій',
+    'items_list' => 'Список предметів',
 
     'logout' => 'Вийти',
     'registration' => 'Реєстрація',
@@ -22,6 +23,13 @@ return [
     'yes' => 'Так',
     'no' => 'Ні',
     'created_at' => 'Створено',
+    'updated_at' => 'Відредаговано',
+    'photo' => 'Фото',
+    'description' => 'Опис',
+    'overview' => 'Рецензія',
+    'category' => 'Категорія',
+    'wait' => 'Почекайте',
+    'or' => 'або',
 
     'do_set' => 'Встановити',
     'do_recovery' => 'Відновити',
@@ -33,12 +41,14 @@ return [
     'do_add' => 'Додати',
     'do_edit' => 'Редагувати',
     'do_remove' => 'Видалити',
+    'do_choose_image' => 'Обрати зображення',
 
     'editing' => 'Редагування',
     'creating' => 'Створення',
 
     'creating_new_category' => 'Створення нової категорії',
     'creating_new_operation_type' => 'Створення нового типу операції',
+    'creating_new_item' => 'Створення нового предмету',
 
     'q_forgot_password' => 'Забули пароль?',
     'q_registered_already' => 'Вже зареєстровані?',
@@ -51,6 +61,9 @@ return [
     'timeout_error_message' => 'Не вдалося виконати дію. Можливо немає доступу до інтернету.',
     'saved' => 'Збережено',
     'item_not_found' => 'Запис не знайдено',
+    'drag_image_here_or_click' => 'Перетягніть сюди зображення або клікніть тут',
+    'choose_from_exists' => 'Оберіть з наявних',
+    'can_not_delete_image' => 'Не вдалось видалити зображення',
 
 
     /*'' => '',*/

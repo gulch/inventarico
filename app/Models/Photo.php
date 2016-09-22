@@ -9,6 +9,4 @@ class Photo extends BaseModel
     protected $fillable = [
         'description'
     ];
-
-
 }

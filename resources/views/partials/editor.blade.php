@@ -15,17 +15,14 @@
 <link href="/assets/vendor/froala/2.3.4/css/plugins/image.css" rel="stylesheet" type="text/css">
 
 {{-- Include Code Mirror CSS --}}
-<link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.css"
-      rel="stylesheet"
-      type="text/css"
->
+<link href="/assets/vendor/codemirror/5.3.0/codemirror.min.css" rel="stylesheet" type="text/css">
 
 {{-- Froala JS --}}
 <script src="/assets/vendor/froala/2.3.4/js/froala_editor.min.js"></script>
 
 {{-- Include Code Mirror JS --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/codemirror.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+<script src="/assets/vendor/codemirror/5.3.0/codemirror.min.js"></script>
+<script src="/assets/vendor/codemirror/5.3.0/mode/xml/xml.min.js"></script>
 
 
 {{-- Froala Plugins JS --}}

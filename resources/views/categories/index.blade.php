@@ -66,6 +66,14 @@
                 </div>
             @endforeach
         </div>
+
+        <div class="ui hidden divider"></div>
+
+        <div class="ui middle aligned stackable centered grid container">
+            <div class="ui row">
+                {!! $categories->render() !!}
+            </div>
+        </div>
     @else
         @include('partials.nothing-found')
     @endif

@@ -19,11 +19,9 @@ class CreateItemTable extends Migration
             $table->text('description')->nullable();
             $table->text('overview')->nullable();
             $table->integer('id__User')->unsigned();
-            $table->integer('id__Photo')->unsigned();
+            $table->integer('id__Photo')->unsigned()->default(0);
+            $table->integer('id__Category')->unsigned();
             $table->timestamps();
-
-            /*$table->foreign('id__User')->references('id')->on('User')->onDelete('cascade');
-            $table->foreign('id__Photo')->references('id')->on('Photo')->onDelete('cascade');*/
         });
     }
 

@@ -10,7 +10,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $data = [
-            'categories' => Category::paginate(10)
+            'categories' => Category::paginate(24)
         ];
 
         return view('categories.index', $data);
@@ -23,8 +23,10 @@ class CategoriesController extends Controller
 
     public function edit($id)
     {
+        $category = Category::findOrFail($id);
+        $this->ownerAccess($category);
         $data = [
-            'category' => Category::findOrFail($id)
+            'category' => $category
         ];
 
         return view('categories.edit', $data);
