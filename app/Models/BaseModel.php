@@ -9,4 +9,12 @@ abstract class BaseModel extends Eloquent
     {
         return (new static)->getTable();
     }
+
+    public function setUserId($id = null)
+    {
+        if (null === $id) {
+            $id = auth()->user()->id;
+        }
+        $this->id__User = $id;
+    }
 }

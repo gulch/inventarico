@@ -23,4 +23,11 @@ class Controller extends BaseController
     {
         return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
+
+    protected function ownerAccess($item)
+    {
+        if (auth()->user()->id != $item->id__User) {
+            abort(403, 'Forbidden');
+        }
+    }
 }

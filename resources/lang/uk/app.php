@@ -8,6 +8,7 @@ return [
     'photos' => 'Фотографії',
     'operation_types' => 'Типи операцій',
     'categories_list' => 'Список категорій',
+    'operation_types_list' => 'Список типів операцій',
 
     'logout' => 'Вийти',
     'registration' => 'Реєстрація',
@@ -37,6 +38,7 @@ return [
     'creating' => 'Створення',
 
     'creating_new_category' => 'Створення нової категорії',
+    'creating_new_operation_type' => 'Створення нового типу операції',
 
     'q_forgot_password' => 'Забули пароль?',
     'q_registered_already' => 'Вже зареєстровані?',

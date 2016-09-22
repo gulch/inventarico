@@ -2,7 +2,7 @@
 
 @section('content')
     <h1 class="ui header">
-        <i class="tag icon"></i>
+        <i class="folder outline icon"></i>
         {{ trans('app.creating_new_category') }}
     </h1>
 

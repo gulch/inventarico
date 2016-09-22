@@ -4,18 +4,18 @@
 
     <h1 class="ui header">
         <div class="content">
-            {{ trans('app.categories') }}
-            <div class="sub header">{{ trans('app.categories_list') }}</div>
+            {{ trans('app.operation_types') }}
+            <div class="sub header">{{ trans('app.operation_types_list') }}</div>
         </div>
     </h1>
 
     <div class="ui stackable menu">
         <div class="item">
-            <i class="folder outline large icon"></i>
+            <i class="cubes large icon"></i>
         </div>
 
         <div class="right menu">
-            <a href="/categories/create" class="item">
+            <a href="/operation-types/create" class="item">
                 <i class="add icon"></i>
                 {{ trans('app.do_add') }}
             </a>
@@ -24,27 +24,27 @@
 
     <div class="ui clearing divider"></div>
 
-    @if (!is_null($categories))
+    @if (!is_null($operationTypes))
         <div class="ui relaxed items">
-            @foreach($categories as $category)
+            @foreach($operationTypes as $operationType)
                 <div class="item"
-                     data-id="{{ $category->id }}"
+                     data-id="{{ $operationType->id }}"
                      data-action-element="1"
                 >
                     <div class="content">
                         <div class="ui segment raised">
 
                             <div class="ui large header">
-                                {{ $category->title }}
+                                {{ $operationType->title }}
                             </div>
 
                             <div class="meta">
-                                {{ trans('app.created_at') }}: {{ $category->created_at->format('d.m.Y H:i:s') }}
+                                {{ trans('app.created_at') }}: {{ $operationType->created_at->format('d.m.Y H:i:s') }}
                             </div>
 
                             <div class="extra">
 
-                                <a href="/categories/{{ $category->id }}/edit">
+                                <a href="/categories/{{ $operationType->id }}/edit">
                                     <i class="edit icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
@@ -54,7 +54,7 @@
                                     <div class="ui huge header center aligned">{{ trans('app.q_delete') }}</div>
                                     <span class="ui negative button"
                                           data-action-name="remove"
-                                          data-action="/categories/{{ $category->id }}"
+                                          data-action="/operation-types/{{ $operationType->id }}"
                                           data-method="DELETE">{{ trans('app.yes') }}
                                         </span>
                                     <span class="ui button">{{ trans('app.no') }}</span>

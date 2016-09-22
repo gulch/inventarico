@@ -3,31 +3,31 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Session;
-use App\Models\Category;
+use App\Models\OperationType;
 
-class CategoriesController extends Controller
+class OperationTypesController extends Controller
 {
     public function index()
     {
         $data = [
-            'categories' => Category::paginate(10)
+            'operationTypes' => OperationType::paginate(10)
         ];
 
-        return view('categories.index', $data);
+        return view('operation-types.index', $data);
     }
 
     public function create()
     {
-        return view('categories.create');
+        return view('operation-types.create');
     }
 
     public function edit($id)
     {
         $data = [
-            'category' => Category::findOrFail($id)
+            'operationTypes' => OperationType::findOrFail($id)
         ];
 
-        return view('categories.edit', $data);
+        return view('operation-types.edit', $data);
     }
 
     public function store()
@@ -42,13 +42,13 @@ class CategoriesController extends Controller
 
     public function destroy($id)
     {
-        $category = Category::find($id);
-        $this->ownerAccess($category);
+        $operationType = OperationType::find($id);
+        $this->ownerAccess($operationType);
 
-        if (is_null($category)) {
+        if (is_null($operationType)) {
             return json_encode(['message' => trans('app.item_not_found')]);
         } else {
-            $category->delete();
+            $operationType->delete();
         }
 
         return json_encode(['success' => 'OK']);
@@ -65,19 +65,19 @@ class CategoriesController extends Controller
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>'.trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/categories');
+                $validation['redirect'] = Session::pull('url.intended', '/operation-types');
             }
 
             if ($id) {
-                $category = Category::findOrFail($id);
-                $this->ownerAccess($category);
+                $operationType = OperationType::findOrFail($id);
+                $this->ownerAccess($operationType);
             } else {
-                $category = new Category;
-                $category->setUserId();
-                $category->save();
+                $operationType = new OperationType;
+                $operationType->setUserId();
+                $operationType->save();
             }
-            $category->update($this->request->all());
-            $validation['id'] = $category->id;
+            $operationType->update($this->request->all());
+            $validation['id'] = $operationType->id;
         }
 
         return $this->jsonResponse($validation);

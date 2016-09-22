@@ -2,7 +2,7 @@
 
 @section('content')
     <h1 class="ui header">
-        <i class="tag icon"></i>
+        <i class="folder outline icon"></i>
         {{ trans('app.editing') }} &laquo;{{ $category->title }}&raquo;
     </h1>
 

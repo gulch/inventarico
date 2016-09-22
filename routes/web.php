@@ -25,4 +25,12 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('categories', 'CategoriesController@store');
     $router->patch('categories/{id}', 'CategoriesController@update');
     $router->delete('categories/{id}', 'CategoriesController@destroy');
+
+    /* Operation Types */
+    $router->get('operation-types', 'OperationTypesController@index');
+    $router->get('operation-types/create', 'OperationTypesController@create');
+    $router->get('operation-types/{id}/edit', 'OperationTypesController@edit');
+    $router->post('operation-types', 'OperationTypesController@store');
+    $router->patch('operation-types/{id}', 'OperationTypesController@update');
+    $router->delete('operation-types/{id}', 'OperationTypesController@destroy');
 });
