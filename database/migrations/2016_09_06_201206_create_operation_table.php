@@ -15,9 +15,9 @@ class CreateOperationTable extends Migration
     {
         Schema::create('Operation', function (Blueprint $table) {
             $table->increments('id');
-            $table->enum('condition', ['NEW', 'USED']);
-            $table->float('price');
-            $table->text('note');
+            $table->enum('condition', ['NEW', 'USED'])->default('NEW');;
+            $table->float('price')->default(0);
+            $table->text('note')->nullable();
             $table->integer('id__OperationType')->unsigned();
             $table->timestamps();
 

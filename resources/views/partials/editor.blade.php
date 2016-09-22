@@ -45,14 +45,14 @@
 <script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_format.min.js"></script>
 <script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_style.min.js"></script>
 
-{{-- Russian Language --}}
-<script src="/assets/vendor/froala/2.3.4/js/languages/ru.js"></script>
+{{-- Language --}}
+<script src="/assets/vendor/froala/2.3.4/js/languages/{{ config('app.locale') }}.js"></script>
 
 <script>
     $(document).ready(function () {
         $('.wysiwyg-editor').froalaEditor({
-            language: 'ru',
-            imageUploadURL: '/{{ config('app.admin_segment_name') }}/image/upload',
+            language: '{{ config('app.locale') }}',
+            imageUploadURL: '/photos/upload',
 
             imageUploadParams: {
                 setup: 'editor'

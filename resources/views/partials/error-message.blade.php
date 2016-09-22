@@ -3,7 +3,7 @@
         <i class="warning sign icon"></i>
         <div class="content">
             <div class="header">
-                Возникли некоторые ошибки:
+                {{ trans('app.errors_happens') }}:
             </div>
             <ul class="list">
                 @foreach ($errors->all() as $error)
