@@ -13,7 +13,7 @@ class PhotosController extends Controller
             'photos' => Photo::ofCurrentUser()->paginate(24)
         ];
 
-        return view('photos.list', $data);
+        return view('photos.index', $data);
     }
 
     public function edit($id)

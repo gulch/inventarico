@@ -10,6 +10,7 @@ return [
     'categories_list' => 'Список категорій',
     'operation_types_list' => 'Список типів операцій',
     'items_list' => 'Список предметів',
+    'photos_list' => 'Список фотографій',
 
     'logout' => 'Вийти',
     'registration' => 'Реєстрація',
@@ -45,6 +46,7 @@ return [
     'do_remove' => 'Видалити',
     'do_choose_image' => 'Обрати зображення',
     'do_add_field' => 'Додати поле',
+    'do_cancel' => 'Скасувати',
 
     'editing' => 'Редагування',
     'creating' => 'Створення',
@@ -70,7 +72,8 @@ return [
     'can_not_move_image_to_folder_message' => 'Не вдалось перемістити зображення в папку. Перевірте права доступу до папок.',
     'incorrect_image_format' => 'Невірний формат зображення',
     'image_not_found' => 'Зображення не знайдено',
-
+    'enter_description_for_image' => 'Введіть опис (alt атрибут)',
+    'description_non_exists' => 'Немає опису',
 
 
     /*'' => '',*/
