@@ -23,6 +23,6 @@ class Item extends BaseModel
 
     public function operations()
     {
-        return $this->belongsToMany(Operation::class, 'Item_Operation', 'id__Item', 'id__Operation');
+        return $this->hasMany(Operation::class, 'id__User');
     }
 }

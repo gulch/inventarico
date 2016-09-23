@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasMany(Photo::class, 'id__User');
     }
 
+    public function operations()
+    {
+        return $this->hasMany(Operation::class, 'id__User');
+    }
+
     public function operationTypes()
     {
         return $this->hasMany(OperationType::class, 'id__User');

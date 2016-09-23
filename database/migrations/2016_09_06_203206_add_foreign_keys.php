@@ -29,11 +29,6 @@ class AddForeignKeys extends Migration
             $table->foreign('id__Photo')->references('id')->on('Photo')->onDelete('cascade');
             $table->foreign('id__Operation')->references('id')->on('Operation')->onDelete('cascade');
         });
-
-        Schema::table('Item_Operation', function (Blueprint $table) {
-            $table->foreign('id__Item')->references('id')->on('Item')->onDelete('cascade');
-            $table->foreign('id__Operation')->references('id')->on('Operation')->onDelete('cascade');
-        });
     }
 
     /**

@@ -1,3 +1,4 @@
+<div class="ui hidden divider"></div>
 <div class="field">
     <a id="save-button"
        data-content="{{ trans('app.save_tooltip') }}"

@@ -24,7 +24,7 @@
 
     <div class="ui clearing divider"></div>
 
-    @if (!is_null($items))
+    @if (sizeof($items))
         <div class="ui relaxed divided items">
             @foreach($items as $item)
                 <div class="item"
@@ -54,9 +54,14 @@
 
                             <div class="extra">
 
+                                <a href="/operations/create/{{ $item->id }}">
+                                    <i class="cubes icon"></i>{{ trans('app.do_add_operation') }}
+                                </a>
+
                                 <a href="/items/{{ $item->id }}/edit">
                                     <i class="edit icon"></i>{{ trans('app.do_edit') }}
                                 </a>
+
                                 <a data-popup="1">
                                     <i class="remove circle icon"></i>{{ trans('app.do_remove') }}
                                 </a>

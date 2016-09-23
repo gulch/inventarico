@@ -15,11 +15,16 @@ class CreateOperationTable extends Migration
     {
         Schema::create('Operation', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('id__OperationType')->unsigned();
+            $table->timestamp('operated_at')->nullable();
             $table->enum('condition', ['NEW', 'USED'])->default('NEW');
             $table->float('price')->default(0);
+            $table->enum('currency', ['UAH', 'USD', 'EUR'])->default('UAH');
             $table->text('note')->nullable();
-            $table->integer('id__OperationType')->unsigned();
+            $table->integer('id__User')->unsigned();
             $table->timestamps();
+
+            $table->foreign('id__User')->references('id')->on('User')->onDelete('cascade');
         });
     }
 

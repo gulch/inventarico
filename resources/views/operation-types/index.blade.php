@@ -24,7 +24,7 @@
 
     <div class="ui clearing divider"></div>
 
-    @if (!is_null($operationTypes))
+    @if (sizeof($operationTypes))
         <div class="ui relaxed items">
             @foreach($operationTypes as $operationType)
                 <div class="item"

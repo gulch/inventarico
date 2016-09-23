@@ -11,6 +11,7 @@ return [
     'operation_types_list' => 'Список типів операцій',
     'items_list' => 'Список предметів',
     'photos_list' => 'Список фотографій',
+    'operations_list' => 'Список операцій',
 
     'logout' => 'Вийти',
     'registration' => 'Реєстрація',
@@ -23,6 +24,7 @@ return [
     'title' => 'Назва',
     'yes' => 'Так',
     'no' => 'Ні',
+    'operated_date' => 'Дата операції',
     'created_at' => 'Створено',
     'updated_at' => 'Відредаговано',
     'overview' => 'Рецензія',
@@ -31,8 +33,20 @@ return [
     'value' => 'Значення',
     'overview' => 'Рецензія',
     'category' => 'Категорія',
+    'operation_type' => 'Тип операції',
+    'note' => 'Примітка',
+    'condition' => 'Стан',
+    'new' => 'Новий',
+    'used' => 'Вже був у користуванні',
+    'currency' => 'Валюта',
+    'price' => 'Ціна',
+    'usd' => 'долар',
+    'uah' => 'гривня',
+    'eur' => 'євро',
+
     'wait' => 'Почекайте',
     'or' => 'або',
+    'for' => 'для',
 
     'do_set' => 'Встановити',
     'do_recovery' => 'Відновити',
@@ -47,13 +61,16 @@ return [
     'do_choose_image' => 'Обрати зображення',
     'do_add_field' => 'Додати поле',
     'do_cancel' => 'Скасувати',
+    'do_add_operation' => 'Додати операцію',
 
     'editing' => 'Редагування',
     'creating' => 'Створення',
 
     'creating_new_category' => 'Створення нової категорії',
     'creating_new_operation_type' => 'Створення нового типу операції',
+    'creating_new_operation' => 'Створення нової операції',
     'creating_new_item' => 'Створення нового предмету',
+    'editing_operation_for' => 'Редагування операції для',
 
     'q_forgot_password' => 'Забули пароль?',
     'q_registered_already' => 'Вже зареєстровані?',
@@ -74,7 +91,8 @@ return [
     'image_not_found' => 'Зображення не знайдено',
     'enter_description_for_image' => 'Введіть опис (alt атрибут)',
     'description_non_exists' => 'Немає опису',
-
+    'id_of_item_not_exists' => 'Не задано ID предмету',
+    'item_non_exists' => 'Такого предмету не існує',
 
     /*'' => '',*/
 ];
