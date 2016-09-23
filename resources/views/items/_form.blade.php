@@ -15,6 +15,19 @@
     {!! Form::textarea('description', null, ['class' => 'wysiwyg-editor']) !!}
 </div>
 
+<div class="field" id="overview">
+    <h3 class="ui top attached header">
+        <i class="unordered list icon"></i>
+        {{ trans('app.overview') }}
+    </h3>
+
+    <div class="ui bottom attached segment">
+        @include('partials.overviews', [
+            'overviews' => isset($item) ? $item->overview : null
+        ])
+    </div>
+</div>
+
 <div class="field">
     {!! Form::label('id__Photo', trans('app.photo')) !!}
     @include('partials.image-upload-or-choose', [

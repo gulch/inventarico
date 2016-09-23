@@ -83,8 +83,13 @@ class ItemsController extends Controller
                 $item->setUserId();
                 $item->save();
             }
-            $item->update($this->request->all());
             $validation['id'] = $item->id;
+
+            $item_input = array_map('trim', $this->request->only('title', 'description', 'id__Photo', 'id__Category'));
+            $overview = $this->getOverview();
+            $item_input = array_merge($item_input, compact('overview'));
+
+            $item->update($item_input);
         }
 
         return $this->jsonResponse($validation);
@@ -119,5 +124,28 @@ class ItemsController extends Controller
         $categories = ['0' => '---'] + Category::ofCurrentUser()->pluck('title', 'id')->all();
 
         return $categories;
+    }
+
+    private function getOverview()
+    {
+        $title = $this->request->get('o_title');
+        $description = $this->request->get('o_description');
+        $value = $this->request->get('o_value');
+
+        $overview = [];
+        if ($count = sizeof($title)) {
+            for ($i = 0; $i < $count; ++$i) {
+                if ($value[$i] && $title[$i]) {
+                    $o = [];
+                    $o['title'] = trim($title[$i]);
+                    $o['description'] = trim($description[$i]);
+                    $o['value'] = trim($value[$i]);
+                    $o['order'] = $i + 1;
+                    $overview[] = $o;
+                }
+            }
+        }
+
+        return json_encode($overview, JSON_UNESCAPED_UNICODE);
     }
 }

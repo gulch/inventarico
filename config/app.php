@@ -242,5 +242,6 @@ return [
     'thumb_image_upload_path' => '/uploads/img/thumb',
     'photo_image_upload_path' => '/uploads/img/photo',
     'original_image_upload_path' => '/uploads/img/original',
+    'editor_image_upload_path' => '/uploads/img/editor',
 
 ];

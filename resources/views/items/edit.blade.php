@@ -7,7 +7,7 @@
     </h1>
 
     <div class="ui warning form segment">
-        {!! Form::model($tag, ['url' => '/items/'.$item->id, 'method' => 'PATCH']) !!}
+        {!! Form::model($item, ['url' => '/items/'.$item->id, 'method' => 'PATCH']) !!}
 
         @include('items._form')
 

@@ -1,8 +1,9 @@
-/node_modules
 /vendor
 /.idea
 .env
 /_ide_helper.php
 /composer.lock
-public/assets/b/
 /.phpstorm.meta.php
+/public/uploads/img/
+public/uploads/img/editor/
+resources/views/errors/

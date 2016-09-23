@@ -24,8 +24,10 @@ return [
     'no' => 'Ні',
     'created_at' => 'Створено',
     'updated_at' => 'Відредаговано',
+    'overview' => 'Рецензія',
     'photo' => 'Фото',
     'description' => 'Опис',
+    'value' => 'Значення',
     'overview' => 'Рецензія',
     'category' => 'Категорія',
     'wait' => 'Почекайте',
@@ -42,6 +44,7 @@ return [
     'do_edit' => 'Редагувати',
     'do_remove' => 'Видалити',
     'do_choose_image' => 'Обрати зображення',
+    'do_add_field' => 'Додати поле',
 
     'editing' => 'Редагування',
     'creating' => 'Створення',
@@ -64,6 +67,10 @@ return [
     'drag_image_here_or_click' => 'Перетягніть сюди зображення або клікніть тут',
     'choose_from_exists' => 'Оберіть з наявних',
     'can_not_delete_image' => 'Не вдалось видалити зображення',
+    'can_not_move_image_to_folder_message' => 'Не вдалось перемістити зображення в папку. Перевірте права доступу до папок.',
+    'incorrect_image_format' => 'Невірний формат зображення',
+    'image_not_found' => 'Зображення не знайдено',
+
 
 
     /*'' => '',*/
