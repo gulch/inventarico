@@ -23,10 +23,10 @@ class OperationTypesController extends Controller
 
     public function edit($id)
     {
-        $operationTypes = OperationTypes::findOrFail($id);
-        $this->ownerAccess($operationTypes);
+        $operationType = OperationType::findOrFail($id);
+        $this->ownerAccess($operationType);
         $data = [
-            'operationTypes' => $operationTypes
+            'operationType' => $operationType
         ];
 
         return view('operation-types.edit', $data);

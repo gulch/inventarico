@@ -40,6 +40,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->get('items', 'ItemsController@index');
     $router->get('items/create', 'ItemsController@create');
     $router->get('items/{id}/edit', 'ItemsController@edit');
+    $router->get('items/{id}/show', 'ItemsController@show');
     $router->post('items', 'ItemsController@store');
     $router->patch('items/{id}', 'ItemsController@update');
     $router->delete('items/{id}', 'ItemsController@destroy');

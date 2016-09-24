@@ -13,7 +13,7 @@
     <script src="/assets/vendor/jquery/3.1.0/jquery.min.js"></script>
 </head>
 <body>
-    {{-- Меню --}}
+    {{-- Menu --}}
     <div class="ui main stackable large menu">
         <a href="/" class="header item">
             <b>INVENTARICO</b>

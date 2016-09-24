@@ -16,6 +16,17 @@ class ItemsController extends Controller
         return view('items.index', $data);
     }
 
+    public function show($id)
+    {
+        $item = Item::findOrFail($id);
+        $this->ownerAccess($item);
+        $data = [
+            'item' => $item
+        ];
+
+        return view('items.show', $data);
+    }
+
     public function create()
     {
         $data = [

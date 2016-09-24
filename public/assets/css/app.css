@@ -43,3 +43,9 @@
     color: black;
 }
 /* Pagination styles --END-- */
+
+.ui.cards > .card > .image > img, .ui.card > .image > img {
+    max-width: 100%;
+    margin: 0 auto;
+    width: auto;
+}

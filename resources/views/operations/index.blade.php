@@ -36,7 +36,11 @@
                         <div class="ui basic segment">
 
                             <div class="ui large header">
-                                &laquo;{{ $operation->type->title }}&raquo; {{ trans('app.for') }} &laquo;{{ $operation->item->title }}&raquo;
+                                &laquo;{{ $operation->type->title }}&raquo;
+                                {{ trans('app.for') }}
+                                <a href="/items/{{ $operation->item->id }}/show">
+                                    {{ $operation->item->title }}
+                                </a>
                             </div>
 
                             <div class="meta">
@@ -45,6 +49,10 @@
                                     <span class="ui large label">
                                         <i class="clock icon"></i>
                                         {{ $operation->operated_at->format('d.m.Y H:i:s') }}
+                                    </span>
+
+                                    <span class="ui teal tag large label">
+                                        {{ $operation->price }} {{ $operation->currency }}
                                     </span>
                                 </p>
 

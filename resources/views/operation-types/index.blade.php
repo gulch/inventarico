@@ -44,7 +44,7 @@
 
                             <div class="extra">
 
-                                <a href="/categories/{{ $operationType->id }}/edit">
+                                <a href="/operation-types/{{ $operationType->id }}/edit">
                                     <i class="edit icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
