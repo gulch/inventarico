@@ -83,7 +83,7 @@ class ItemsController extends Controller
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/categories');
+                $validation['redirect'] = Session::pull('url.intended', '/items');
             }
 
             if ($id) {

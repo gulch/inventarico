@@ -117,6 +117,7 @@ class OperationsController extends Controller
 
             $operation_input = array_map('trim', $this->request->only([
                 'id__OperationType',
+                'id__Item',
                 'operated_at',
                 'note',
                 'condition',
