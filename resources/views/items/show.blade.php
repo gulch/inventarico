@@ -78,6 +78,13 @@
                         <div class="extra text">
                             {!! $operation->note !!}
                         </div>
+                        <div class="extra images">
+                            @foreach($operation->photos as $photo)
+                                <a href="#">
+                                    <img src="{{ config('app.thumb_image_upload_path') . $phot->path }}">
+                                </a>
+                            @endforeach
+                        </div>
                         <div class="meta">
                             {{ trans('app.created_at') }}: {{ $operation->created_at->format('d.m.Y H:i') }}
                         </div>
