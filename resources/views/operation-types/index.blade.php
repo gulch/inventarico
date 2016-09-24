@@ -2,23 +2,26 @@
 
 @section('content')
 
-    <h1 class="ui header">
-        <div class="content">
-            {{ trans('app.operation_types') }}
-            <div class="sub header">{{ trans('app.operation_types_list') }}</div>
+    <div class="ui grid">
+        <div class="middle aligned twelve wide column">
+            <h1 class="ui header">
+                <div class="content">
+                    {{ trans('app.operation_types') }}
+                    <div class="sub header">{{ trans('app.operation_types_list') }}</div>
+                </div>
+            </h1>
         </div>
-    </h1>
+        <div class="middle aligned right aligned four wide column">
+            <a href="/operation-types/create" class="ui large labeled icon button">
+                <i class="add icon"></i>
+                {{ trans('app.do_add') }}
+            </a>
+        </div>
+    </div>
 
     <div class="ui stackable menu">
         <div class="item">
             <i class="cubes large icon"></i>
-        </div>
-
-        <div class="right menu">
-            <a href="/operation-types/create" class="item">
-                <i class="add icon"></i>
-                {{ trans('app.do_add') }}
-            </a>
         </div>
     </div>
 

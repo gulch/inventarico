@@ -2,23 +2,27 @@
 
 @section('content')
 
-    <h1 class="ui header">
-        <div class="content">
-            {{ trans('app.categories') }}
-            <div class="sub header">{{ trans('app.categories_list') }}</div>
+    <div class="ui grid">
+        <div class="middle aligned twelve wide column">
+            <h1 class="ui header">
+                <div class="content">
+                    {{ trans('app.categories') }}
+                    <div class="sub header">{{ trans('app.categories_list') }}</div>
+                </div>
+            </h1>
         </div>
-    </h1>
+
+        <div class="middle aligned right aligned four wide column">
+            <a href="/categories/create" class="ui large labeled icon button">
+                <i class="add icon"></i>
+                {{ trans('app.do_add') }}
+            </a>
+        </div>
+    </div>
 
     <div class="ui stackable menu">
         <div class="item">
             <i class="folder outline large icon"></i>
-        </div>
-
-        <div class="right menu">
-            <a href="/categories/create" class="item">
-                <i class="add icon"></i>
-                {{ trans('app.do_add') }}
-            </a>
         </div>
     </div>
 
@@ -34,9 +38,16 @@
                     <div class="content">
                         <div class="ui segment raised">
 
-                            <div class="ui large header">
-                                {{ $category->title }}
+                            <div class="ui statistic tiny right floated">
+                                <div class="value">
+                                    <i class="gift icon"></i>
+                                    {{ $category->items->count() }}
+                                </div>
                             </div>
+
+                            <span class="ui large header">
+                                {{ $category->title }}
+                            </span>
 
                             <div class="meta">
                                 {{ trans('app.created_at') }}: {{ $category->created_at->format('d.m.Y H:i:s') }}

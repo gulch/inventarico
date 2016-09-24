@@ -9,4 +9,11 @@ class Category extends BaseModel
     protected $fillable = [
         'title'
     ];
+
+    /* -------------- Relations -------------- */
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'id__Category');
+    }
 }

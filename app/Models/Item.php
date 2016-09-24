@@ -21,8 +21,13 @@ class Item extends BaseModel
         return $this->belongsTo(Photo::class, 'id__Photo');
     }
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id__Category');
+    }
+
     public function operations()
     {
-        return $this->hasMany(Operation::class, 'id__User');
+        return $this->hasMany(Operation::class, 'id__Item');
     }
 }

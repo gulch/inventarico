@@ -2,23 +2,28 @@
 
 @section('content')
 
-    <h1 class="ui header">
-        <div class="content">
-            {{ trans('app.items') }}
-            <div class="sub header">{{ trans('app.items_list') }}</div>
-        </div>
-    </h1>
-
-    <div class="ui stackable menu">
-        <div class="item">
-            <i class="gift large icon"></i>
+    <div class="ui grid">
+        <div class="middle aligned twelve wide column">
+            <h1 class="ui header">
+                <div class="content">
+                    {{ trans('app.items') }}
+                    <div class="sub header">{{ trans('app.items_list') }}</div>
+                </div>
+            </h1>
         </div>
 
-        <div class="right menu">
-            <a href="/items/create" class="item">
+        <div class="middle aligned right aligned four wide column">
+            <a href="/items/create" class="ui large labeled icon button">
                 <i class="add icon"></i>
                 {{ trans('app.do_add') }}
             </a>
+        </div>
+    </div>
+
+    {{-- Menu Bar --}}
+    <div class="ui stackable menu">
+        <div class="item">
+            <i class="gift large icon"></i>
         </div>
     </div>
 
@@ -42,9 +47,16 @@
                     <div class="content">
                         <div class="ui basic segment">
 
-                            <div class="ui large header">
-                                {{ $item->title }}
+                            <div class="ui statistic tiny right floated">
+                                <div class="value">
+                                    <i class="cubes icon"></i>
+                                    {{ $item->operations->count() }}
+                                </div>
                             </div>
+
+                            <a href="/items/{{ $item->id }}/show" class="ui large header">
+                                {{ $item->title }}
+                            </a>
 
                             <div class="meta">
                                 {{ trans('app.created_at') }}: {{ $item->created_at->format('d.m.Y H:i:s') }}
