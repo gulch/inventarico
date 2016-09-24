@@ -10,7 +10,7 @@ class OperationTypesController extends Controller
     public function index()
     {
         $data = [
-            'operationTypes' => OperationType::paginate(24)
+            'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(24)
         ];
 
         return view('operation-types.index', $data);

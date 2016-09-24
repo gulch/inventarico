@@ -10,7 +10,7 @@ class ItemsController extends Controller
     public function index()
     {
         $data = [
-            'items' => Item::ofCurrentUser()->paginate(24)
+            'items' => Item::ofCurrentUser()->latest()->paginate(24)
         ];
 
         return view('items.index', $data);

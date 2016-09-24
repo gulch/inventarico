@@ -10,7 +10,7 @@ class PhotosController extends Controller
     public function index()
     {
         $data = [
-            'photos' => Photo::ofCurrentUser()->paginate(24)
+            'photos' => Photo::ofCurrentUser()->latest()->paginate(24)
         ];
 
         return view('photos.index', $data);

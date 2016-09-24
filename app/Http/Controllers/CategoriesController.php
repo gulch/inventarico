@@ -10,7 +10,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $data = [
-            'categories' => Category::paginate(24)
+            'categories' => Category::ofCurrentUser()->latest()->paginate(24)
         ];
 
         return view('categories.index', $data);
