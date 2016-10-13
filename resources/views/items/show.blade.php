@@ -81,7 +81,7 @@
                         <div class="extra images">
                             @foreach($operation->photos as $photo)
                                 <a href="#">
-                                    <img src="{{ config('app.thumb_image_upload_path') . $phot->path }}">
+                                    <img class="ui rounded image" src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
                                 </a>
                             @endforeach
                         </div>
