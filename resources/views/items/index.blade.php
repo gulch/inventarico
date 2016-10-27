@@ -59,6 +59,10 @@
                             </a>
 
                             <div class="meta">
+                                <p>
+                                    {{ trans('app.category') }}: {{ $item->category->title }}
+                                </p>
+
                                 {{ trans('app.created_at') }}: {{ $item->created_at->format('d.m.Y H:i:s') }}
                                 <br>
                                 {{ trans('app.updated_at') }}: {{ $item->updated_at->format('d.m.Y H:i:s') }}
