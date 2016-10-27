@@ -9,12 +9,6 @@
                 <div class="content">
                     <div class="description">
                         {{ $photo->description }}
-
-                        @if(!$photo->description)
-                            <div class="ui red large label">
-                                <i class="warning sign icon"></i> {{ trans('app.description_non_exists') }}
-                            </div>
-                        @endif
                     </div>
                 </div>
 

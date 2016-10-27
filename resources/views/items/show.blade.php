@@ -62,7 +62,7 @@
 
         <div class="ui large feed">
 
-            @foreach($item->operations as $operation)
+            @foreach($item->operations()->orderBy('operated_at', 'desc')->get() as $operation)
 
                 <div class="event">
                     <div class="label">
@@ -74,6 +74,12 @@
                             <div class="date">
                                 {{ $operation->operated_at->format('d.m.Y H:i') }}
                             </div>
+                            <div class="ui label">
+                                {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
+                            </div>
+                            <div class="ui left pointing teal basic label">
+                                {{ $operation->price }} {{ $operation->currency }}
+                            </div>
                         </div>
                         <div class="extra text">
                             {!! $operation->note !!}
@@ -81,7 +87,8 @@
                         <div class="extra images">
                             @foreach($operation->photos as $photo)
                                 <a href="#">
-                                    <img class="ui rounded image" src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
+                                    <img class="ui rounded image"
+                                         src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
                                 </a>
                             @endforeach
                         </div>

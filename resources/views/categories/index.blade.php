@@ -13,7 +13,7 @@
         </div>
 
         <div class="middle aligned right aligned four wide column">
-            <a href="/categories/create" class="ui large labeled icon button">
+            <a href="/categories/create" class="ui large labeled icon basic button">
                 <i class="add icon"></i>
                 {{ trans('app.do_add') }}
             </a>

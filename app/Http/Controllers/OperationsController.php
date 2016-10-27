@@ -13,7 +13,7 @@ class OperationsController extends Controller
     {
         $operations = Operation::ofCurrentUser()
             ->with('item', 'type')
-            ->latest()
+            ->orderBy('operated_at', 'desc')
             ->paginate(24);
 
         $data = [

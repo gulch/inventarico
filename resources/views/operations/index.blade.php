@@ -46,12 +46,16 @@
                             <div class="meta">
 
                                 <p>
-                                    <span class="ui large label">
+                                    <span class="ui large basic label">
                                         <i class="clock icon"></i>
                                         {{ $operation->operated_at->format('d.m.Y H:i:s') }}
                                     </span>
 
-                                    <span class="ui teal tag large label">
+                                    <span class="ui large label">
+                                        {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
+                                    </span>
+
+                                    <span class="ui left pointing teal basic label">
                                         {{ $operation->price }} {{ $operation->currency }}
                                     </span>
                                 </p>
