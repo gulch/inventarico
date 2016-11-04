@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Session, URL};
 use App\Models\Item;
 use App\Models\Operation;
 use App\Models\OperationType;
@@ -27,6 +27,7 @@ class OperationsController extends Controller
     {
         $item = Item::findOrFail($id__Item);
         $this->ownerAccess($item);
+        Session::put('url.intended', url(URL::previous()));
         $data = [
             'item' => $item,
             'currencies' => $this->getCurrenciesForDropDown(),
@@ -41,6 +42,7 @@ class OperationsController extends Controller
     {
         $operation = Operation::findOrFail($id);
         $this->ownerAccess($operation);
+        Session::put('url.intended', url(URL::previous()));
         $data = [
             'operation' => $operation,
             'item' => $operation->item,

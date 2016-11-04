@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{Session, URL};
 use App\Models\{Item, Category};
 
 class ItemsController extends Controller
@@ -32,6 +32,7 @@ class ItemsController extends Controller
         $data = [
             'categories' => $this->getCategoriesForDropdown()
         ];
+        Session::put('url.intended', url(URL::previous()));
 
         return view('items.create', $data);
     }
@@ -40,6 +41,7 @@ class ItemsController extends Controller
     {
         $item = Item::findOrFail($id);
         $this->ownerAccess($item);
+        Session::put('url.intended', url(URL::previous()));
         $data = [
             'item' => $item,
             'categories' => $this->getCategoriesForDropdown()
