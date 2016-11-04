@@ -90,4 +90,28 @@ $(document).ready(function () {
 
     activateDataAction();
     activateCustomPopup();
+
+
+    /* Галерея */
+    var galleryElements = document.getElementsByClassName("gallery");
+    for (var i = 0; i < galleryElements.length; i++) {
+        lightGallery(galleryElements[i], {
+            thumbnail: false,
+            speed: 250,
+            download: false,
+            zoom: true
+        });
+    }
+
+    /* lightbox */
+    var lightboxImages = document.getElementsByClassName('lightbox');
+    for (var i = 0; i < lightboxImages.length; i++) {
+        lightGallery(lightboxImages[i], {
+            selector: 'this',
+            thumbnail: false,
+            speed: 250,
+            download: false,
+            zoom: true
+        });
+    }
 });

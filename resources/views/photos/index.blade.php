@@ -1,4 +1,18 @@
-@extends('template')
+@extends('template', [
+    'scripts' => [
+        [
+            'load' => 'defer',
+            'src' => '/assets/vendor/lightgallery/1.0.0/js/lightgallery.js'
+        ],
+        [
+            'load' => 'defer',
+            'src' => '/assets/vendor/lightgallery/1.0.0/js/lg-zoom.js'
+        ]
+    ],
+    'styles' => [
+        '/assets/vendor/lightgallery/1.0.0/css/lightgallery.css'
+    ]
+])
 
 @section('content')
     <h1 class="ui header">

@@ -2,9 +2,11 @@
     @if(sizeof($photos))
         @foreach($photos as $photo)
             <div class="card segment">
-                <div class="image text-centered">
+                <a href="{{ config('app.photo_image_upload_path') . $photo->path }}"
+                   class="image text-centered lightbox"
+                >
                     <img src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
-                </div>
+                </a>
 
                 <div class="content">
                     <div class="description">

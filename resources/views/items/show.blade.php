@@ -1,4 +1,18 @@
-@extends('template')
+@extends('template', [
+    'scripts' => [
+        [
+            'load' => 'defer',
+            'src' => '/assets/vendor/lightgallery/1.0.0/js/lightgallery.js'
+        ],
+        [
+            'load' => 'defer',
+            'src' => '/assets/vendor/lightgallery/1.0.0/js/lg-zoom.js'
+        ]
+    ],
+    'styles' => [
+        '/assets/vendor/lightgallery/1.0.0/css/lightgallery.css'
+    ]
+])
 
 @section('content')
 
@@ -69,6 +83,7 @@
                         <i class="cube icon"></i>
                     </div>
                     <div class="content">
+
                         <div class="summary">
                             {{ $operation->type->title }}
                             <div class="date">
@@ -81,17 +96,23 @@
                                 {{ $operation->price }} {{ $operation->currency }}
                             </div>
                         </div>
+
                         <div class="extra text">
                             {!! $operation->note !!}
                         </div>
-                        <div class="extra images">
-                            @foreach($operation->photos as $photo)
-                                <a href="#">
-                                    <img class="ui rounded image"
-                                         src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
-                                </a>
-                            @endforeach
-                        </div>
+
+                        @if(sizeof($operation->photos))
+                            <div class="extra images gallery">
+                                @foreach($operation->photos as $photo)
+                                    <a href="{{ config('app.photo_image_upload_path') . $photo->path }}">
+                                        <img class="ui rounded image"
+                                             src="{{ config('app.thumb_image_upload_path') . $photo->path }}"
+                                        >
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+
                         <div class="meta">
                             {{ trans('app.created_at') }}: {{ $operation->created_at->format('d.m.Y H:i') }}
                         </div>
