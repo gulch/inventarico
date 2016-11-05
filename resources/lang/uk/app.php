@@ -13,7 +13,17 @@ return [
     'photos_list' => 'Список фотографій',
     'operations_list' => 'Список операцій',
 
+    'sorting' => 'Сортування',
+    'operation_date' => 'Дата операції',
+    'created_date' => 'Дата створення',
+    'updated_date' => 'Дата редагування',
+    'new_first' => 'спочатку нові',
+    'old_first' => 'спочатку перші',
+
+    'all_categories' => 'Всі категорії',
+
     'logout' => 'Вийти',
+    'summary' => 'Всього',
     'registration' => 'Реєстрація',
     'authorization' => 'Авторизація',
     'remember_me' => 'Запам\'ятати мене',

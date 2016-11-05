@@ -9,8 +9,34 @@ class ItemsController extends Controller
 {
     public function index()
     {
+        $items = Item::ofCurrentUser();
+
+        $category = $this->request->input('category');
+        if ($category) {
+            $items->where('id__Category', $category);
+        }
+
+        $sort = $this->request->input('sort');
+        switch ($sort) {
+            case 'updated_desc':
+                $items->orderBy('updated_at', 'desc');
+                break;
+            case 'updated_asc':
+                $items->orderBy('updated_at');
+                break;
+            case 'created_asc':
+                $items->orderBy('created_at');
+                break;
+            case 'created_desc':
+            default:
+                $items->orderBy('created_at', 'desc');
+        }
+
+        $items = $items->paginate(24);
+
         $data = [
-            'items' => Item::ofCurrentUser()->latest()->paginate(24)
+            'items' => $items,
+            'categories' => ['0' => '---'] + Category::pluck('title', 'id')->all()
         ];
 
         return view('items.index', $data);

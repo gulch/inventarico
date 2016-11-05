@@ -13,6 +13,29 @@
         <div class="item">
             <i class="gift large icon"></i>
         </div>
+
+        <div class="right menu">
+            <div class="item">
+                <div class="ui floating labeled icon pointing dropdown basic button">
+                    <i class="sort content ascending icon"></i>
+                    <span class="text">{{ trans('app.sorting') }}</span>
+                    <input type="hidden"
+                           name="sort"
+                           value="{{ app('request')->input('sort') ?? 'operation_date_desc' }}"
+                    >
+                    <div class="menu">
+                        <div class="header">{{ trans('app.operation_date') }}</div>
+                        <div class="item" data-value="operation_date_desc">{{ trans('app.new_first') }}</div>
+                        <div class="item" data-value="operation_date_asc">{{ trans('app.old_first') }}</div>
+                        <div class="divider"></div>
+                        <div class="header">{{ trans('app.created_date') }}</div>
+                        <div class="item" data-value="created_desc">{{ trans('app.new_first') }}</div>
+                        <div class="item" data-value="created_asc">{{ trans('app.old_first') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="ui clearing divider"></div>

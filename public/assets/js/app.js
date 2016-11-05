@@ -91,6 +91,16 @@ $(document).ready(function () {
     activateDataAction();
     activateCustomPopup();
 
+    $('select[name=category], input[name=sort]').change(function () {
+        var url = window.location.pathname;
+        url = url + '?sort=' + $('input[name=sort]').val();
+
+        var $category_input = $('select[name=category]');
+        if ($category_input.length) {
+            url = url + '&category=' + $category_input.val();
+        }
+        window.location.href = url;
+    });
 
     /* Галерея */
     var galleryElements = document.getElementsByClassName("gallery");
@@ -114,4 +124,5 @@ $(document).ready(function () {
             zoom: true
         });
     }
+
 });

@@ -11,10 +11,25 @@ class OperationsController extends Controller
 {
     public function index()
     {
-        $operations = Operation::ofCurrentUser()
-            ->with('item', 'type')
-            ->orderBy('operated_at', 'desc')
-            ->paginate(24);
+        $operations = Operation::ofCurrentUser()->with('item', 'type');
+
+        $sort = $this->request->input('sort');
+        switch ($sort) {
+            case 'operation_date_asc':
+                $operations->orderBy('operated_at');
+                break;
+            case 'created_asc':
+                $operations->orderBy('created_at');
+                break;
+            case 'created_desc':
+                $operations->orderBy('created_at', 'desc');
+                break;
+            case 'operation_date_desc':
+            default:
+                $operations->orderBy('operated_at', 'desc');
+        }
+
+        $operations = $operations->paginate(24);
 
         $data = [
             'operations' => $operations
