@@ -148,7 +148,7 @@ class PhotosController extends Controller
         $width = null,
         $height = null,
         $crop = false,
-        $quality = 80
+        $quality = null
     ) {
         $ii = InterventionImage::getManager();
         $ii->configure(['driver' => 'imagick']);
@@ -181,17 +181,6 @@ class PhotosController extends Controller
             /* Optimizations */
             $img->getCore()->stripImage();
             //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
-
-            // if image format is PNG
-            if(pathinfo($filepath_original . $filename, PATHINFO_EXTENSION) === 'png') {
-                $img->encode('png');
-                $img->getCore()->setOption('png:compression-filter', '5');
-                $img->getCore()->setOption('png:compression-level', '9');
-                $img->getCore()->setOption('png:compression-strategy', '1');
-                $img->getCore()->setOption('png:exclude-chunk', 'all');
-            } else {
-                $img->interlace(true);
-            }
 
             $img->save($filepath_new . $filename, $quality);
         }
