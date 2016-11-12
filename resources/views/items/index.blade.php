@@ -1,4 +1,4 @@
-@extends('template')
+@extends('template', ['title' => trans('app.items') . ' :: INVENTARICO' ])
 
 @section('content')
 
@@ -83,7 +83,7 @@
                                 </div>
                             </div>
 
-                            <a href="/items/{{ $item->id }}/show" class="ui large header">
+                            <a href="/items/{{ $item->id }}/show" target="_blank" class="ui large header">
                                 {{ $item->title }}
                             </a>
 

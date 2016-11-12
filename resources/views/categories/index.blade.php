@@ -1,4 +1,4 @@
-@extends('template')
+@extends('template', ['title' => trans('app.categories') . ' :: INVENTARICO' ])
 
 @section('content')
 
@@ -45,9 +45,9 @@
                                 </div>
                             </div>
 
-                            <span class="ui large header">
+                            <a href="/items?category={{ $category->id }}" class="ui large header">
                                 {{ $category->title }}
-                            </span>
+                            </a>
 
                             <div class="meta">
                                 {{ trans('app.created_at') }}: {{ $category->created_at->format('d.m.Y H:i:s') }}

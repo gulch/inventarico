@@ -4,7 +4,7 @@
             <div class="ui card">
                 <div class="image pointer" data-image-id="{{ $img->id }}">
                     <img class="lazyload"
-                         src="/{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg"
+                         src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg"
                          data-src="{{ config('app.thumb_image_upload_path') . $img->path }}"
                     >
                 </div>
