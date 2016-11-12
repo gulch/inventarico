@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\{Session, URL};
-use App\Models\{Item, Category};
+use Illuminate\Support\Facades\{
+    Session, URL
+};
+use App\Models\{
+    Item, Category
+};
 
 class ItemsController extends Controller
 {
     public function index()
     {
-        $items = Item::ofCurrentUser();
+        $items = Item::with('photo', 'category', 'operations')->ofCurrentUser();
 
         $category = $this->request->input('category');
         if ($category) {
@@ -32,7 +36,7 @@ class ItemsController extends Controller
                 $items->orderBy('created_at', 'desc');
         }
 
-        $items = $items->paginate(24);
+        $items = $items->paginate(10);
 
         $data = [
             'items' => $items,
@@ -94,6 +98,16 @@ class ItemsController extends Controller
         if (is_null($item)) {
             return json_encode(['message' => trans('app.item_not_found')]);
         } else {
+            // Unsync photos from operations
+            if ($item->operations) {
+               foreach ($item->operations as $o) {
+                   $o->photos()->sync([]);
+               }
+                // Delete operations
+               $item->operations()->delete();
+            }
+
+            // Delete item
             $item->delete();
         }
 

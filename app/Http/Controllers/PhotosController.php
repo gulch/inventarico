@@ -45,7 +45,17 @@ class PhotosController extends Controller
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         } else {
 
-            // TODO: check image usage on Items and Operations
+            if (sizeof($photo->items)) {
+                return $this->jsonResponse([
+                    'message' => trans('app.photo_is_use_in_some_item')
+                ]);
+            }
+
+            if (sizeof($photo->operations)) {
+                return $this->jsonResponse([
+                    'message' => trans('app.photo_is_use_in_some_item')
+                ]);
+            }
 
             self::removeImageFile($photo->path);
 
@@ -55,11 +65,13 @@ class PhotosController extends Controller
 
             /* Delete from DB */
             if (!$photo->delete()) {
-                return $this->jsonResponse(['message' => trans('app.can_not_delete_image')]);
+                return $this->jsonResponse([
+                    'message' => trans('app.can_not_delete_image')
+                ]);
             }
         }
 
-        return json_encode(['success' => 'ok']);
+        return $this->jsonResponse(['success' => 'ok']);
     }
 
     public function upload()

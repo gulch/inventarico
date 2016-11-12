@@ -1,4 +1,4 @@
-@extends('template')
+@extends('template', ['title' => trans('app.operations_list') . ' :: INVENTARICO' ])
 
 @section('content')
 
@@ -37,6 +37,12 @@
         </div>
 
     </div>
+
+    @if (sizeof($operations))
+        <p>
+            {{ trans('app.summary') }}: {{ $operations->total() }}
+        </p>
+    @endif
 
     <div class="ui clearing divider"></div>
 

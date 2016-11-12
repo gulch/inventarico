@@ -54,7 +54,11 @@
 
     </div>
 
-    <h2></h2>
+    @if (sizeof($items))
+        <p>
+            {{ trans('app.summary') }}: {{ $items->total() }}
+        </p>
+    @endif
 
     <div class="ui clearing divider"></div>
 

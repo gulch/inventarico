@@ -115,6 +115,10 @@
 
                         <div class="meta">
                             {{ trans('app.created_at') }}: {{ $operation->created_at->format('d.m.Y H:i') }}
+                            &nbsp;
+                            <a href="/operations/{{ $operation->id }}/edit">
+                                {{ trans('app.do_edit') }}
+                            </a>
                         </div>
                     </div>
                 </div>

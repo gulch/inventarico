@@ -10,7 +10,7 @@ class CategoriesController extends Controller
     public function index()
     {
         $data = [
-            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(24)
+            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(10)
         ];
 
         return view('categories.index', $data);
@@ -48,8 +48,14 @@ class CategoriesController extends Controller
         $this->ownerAccess($category);
 
         if (is_null($category)) {
-            return json_encode(['message' => trans('app.item_not_found')]);
+            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         } else {
+            if (sizeof($category->items)) {
+                return $this->jsonResponse([
+                    'message' => trans('app.category_has_items_cant_delete')
+                ]);
+            }
+
             $category->delete();
         }
 

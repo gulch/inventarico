@@ -19,6 +19,10 @@
                         <i class="history icon"></i>
                         {{ $photo->created_at->format('d.m.Y H:i:s') }}
                     </span>
+                    <span>
+                        <i class="history icon"></i>
+                        {{ $photo->created_at->format('d.m.Y H:i:s') }}
+                    </span>
                 </div>
 
                 <div class="extra">

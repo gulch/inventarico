@@ -10,4 +10,9 @@ class OperationType extends BaseModel
         'title',
         'id__User'
     ];
+
+    public function operations()
+    {
+        return $this->hasMany(Operation::class, 'id__OperationType');
+    }
 }

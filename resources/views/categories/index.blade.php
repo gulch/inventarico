@@ -26,6 +26,12 @@
         </div>
     </div>
 
+    @if (sizeof($categories))
+        <p>
+            {{ trans('app.summary') }}: {{ $categories->total() }}
+        </p>
+    @endif
+
     <div class="ui clearing divider"></div>
 
     @if (sizeof($categories))

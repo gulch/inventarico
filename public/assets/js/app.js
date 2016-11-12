@@ -13,7 +13,7 @@ function activateDataAction()
 
         if (action) {
             segment.addClass('ui basic segment');
-            segment.append("<div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Секундочку</div></div>");
+            segment.append("<div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Wait please</div></div>");
             $.post(action, params, function (result) {
                 if (result) {
                     segment.find('.dimmer').remove();
@@ -37,13 +37,13 @@ function activateDataAction()
 /* Модальный диалог ошибки */
 function showErrorModalMessage(message, text, icon) {
     if (message == undefined) {
-        message = 'Неизвестная ошибка';
+        message = 'UNKNOWN ERROR';
     }
     if (icon == undefined) {
         icon = 'orange warning sign';
     }
     if (text == undefined) {
-        text = 'Ошибка';
+        text = 'ERROR';
     }
     var key = Math.floor(Math.random() * 1000);
     $(document.body).append(

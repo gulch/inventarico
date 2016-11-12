@@ -29,7 +29,7 @@ class OperationsController extends Controller
                 $operations->orderBy('operated_at', 'desc');
         }
 
-        $operations = $operations->paginate(24);
+        $operations = $operations->paginate(10);
 
         $data = [
             'operations' => $operations
@@ -87,6 +87,9 @@ class OperationsController extends Controller
         if (is_null($operation)) {
             return json_encode(['message' => trans('app.item_not_found')]);
         } else {
+            // Unsync photos
+            $operation->photos()->sync([]);
+            // Delete operation
             $operation->delete();
         }
 

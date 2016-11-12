@@ -1,4 +1,4 @@
-@extends('template')
+@extends('template', ['title' => trans('app.operation_types_list') . ' :: INVENTARICO' ])
 
 @section('content')
 

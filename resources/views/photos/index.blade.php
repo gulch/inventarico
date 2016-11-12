@@ -1,4 +1,5 @@
 @extends('template', [
+    'title' => trans('app.photos_list') . ' :: INVENTARICO',
     'scripts' => [
         [
             'load' => 'defer',
@@ -21,6 +22,14 @@
             <div class="sub header">{{ trans('app.photos_list') }}</div>
         </div>
     </h1>
+
+    <div class="ui divider"></div>
+
+    @if (sizeof($photos))
+        <p>
+            {{ trans('app.summary') }}: {{ $photos->total() }}
+        </p>
+    @endif
 
     <div class="ui divider"></div>
 

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\{
+    Session,
+    URL
+};
 use App\Models\OperationType;
 
 class OperationTypesController extends Controller
@@ -10,7 +13,7 @@ class OperationTypesController extends Controller
     public function index()
     {
         $data = [
-            'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(24)
+            'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(10)
         ];
 
         return view('operation-types.index', $data);
@@ -18,6 +21,7 @@ class OperationTypesController extends Controller
 
     public function create()
     {
+        Session::put('url.intended', url(URL::previous()));
         return view('operation-types.create');
     }
 
@@ -25,6 +29,7 @@ class OperationTypesController extends Controller
     {
         $operationType = OperationType::findOrFail($id);
         $this->ownerAccess($operationType);
+        Session::put('url.intended', url(URL::previous()));
         $data = [
             'operationType' => $operationType
         ];
@@ -50,6 +55,13 @@ class OperationTypesController extends Controller
         if (is_null($operationType)) {
             return json_encode(['message' => trans('app.item_not_found')]);
         } else {
+            if (sizeof($operationType->operations)) {
+                return $this->jsonResponse([
+                    'message' => trans('app.operationtype_has_operations_cant_delete')
+                ]);
+            }
+
+            // Delete Operation Type
             $operationType->delete();
         }
 

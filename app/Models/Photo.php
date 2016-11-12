@@ -10,4 +10,14 @@ class Photo extends BaseModel
         'path',
         'description'
     ];
+
+    public function operations()
+    {
+        return $this->belongsToMany(Operation::class, 'Operation_Photo', 'id__Photo', 'id__Operation');
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'id__Photo');
+    }
 }
