@@ -11,7 +11,9 @@ class OperationsController extends Controller
 {
     public function index()
     {
-        $operations = Operation::ofCurrentUser()->with('item', 'type');
+        $operations = Operation::ofCurrentUser()->with(['type', 'item' => function ($query) {
+            $query->with('photo');
+        }]);
 
         $sort = $this->request->input('sort');
         switch ($sort) {
