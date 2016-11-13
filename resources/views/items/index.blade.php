@@ -37,9 +37,13 @@
                     <span class="text">{{ trans('app.sorting') }}</span>
                     <input type="hidden"
                            name="sort"
-                           value="{{ app('request')->input('sort') ?? 'created_desc' }}"
+                           value="{{ app('request')->input('sort') ?? 'alphabet_asc' }}"
                     >
                     <div class="menu">
+                        <div class="header">{{ trans('app.title_sort') }}</div>
+                        <div class="item" data-value="alphabet_asc">{{ trans('app.alphabet_asc') }}</div>
+                        <div class="item" data-value="alphabet_desc">{{ trans('app.alphabet_desc') }}</div>
+                        <div class="divider"></div>
                         <div class="header">{{ trans('app.created_date') }}</div>
                         <div class="item" data-value="created_desc">{{ trans('app.new_first') }}</div>
                         <div class="item" data-value="created_asc">{{ trans('app.old_first') }}</div>
@@ -135,7 +139,11 @@
 
         <div class="ui middle aligned stackable centered grid container">
             <div class="ui row">
-                {!! $items->render() !!}
+                {!! $items->appends([
+                    'sort' => app('request')->input('sort'),
+                    'category' => app('request')->input('category')
+                    ])->links()
+                !!}
             </div>
         </div>
 

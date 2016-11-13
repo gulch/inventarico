@@ -15,6 +15,9 @@ return [
 
     'sorting' => 'Сортування',
     'operation_date' => 'Дата операції',
+    'title_sort' => 'За назвою',
+    'alphabet_asc' => 'По алфавіту',
+    'alphabet_desc' => 'В зворотньому порядку',
     'created_date' => 'Дата створення',
     'updated_date' => 'Дата редагування',
     'new_first' => 'спочатку нові',

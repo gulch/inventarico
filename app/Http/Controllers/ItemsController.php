@@ -32,8 +32,14 @@ class ItemsController extends Controller
                 $items->orderBy('created_at');
                 break;
             case 'created_desc':
-            default:
                 $items->orderBy('created_at', 'desc');
+                break;
+            case 'alphabet_desc':
+                $items->orderBy('title', 'desc');
+                break;
+            case 'alphabet_asc':
+            default:
+                $items->orderBy('title', 'asc');
         }
 
         $items = $items->paginate(10);
