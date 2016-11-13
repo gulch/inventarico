@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.2.4/semantic.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ env('APP_VERSION') }}">
+    <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ config('app.version') }}">
 
     @if(isset($styles))
         @foreach($styles as $style)
@@ -15,7 +15,7 @@
         @endforeach
     @endif
 
-    <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ env('APP_VERSION') }}">
+    <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
 
     {{-- jQuery --}}
     <script src="/assets/vendor/jquery/3.1.0/jquery.min.js"></script>
@@ -95,7 +95,7 @@
     @endif
 
     <script defer src="/assets/vendor/semantic/2.2.4/semantic.js"></script>
-    <script defer src="/assets/js/app.js?v={{ env('APP_VERSION') }}"></script>
+    <script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
     <script defer src="/assets/vendor/lazysizes/2.0.2/lazysizes.min.js"></script>
 </body>
 </html>
