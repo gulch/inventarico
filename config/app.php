@@ -244,4 +244,5 @@ return [
     'original_image_upload_path' => '/uploads/img/original',
     'editor_image_upload_path' => '/uploads/img/editor',
 
+    'version' => env('APP_VERSION', '1.0'),
 ];

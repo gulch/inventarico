@@ -15,6 +15,11 @@ class OperationsController extends Controller
             $query->with('photo');
         }]);
 
+        $operationtype = $this->request->input('operationtype');
+        if ($operationtype) {
+            $operations->where('id__OperationType', $operationtype);
+        }
+
         $sort = $this->request->input('sort');
         switch ($sort) {
             case 'operation_date_asc':
@@ -34,7 +39,8 @@ class OperationsController extends Controller
         $operations = $operations->paginate(10);
 
         $data = [
-            'operations' => $operations
+            'operations' => $operations,
+            'operationTypes' => ['0' => '-- '.trans('app.all').' --'] + OperationType::pluck('title', 'id')->all()
         ];
 
         return view('operations.index', $data);

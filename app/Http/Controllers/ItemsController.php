@@ -46,7 +46,7 @@ class ItemsController extends Controller
 
         $data = [
             'items' => $items,
-            'categories' => ['0' => '---'] + Category::pluck('title', 'id')->all()
+            'categories' => ['0' => '-- '.trans('app.all').' --'] + Category::pluck('title', 'id')->all()
         ];
 
         return view('items.index', $data);

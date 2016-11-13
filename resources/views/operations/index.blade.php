@@ -14,6 +14,10 @@
             <i class="file text outline large icon"></i>
         </div>
 
+        <div class="item">
+            {!! Form::select('operationtype', $operationTypes, app('request')->input('operationtype'), ['class' => 'ui search dropdown']) !!}
+        </div>
+
         <div class="right menu">
             <div class="item">
                 <div class="ui floating labeled icon pointing dropdown basic button">
@@ -123,7 +127,11 @@
 
         <div class="ui middle aligned stackable centered grid container">
             <div class="ui row">
-                {!! $operations->render() !!}
+                {!! $operations->appends([
+                        'sort' => app('request')->input('sort'),
+                        'operationtype' => app('request')->input('operationtype')
+                    ])->links()
+                !!}
             </div>
         </div>
 
