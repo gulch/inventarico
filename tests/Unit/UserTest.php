@@ -1,19 +1,22 @@
 <?php
 
-use Illuminate\Foundation\Testing\WithoutMiddleware;
+namespace Tests\Unit;
+
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Models\User;
 
 class UserTest extends TestCase
 {
+    use DatabaseMigrations;
+
     public function testUserCanBeCreated()
     {
-        $password_hash = bcrypt('test-password');
+        $password_hash = \app('hash')->make('test-password');
         $name = 'Test User';
         $email = 'test@inventarico.com';
 
-        $user = User::create([
+        $user = \factory(User::class)->create([
             'name' => $name,
             'email' => $email,
             'password' => $password_hash
@@ -25,11 +28,5 @@ class UserTest extends TestCase
         $this->assertEquals($email, $latest_user->email);
         $this->assertEquals($name, $latest_user->name);
         $this->assertEquals($password_hash, $latest_user->password);
-
-        $this->seeInDatabase('User', [
-            'name' => $name,
-            'email' => $email,
-            'password' => $password_hash
-        ]);
     }
 }
