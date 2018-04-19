@@ -26,7 +26,7 @@ class Controller extends BaseController
 
     protected function ownerAccess($item)
     {
-        if (auth()->user()->id != $item->id__User) {
+        if (auth()->user()->id !== $item->id__User) {
             abort(403, 'Forbidden');
         }
     }

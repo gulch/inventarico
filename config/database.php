@@ -54,16 +54,17 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
             'password' => env('DB_PASSWORD', ''),
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
+            'unix_socket' => env('DB_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
             'strict' => false,
-            'engine' => 'InnoDB',
+            'engine' => null,
         ],
 
         'pgsql' => [
@@ -107,16 +108,16 @@ return [
 
     'redis' => [
 
-        'cluster' => false,
+        'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'default' => [
-            'host' => env('REDIS_HOST', 'localhost'),
+            'scheme'   => env('REDIS_SCHEME', 'tcp'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'port'     => env('REDIS_PORT', 6379),
+            'path'     => env('REDIS_PATH', '/var/run/redis/redis.sock'),
+            'prefix'   => env('REDIS_PREFIX', ''),
             'password' => env('REDIS_PASSWORD', null),
-            'port' => env('REDIS_PORT', 6379),
             'database' => 0,
-            'path' => env('REDIS_PATH', '/tmp/redis.sock'),
-            'scheme' => env('REDIS_SCHEME', 'tcp'),
-            'prefix' => env('REDIS_PREFIX', 'laravel'),
         ],
 
     ],

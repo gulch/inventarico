@@ -192,7 +192,8 @@ class ItemsController extends Controller
         $value = $this->request->get('o_value');
 
         $overview = [];
-        if ($count = sizeof($title)) {
+        if (\is_array($title)) {
+            $count = \sizeof($title);
             for ($i = 0; $i < $count; ++$i) {
                 if ($value[$i] && $title[$i]) {
                     $o = [];

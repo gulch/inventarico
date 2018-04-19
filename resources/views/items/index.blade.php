@@ -58,7 +58,7 @@
 
     </div>
 
-    @if (sizeof($items))
+    @if ($items)
         <p>
             {{ trans('app.summary') }}: {{ $items->total() }}
         </p>
@@ -66,7 +66,7 @@
 
     <div class="ui clearing divider"></div>
 
-    @if (sizeof($items))
+    @if ($items)
         <div class="ui relaxed divided items">
             @foreach($items as $item)
                 <div class="item"

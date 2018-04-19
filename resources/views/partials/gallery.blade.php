@@ -8,7 +8,7 @@
                 </h5>
             </div>
         </div>
-        <div id="image_preview_{{ $key }}" class="ui four column grid thumbnails @if(!sizeof($photos)) hide @endif">
+        <div id="image_preview_{{ $key }}" class="ui four column grid thumbnails @if(!$photos) hide @endif">
             <div class="row">
                 @if(!is_null($photos))
                     @foreach($photos as $photo)

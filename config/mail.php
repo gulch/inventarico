@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => env('MAIL_DRIVER', 'smtp'),
+    'driver' => env('MAIL_DRIVER', 'sendmail'),
 
     /*
     |--------------------------------------------------------------------------
@@ -56,8 +56,8 @@ return [
     */
 
     'from' => [
-        'address' => 'webmaster@gulchuk.com',
-        'name' => 'Webmaster',
+        'address' => 'no-reply@gulchuk.com',
+        'name' => 'No Reply',
     ],
 
     /*

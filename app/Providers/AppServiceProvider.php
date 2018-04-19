@@ -24,10 +24,11 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         if ($this->app->environment() === 'local') {
-            $localProviders = config('app.local_providers', []);
-            foreach ($localProviders as $provider) {
-                $this->app->register($provider);
-            }
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
+
+        if (\env('APP_DEBUGBAR_ENABLE') === true) {
+            $this->app->register(\Barryvdh\Debugbar\ServiceProvider::class);
         }
     }
 }
