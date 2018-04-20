@@ -1,5 +1,4 @@
-function activateDataAction()
-{
+function activateDataAction() {
     $('span[data-action], a[data-action], div[data-action]').on('click', function () {
         var elem = $(this);
         var action = elem.attr('data-action');

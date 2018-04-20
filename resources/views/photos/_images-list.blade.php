@@ -1,5 +1,5 @@
 <div class="ui four doubling cards">
-    @if(sizeof($photos))
+    @if($photos)
         @foreach($photos as $photo)
             <div class="card segment">
                 <a href="{{ config('app.photo_image_upload_path') . $photo->path }}"
@@ -19,6 +19,7 @@
                         <i class="history icon"></i>
                         {{ $photo->created_at->format('d.m.Y H:i:s') }}
                     </span>
+                    <br/>
                     <span>
                         <i class="history icon"></i>
                         {{ $photo->created_at->format('d.m.Y H:i:s') }}
@@ -33,13 +34,13 @@
                         <i class="remove circle icon"></i>{{ trans('app.do_remove') }}
                     </a>
                     <div class="ui custom popup">
-                        <div class="ui huge header center aligned">{{ trans('app.q_delete') }}</div>
-                        <span class="ui negative button"
+                        <div class="ui header center aligned">{{ trans('app.q_delete') }}</div>
+                        <span class="ui negative small button"
                               data-action-name="remove"
                               data-action="/photos/{{ $photo->id }}"
                               data-method="DELETE">{{ trans('app.yes') }}
                         </span>
-                        <span class="ui button">{{ trans('app.no') }}</span>
+                        <span class="ui small button">{{ trans('app.no') }}</span>
                     </div>
                 </div>
             </div>

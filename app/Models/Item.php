@@ -10,9 +10,18 @@ class Item extends BaseModel
         'title',
         'description',
         'overview',
+        'is_archived',
+
         'id__Photo',
         'id__Category'
     ];
+
+    /* -------------- Scopes -------------- */
+
+    public function scopeArchived($query)
+    {
+        return $query->where('is_archived', 1);
+    }
 
     /* -------------- Relations -------------- */
 

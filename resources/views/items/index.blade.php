@@ -30,6 +30,18 @@
             {!! Form::select('category', $categories, app('request')->input('category'), ['class' => 'ui search dropdown']) !!}
         </div>
 
+        <a class="item @if(url()->current() == route('available-items')) active @endif"
+               href="{{ route('available-items') }}"
+        >
+            {{ trans('app.available') }}
+        </a>
+
+        <a class="item @if(url()->current() == route('archived-items')) active @endif"
+           href="{{ route('archived-items') }}"
+        >
+            {{ trans('app.archived') }}
+        </a>
+
         <div class="right menu">
             <div class="item">
                 <div class="ui floating labeled icon pointing dropdown basic button">

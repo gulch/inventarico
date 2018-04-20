@@ -40,6 +40,15 @@
     ])
 </div>
 
+<div class="field ui grey message">
+    <div class="header">
+        <div class="ui checkbox">
+            {!! Form::checkbox('is_archived', 1) !!}
+            {!! Form::label('is_archived', trans('app.q_archived_item')) !!}
+        </div>
+    </div>
+</div>
+
 @include('partials.submit-buttons')
 
 @include('partials.editor')

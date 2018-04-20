@@ -12,6 +12,8 @@ return [
     'items_list' => 'Список предметів',
     'photos_list' => 'Список фотографій',
     'operations_list' => 'Список операцій',
+    'available' => 'Наявні',
+    'archived' => 'Архівні',
 
     'sorting' => 'Сортування',
     'operation_date' => 'Дата операції',
@@ -56,6 +58,7 @@ return [
     'usd' => 'долар',
     'uah' => 'гривня',
     'eur' => 'євро',
+    'q_archived_item' => 'Архівний предмет?',
 
     'wait' => 'Почекайте',
     'or' => 'або',

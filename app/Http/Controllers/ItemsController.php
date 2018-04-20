@@ -15,38 +15,35 @@ class ItemsController extends Controller
     {
         $items = Item::with('photo', 'category', 'operations')->ofCurrentUser();
 
-        $category = $this->request->input('category');
-        if ($category) {
-            $items->where('id__Category', $category);
-        }
+        $items = $this->applyCategory($items);
 
-        $sort = $this->request->input('sort');
-        switch ($sort) {
-            case 'updated_desc':
-                $items->orderBy('updated_at', 'desc');
-                break;
-            case 'updated_asc':
-                $items->orderBy('updated_at');
-                break;
-            case 'created_asc':
-                $items->orderBy('created_at');
-                break;
-            case 'created_desc':
-                $items->orderBy('created_at', 'desc');
-                break;
-            case 'alphabet_desc':
-                $items->orderBy('title', 'desc');
-                break;
-            case 'alphabet_asc':
-            default:
-                $items->orderBy('title', 'asc');
-        }
+        $items = $this->applySort($items);
 
         $items = $items->paginate(10);
 
         $data = [
             'items' => $items,
-            'categories' => ['0' => '-- '.trans('app.all').' --'] + Category::pluck('title', 'id')->all()
+            'categories' => $this->getCategoriesForDropdown()
+        ];
+
+        return view('items.index', $data);
+    }
+
+    public function indexArchive()
+    {
+        $items = Item::with('photo', 'category', 'operations')
+            ->ofCurrentUser()
+            ->archived();
+
+        $items = $this->applyCategory($items);
+
+        $items = $this->applySort($items);
+
+        $items = $items->paginate(10);
+
+        $data = [
+            'items' => $items,
+            'categories' => $this->getCategoriesForDropdown()
         ];
 
         return view('items.index', $data);
@@ -106,11 +103,11 @@ class ItemsController extends Controller
         } else {
             // Unsync photos from operations
             if ($item->operations) {
-               foreach ($item->operations as $o) {
-                   $o->photos()->sync([]);
-               }
+                foreach ($item->operations as $o) {
+                    $o->photos()->sync([]);
+                }
                 // Delete operations
-               $item->operations()->delete();
+                $item->operations()->delete();
             }
 
             // Delete item
@@ -144,9 +141,14 @@ class ItemsController extends Controller
             }
             $validation['id'] = $item->id;
 
-            $item_input = array_map('trim', $this->request->only('title', 'description', 'id__Photo', 'id__Category'));
+            $item_input = \array_map(
+                'trim',
+                $this->request->input()
+            );
             $overview = $this->getOverview();
-            $item_input = array_merge($item_input, compact('overview'));
+            $item_input = \array_merge($item_input, compact('overview'));
+
+            $item_input = $this->setCheckboxesValues($item_input);
 
             $item->update($item_input);
         }
@@ -207,5 +209,52 @@ class ItemsController extends Controller
         }
 
         return json_encode($overview, JSON_UNESCAPED_UNICODE);
+    }
+
+    private function applyCategory($items)
+    {
+        $category = $this->request->input('category');
+        if ($category) {
+            $items->where('id__Category', $category);
+        }
+
+        return $items;
+    }
+
+    private function applySort($items)
+    {
+        $sort = $this->request->input('sort');
+
+        switch ($sort) {
+            case 'updated_desc':
+                $items->orderBy('updated_at', 'desc');
+                break;
+            case 'updated_asc':
+                $items->orderBy('updated_at');
+                break;
+            case 'created_asc':
+                $items->orderBy('created_at');
+                break;
+            case 'created_desc':
+                $items->orderBy('created_at', 'desc');
+                break;
+            case 'alphabet_desc':
+                $items->orderBy('title', 'desc');
+                break;
+            case 'alphabet_asc':
+            default:
+                $items->orderBy('title', 'asc');
+        }
+
+        return $items;
+    }
+
+    private function setCheckboxesValues($input)
+    {
+        if (!isset($input['is_archived'])) {
+            $input['is_archived'] = 0;
+        }
+
+        return $input;
     }
 }
