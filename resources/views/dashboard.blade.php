@@ -1,4 +1,6 @@
-@extends('template')
+@extends('template', [
+    'title' => trans('app.dashboard')
+])
 
 @section('content')
     <div class="container">

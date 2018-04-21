@@ -1,4 +1,5 @@
 @extends('template', [
+    'title' => trans('app.items') . ' → ' . $item->title,
     'scripts' => [
         [
             'load' => 'defer',
@@ -11,7 +12,7 @@
     ],
     'styles' => [
         '/assets/vendor/lightgallery/1.0.0/css/lightgallery.css'
-    ]
+    ],
 ])
 
 @section('content')

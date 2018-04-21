@@ -1,4 +1,6 @@
-@extends('template', ['title' => trans('app.items') . ' :: INVENTARICO' ])
+@extends('template', [
+    'title' => trans('app.items')
+])
 
 @section('content')
 

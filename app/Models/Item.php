@@ -23,6 +23,11 @@ class Item extends BaseModel
         return $query->where('is_archived', 1);
     }
 
+    public function scopeAvailable($query)
+    {
+        return $query->where('is_archived', 0);
+    }
+
     /* -------------- Relations -------------- */
 
     public function photo()

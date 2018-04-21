@@ -1,4 +1,6 @@
-@extends('template')
+@extends('template', [
+    'title' => trans('app.items') . ' → ' . trans('app.editing') . ' «' . $item->title . '»',
+])
 
 @section('content')
     <h1 class="ui header">

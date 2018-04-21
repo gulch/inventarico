@@ -1,4 +1,6 @@
-@extends('template')
+@extends('template', [
+    'title' => trans('app.operation_types') . ' → ' . trans('app.creating_new_operation_type'),
+])
 
 @section('content')
     <h1 class="ui header">

@@ -1,4 +1,6 @@
-@extends('template')
+@extends('template', [
+    'title' => trans('app.categories') . ' → ' . trans('app.editing') . ' «' . $category->title . '»',
+])
 
 @section('content')
     <h1 class="ui header">
@@ -7,7 +9,7 @@
     </h1>
 
     <div class="ui warning form segment">
-        {!! Form::model($tag, ['url' => '/categories/'.$category->id, 'method' => 'PATCH']) !!}
+        {!! Form::model($category, ['url' => '/categories/'.$category->id, 'method' => 'PATCH']) !!}
 
         @include('categories._form')
 

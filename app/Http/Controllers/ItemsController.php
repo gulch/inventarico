@@ -13,7 +13,9 @@ class ItemsController extends Controller
 {
     public function index()
     {
-        $items = Item::with('photo', 'category', 'operations')->ofCurrentUser();
+        $items = Item::with('photo', 'category', 'operations')
+            ->ofCurrentUser()
+            ->available();
 
         $items = $this->applyCategory($items);
 
@@ -143,7 +145,13 @@ class ItemsController extends Controller
 
             $item_input = \array_map(
                 'trim',
-                $this->request->input()
+                $this->request->only([
+                    'title',
+                    'description',
+                    'is_archived',
+                    'id__Photo',
+                    'id__Category'
+                ])
             );
             $overview = $this->getOverview();
             $item_input = \array_merge($item_input, compact('overview'));
