@@ -17,8 +17,19 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->string('title')->default('');
             $table->integer('id__User')->unsigned();
+
+            $table->integer('parent_id')->unsigned()->nullable();
+            $table->integer('position', false, true);
+            $table->integer('real_depth', false, true);
+
             $table->timestamps();
+
             $table->foreign('id__User')->references('id')->on('User')->onDelete('cascade');
+
+            $table->foreign('parent_id')
+                ->references('id')
+                ->on('Category')
+                ->onDelete('set null');
         });
     }
 

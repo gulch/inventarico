@@ -25,7 +25,8 @@ class ItemsController extends Controller
 
         $data = [
             'items' => $items,
-            'categories' => $this->getCategoriesForDropdown()
+            'categories' => $this->getCategoriesForDropdown(),
+            'selected_category' => $this->request->input('category') ?? 0,
         ];
 
         return view('items.index', $data);
@@ -65,7 +66,8 @@ class ItemsController extends Controller
     public function create()
     {
         $data = [
-            'categories' => $this->getCategoriesForDropdown()
+            'categories' => $this->getCategoriesForDropdown(),
+            'selected_category' => 0,
         ];
         Session::put('url.intended', url(URL::previous()));
 
@@ -79,7 +81,8 @@ class ItemsController extends Controller
         Session::put('url.intended', url(URL::previous()));
         $data = [
             'item' => $item,
-            'categories' => $this->getCategoriesForDropdown()
+            'categories' => $this->getCategoriesForDropdown(),
+            'selected_category' => $item->id__Category,
         ];
 
         return view('items.edit', $data);
@@ -190,9 +193,7 @@ class ItemsController extends Controller
 
     private function getCategoriesForDropdown()
     {
-        $categories = ['0' => '---'] + Category::ofCurrentUser()->pluck('title', 'id')->all();
-
-        return $categories;
+        return CategoriesController::getCategoriesForDropdown();
     }
 
     private function getOverview()
@@ -221,10 +222,19 @@ class ItemsController extends Controller
 
     private function applyCategory($items)
     {
-        $category = $this->request->input('category');
-        if ($category) {
-            $items->where('id__Category', $category);
+        $category_id = $this->request->input('category');
+
+        if (!$category_id) {
+            return $items;
         }
+
+        $category = Category::find($category_id);
+
+        if (!$category) {
+            return $items;
+        }
+
+        $items->whereIn('id__Category', \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()));
 
         return $items;
     }

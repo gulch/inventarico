@@ -18,7 +18,12 @@ class CategoriesController extends Controller
 
     public function create()
     {
-        return view('categories.create');
+        $data = [
+            'parent_category' => 0,
+            'parent_categories' => self::getCategoriesForDropdown(),
+        ];
+
+        return view('categories.create', $data);
     }
 
     public function edit($id)
@@ -26,7 +31,9 @@ class CategoriesController extends Controller
         $category = Category::findOrFail($id);
         $this->ownerAccess($category);
         $data = [
-            'category' => $category
+            'category' => $category,
+            'parent_category' => $category->parent_id,
+            'parent_categories' => self::getCategoriesForDropdown(),
         ];
 
         return view('categories.edit', $data);
@@ -71,7 +78,7 @@ class CategoriesController extends Controller
         $validation = $this->validateData();
 
         if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>'.trans('app.saved');
+            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
                 $validation['redirect'] = Session::pull('url.intended', '/categories');
             }
@@ -85,6 +92,16 @@ class CategoriesController extends Controller
                 $category->save();
             }
             $category->update($this->request->all());
+
+            if ($parent_id = \request('parent_id')) {
+                $parent_category = Category::find($parent_id);
+
+                if ($parent_category) {
+                    $category->moveTo(0, $parent_category);
+                    //$parent_category->addChild($category);
+                }
+            }
+
             $validation['id'] = $category->id;
         }
 
@@ -110,5 +127,13 @@ class CategoriesController extends Controller
         }
 
         return $data;
+    }
+
+    public static function getCategoriesForDropdown()
+    {
+        return Category::ofCurrentUser()
+            ->orderBy('title')
+            ->get()
+            ->toTree();
     }
 }

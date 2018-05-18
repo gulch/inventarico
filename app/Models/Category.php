@@ -2,13 +2,22 @@
 
 namespace App\Models;
 
-class Category extends BaseModel
+use Franzose\ClosureTable\Models\Entity;
+use Franzose\ClosureTable\Contracts\EntityInterface;
+
+class Category extends Entity implements EntityInterface
 {
+    use ModelTrait;
+
     protected $table = 'Category';
+
+    protected $closure = CategoryClosure::class;
 
     protected $fillable = [
         'title'
     ];
+
+    public $timestamps = true;
 
     /* -------------- Relations -------------- */
 

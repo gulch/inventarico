@@ -48,6 +48,7 @@ return [
     'value' => 'Значення',
     'overview' => 'Рецензія',
     'category' => 'Категорія',
+    'parent_category' => 'Батьківська категорія',
     'operation_type' => 'Тип операції',
     'note' => 'Примітка',
     'condition' => 'Стан',

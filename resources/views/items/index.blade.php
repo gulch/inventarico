@@ -29,7 +29,10 @@
         </div>
 
         <div class="item">
-            {!! Form::select('category', $categories, app('request')->input('category'), ['class' => 'ui search dropdown']) !!}
+            <select name="category" class="ui search dropdown">
+                <option value="0" @if($selected_category === 0) selected @endif>---</option>
+                @include('items._options', ['items' => $categories, 'depth' => 0])
+            </select>
         </div>
 
         <a class="item @if(url()->current() == route('available-items')) active @endif"

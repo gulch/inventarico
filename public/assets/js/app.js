@@ -111,7 +111,7 @@ $(document).ready(function () {
         lightGallery(galleryElements[i], {
             thumbnail: false,
             speed: 250,
-            download: false,
+            download: true,
             zoom: true
         });
     }
@@ -123,7 +123,7 @@ $(document).ready(function () {
             selector: 'this',
             thumbnail: false,
             speed: 250,
-            download: false,
+            download: true,
             zoom: true
         });
     }
