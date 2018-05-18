@@ -49,3 +49,7 @@
     margin: 0 auto;
     width: auto;
 }
+
+.wide-min-320 {
+    min-width: 320px !important;
+}

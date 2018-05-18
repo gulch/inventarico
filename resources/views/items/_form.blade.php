@@ -2,7 +2,7 @@
 
 <div class="field">
     {!! Form::label('id__Category', trans('app.category').'*') !!}
-    <select name="id__Category" class="ui search dropdown" style="min-width: 320px;">
+    <select name="id__Category" class="ui search dropdown">
         <option value="0" @if($selected_category === 0) selected @endif>---</option>
         @include('items._options', ['items' => $categories, 'depth' => 0])
     </select>
