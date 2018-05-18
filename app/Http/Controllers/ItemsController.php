@@ -46,7 +46,8 @@ class ItemsController extends Controller
 
         $data = [
             'items' => $items,
-            'categories' => $this->getCategoriesForDropdown()
+            'categories' => $this->getCategoriesForDropdown(),
+            'selected_category' => $this->request->input('category') ?? 0,
         ];
 
         return view('items.index', $data);
@@ -234,7 +235,8 @@ class ItemsController extends Controller
             return $items;
         }
 
-        $items->whereIn('id__Category', \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()));
+        $items->whereIn('id__Category',
+            \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()));
 
         return $items;
     }
