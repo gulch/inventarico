@@ -252,18 +252,18 @@ class ItemsController extends Controller
             case 'updated_asc':
                 $items->orderBy('updated_at');
                 break;
-            case 'created_asc':
-                $items->orderBy('created_at');
-                break;
-            case 'created_desc':
-                $items->orderBy('created_at', 'desc');
-                break;
             case 'alphabet_desc':
                 $items->orderBy('title', 'desc');
                 break;
             case 'alphabet_asc':
-            default:
                 $items->orderBy('title', 'asc');
+            case 'created_desc':
+                $items->orderBy('created_at', 'desc');
+                break;
+            case 'created_asc':
+            default:
+                $items->orderBy('created_at');
+                break;
         }
 
         return $items;
