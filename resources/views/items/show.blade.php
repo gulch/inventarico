@@ -71,6 +71,13 @@
             </table>
         @endif
 
+        <a  class="ui right floated labeled icon button"
+            href="/operations/create/{{ $item->id }}"
+        >
+            <i class="plus icon"></i>
+            {{ trans('app.add_new_operation') }}
+        </a>
+
         <h2 class="ui dividing header">
             {{ trans('app.operations') }}
         </h2>
@@ -93,7 +100,17 @@
                             <div class="ui label">
                                 {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
                             </div>
-                            <div class="ui left pointing teal basic label">
+                            <?php
+                            $operation_label_type = 'teal basic';
+
+                            if ($operation->type->kind === 'profitable') {
+                                $operation_label_type = 'green';
+                            } elseif ($operation->type->kind === 'expenditure') {
+                                $operation_label_type = 'red';
+                            }
+
+                            ?>
+                            <div class="ui left pointing {{ $operation_label_type }} label">
                                 {{ $operation->price }} {{ $operation->currency }}
                             </div>
                         </div>

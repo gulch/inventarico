@@ -14,6 +14,7 @@ return [
     'operations_list' => 'Список операцій',
     'available' => 'Наявні',
     'archived' => 'Архівні',
+    'add_new_operation' => 'Додати нову операцію',
 
     'sorting' => 'Сортування',
     'operation_date' => 'Дата операції',
@@ -89,6 +90,10 @@ return [
     'creating_new_operation' => 'Створення нової операції',
     'creating_new_item' => 'Створення нового предмету',
     'editing_operation_for' => 'Редагування операції для',
+    'kind_of_operation' => 'Тип операції',
+    'expenditure' => 'Видаткова',
+    'profitable' => 'Прибуткова',
+    'neutral' => 'Нейтральна',
 
     'q_forgot_password' => 'Забули пароль?',
     'q_registered_already' => 'Вже зареєстровані?',
