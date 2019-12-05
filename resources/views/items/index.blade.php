@@ -54,7 +54,7 @@
                     <span class="text">{{ trans('app.sorting') }}</span>
                     <input type="hidden"
                            name="sort"
-                           value="{{ app('request')->input('sort') ?? 'alphabet_asc' }}"
+                           value="{{ app('request')->input('sort') ?? 'created_desc' }}"
                     >
                     <div class="menu">
                         <div class="header">{{ trans('app.created_date') }}</div>
@@ -114,7 +114,10 @@
 
                             <div class="meta">
                                 <p>
-                                    {{ trans('app.category') }}: {{ $item->category->title }}
+                                    {{ trans('app.category') }}:
+                                    <a href="/items?category={{ $item->category->id }}">
+                                        {{ $item->category->title }}
+                                    </a>
                                 </p>
 
                                 {{ trans('app.created_at') }}: {{ $item->created_at->format('d.m.Y H:i:s') }}
