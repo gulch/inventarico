@@ -38,6 +38,13 @@
             >
         @endif
 
+        <a class="ui right floated labeled icon button"
+           href="/item/{{ $item->id }}/edit"
+        >
+            <i class="edit icon"></i>
+            {{ trans('app.do_edit_item') }}
+        </a>
+
         <h2 class="ui dividing header">
             {{ trans('app.description') }}
         </h2>
@@ -71,8 +78,8 @@
             </table>
         @endif
 
-        <a  class="ui right floated labeled icon button"
-            href="/operations/create/{{ $item->id }}"
+        <a class="ui right floated labeled icon button"
+           href="/operations/create/{{ $item->id }}"
         >
             <i class="plus icon"></i>
             {{ trans('app.add_new_operation') }}

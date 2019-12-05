@@ -76,6 +76,7 @@ return [
     'do_save_n_close' => 'Зберегти і закрити',
     'do_add' => 'Додати',
     'do_edit' => 'Редагувати',
+    'do_edit_item' => 'Редагувати предмет',
     'do_remove' => 'Видалити',
     'do_choose_image' => 'Обрати зображення',
     'do_add_field' => 'Додати поле',
