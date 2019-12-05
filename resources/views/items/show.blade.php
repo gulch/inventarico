@@ -29,6 +29,17 @@
 
     <div class="ui divider"></div>
 
+    <div class="ui labeled icon stackable menu">
+        <a class="item" href="/operations/create/{{ $item->id }}">
+            <i class="plus icon"></i>
+            {{ trans('app.add_new_operation') }}
+        </a>
+        <a class="item" href="/items/{{ $item->id }}/edit">
+            <i class="edit icon"></i>
+            {{ trans('app.do_edit_item') }}
+        </a>
+    </div>
+
     <div class="ui segment">
 
         @if($item->photo)
@@ -37,13 +48,6 @@
                  class="ui fluid image"
             >
         @endif
-
-        <a class="ui right floated labeled icon button"
-           href="/item/{{ $item->id }}/edit"
-        >
-            <i class="edit icon"></i>
-            {{ trans('app.do_edit_item') }}
-        </a>
 
         <h2 class="ui dividing header">
             {{ trans('app.description') }}
@@ -77,13 +81,6 @@
                 </tbody>
             </table>
         @endif
-
-        <a class="ui right floated labeled icon button"
-           href="/operations/create/{{ $item->id }}"
-        >
-            <i class="plus icon"></i>
-            {{ trans('app.add_new_operation') }}
-        </a>
 
         <h2 class="ui dividing header">
             {{ trans('app.operations') }}
