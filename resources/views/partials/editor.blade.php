@@ -50,6 +50,8 @@
         $('.wysiwyg-editor').froalaEditor({
             language: '{{ config('app.locale') }}',
             imageUploadURL: '/photos/upload',
+            linkAlwaysNoFollow: true,
+            linkAlwaysBlank: true,
 
             imageUploadParams: {
                 setup: 'editor'
