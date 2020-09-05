@@ -5,18 +5,16 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.2",
-        "franzose/closure-table": "^5.1",
-        "intervention/image": "^2.3",
-        "laravel/framework": "5.6.*",
-        "laravelcollective/html": "5.6.*"
+        "php": ">=7.4",
+        "franzose/closure-table": "^6.0",
+        "intervention/image": "^2.5",
+        "laravel/framework": "^7.0",
+        "laravel/ui": "^2.0",
+        "laravelcollective/html": "^6.1"
     },
     "require-dev": {
-        "filp/whoops": "^2.0",
-        "fzaninotto/faker": "^1.4",
-        "mockery/mockery": "^1.0",
-        "nunomaduro/collision": "^2.0",
-        "phpunit/phpunit": "^7.0",
+        "facade/ignition": "^2.0",
+        "nunomaduro/collision": "^5.0",
         "barryvdh/laravel-debugbar": "^3.1",
         "barryvdh/laravel-ide-helper": "^2.4"
     },

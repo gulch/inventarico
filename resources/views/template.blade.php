@@ -84,6 +84,9 @@
     @yield('content')
 </div>
 
+<div class="ui hidden divider"></div>
+<div class="ui hidden divider"></div>
+
 @if(isset($scripts))
     @foreach($scripts as $js)
         @if(is_array($js))
