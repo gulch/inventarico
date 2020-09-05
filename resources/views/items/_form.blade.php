@@ -1,5 +1,14 @@
 @include('partials.error-message')
 
+<div class="field ui grey message">
+    <div class="header">
+        <div class="ui checkbox">
+            {!! Form::checkbox('is_archived', 1) !!}
+            {!! Form::label('is_archived', trans('app.q_archived_item')) !!}
+        </div>
+    </div>
+</div>
+
 <div class="field">
     {!! Form::label('id__Category', trans('app.category').'*') !!}
     <select name="id__Category" class="ui search dropdown">
@@ -41,15 +50,6 @@
         'setup' => 'photo',
         'path' => config('app.photo_image_upload_path')
     ])
-</div>
-
-<div class="field ui grey message">
-    <div class="header">
-        <div class="ui checkbox">
-            {!! Form::checkbox('is_archived', 1) !!}
-            {!! Form::label('is_archived', trans('app.q_archived_item')) !!}
-        </div>
-    </div>
 </div>
 
 @include('partials.submit-buttons')

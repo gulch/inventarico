@@ -24,6 +24,11 @@
                 {{ $item->category->title }}
             </div>
             {{ $item->title }}
+            @if($item->is_archived)
+                <div class="ui left pointing teal label">
+                    {{ trans('app.archived_item') }}
+                </div>
+            @endif
         </div>
     </h1>
 
@@ -144,10 +149,10 @@
                         </div>
                     </div>
                 </div>
-
             @endforeach
-
         </div>
-
     </div>
+
+    <div class="ui hidden divider"></div>
+    <div class="ui hidden divider"></div>
 @endsection
