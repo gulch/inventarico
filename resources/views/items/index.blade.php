@@ -36,7 +36,7 @@
         </div>
 
         <a class="item @if(url()->current() == route('available-items')) active @endif"
-               href="{{ route('available-items') }}"
+           href="{{ route('available-items') }}"
         >
             {{ trans('app.available') }}
         </a>
@@ -106,6 +106,12 @@
                                     <i class="cubes icon"></i>
                                     {{ $item->operations->count() }}
                                 </div>
+
+                                @if($item->is_archived)
+                                    <div class="value">
+                                        <span class="ui tiny label">{{ trans('app.archived_item') }}</span>
+                                    </div>
+                                @endif
                             </div>
 
                             <a href="/items/{{ $item->id }}/show" target="_blank" class="ui large header">
