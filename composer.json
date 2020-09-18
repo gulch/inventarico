@@ -8,15 +8,15 @@
         "php": ">=7.4",
         "franzose/closure-table": "^6.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "^7.0",
-        "laravel/ui": "^2.0",
-        "laravelcollective/html": "^6.1"
+        "laravel/framework": "^8.0",
+        "laravel/ui": "^3.0",
+        "laravelcollective/html": "^6.2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
         "nunomaduro/collision": "^5.0",
-        "barryvdh/laravel-debugbar": "^3.1",
-        "barryvdh/laravel-ide-helper": "^2.4"
+        "barryvdh/laravel-debugbar": "^3.5",
+        "barryvdh/laravel-ide-helper": "^2.8"
     },
     "autoload": {
         "classmap": [
