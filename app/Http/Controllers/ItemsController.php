@@ -11,6 +11,8 @@ use App\Models\{
 
 class ItemsController extends Controller
 {
+    private const PAGINATE_COUNT = 25;
+
     public function index()
     {
         $items = Item::with('photo', 'category', 'operations')
@@ -21,7 +23,7 @@ class ItemsController extends Controller
 
         $items = $this->applySort($items);
 
-        $items = $items->paginate(10);
+        $items = $items->paginate(self::PAGINATE_COUNT);
 
         $data = [
             'items' => $items,
@@ -42,7 +44,7 @@ class ItemsController extends Controller
 
         $items = $this->applySort($items);
 
-        $items = $items->paginate(10);
+        $items = $items->paginate(self::PAGINATE_COUNT);
 
         $data = [
             'items' => $items,
