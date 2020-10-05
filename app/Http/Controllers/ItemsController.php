@@ -16,33 +16,13 @@ class ItemsController extends Controller
     public function index()
     {
         $items = Item::with('photo', 'category', 'operations')
-            ->ofCurrentUser()
-            ->available();
+            ->ofCurrentUser();
 
         $items = $this->applyCategory($items);
 
         $items = $this->applySort($items);
 
-        $items = $items->paginate(self::PAGINATE_COUNT);
-
-        $data = [
-            'items' => $items,
-            'categories' => $this->getCategoriesForDropdown(),
-            'selected_category' => $this->request->input('category') ?? 0,
-        ];
-
-        return view('items.index', $data);
-    }
-
-    public function indexArchive()
-    {
-        $items = Item::with('photo', 'category', 'operations')
-            ->ofCurrentUser()
-            ->archived();
-
-        $items = $this->applyCategory($items);
-
-        $items = $this->applySort($items);
+        $items = $this->applyAvailability($items);
 
         $items = $items->paginate(self::PAGINATE_COUNT);
 
@@ -266,6 +246,22 @@ class ItemsController extends Controller
             case 'created_desc':
             default:
                 $items->orderBy('created_at', 'desc');
+        }
+
+        return $items;
+    }
+
+    private function applyAvailability($items)
+    {
+        $availability = $this->request->input('availability');
+
+        switch ($availability) {
+            case 'available':
+                $items->available();
+                break;
+            case 'archived':
+                $items->archived();
+                break;
         }
 
         return $items;

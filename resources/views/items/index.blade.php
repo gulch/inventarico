@@ -28,26 +28,37 @@
             <i class="gift large icon"></i>
         </div>
 
+        <div class="ui search large item">
+            <div class="ui transparent icon input">
+                <input class="prompt" type="text" placeholder="{{ trans('app.search') }}...">
+                <i class="search link icon"></i>
+            </div>
+            <div class="results"></div>
+        </div>
+
         <div class="item">
-            <select name="category" class="ui large search dropdown wide-min-320">
-                <option value="0" @if($selected_category === 0) selected @endif>---</option>
+            <select name="category" class="ui search dropdown wide-min-320">
+                <option value="0" @if($selected_category === 0) selected @endif>{{ trans('app.all_categories') }}</option>
                 @include('items._options', ['items' => $categories, 'depth' => 0])
             </select>
         </div>
 
-        <a class="item @if(url()->current() == route('available-items')) active @endif"
-           href="{{ route('available-items') }}"
-        >
-            {{ trans('app.available') }}
-        </a>
-
-        <a class="item @if(url()->current() == route('archived-items')) active @endif"
-           href="{{ route('archived-items') }}"
-        >
-            {{ trans('app.archived') }}
-        </a>
-
         <div class="right menu">
+            <div class="item">
+                <div class="ui labeled icon floating pointing dropdown basic button">
+                    <i class="archive icon"></i>
+                    <span class="text">{{ trans('app.availability') }}</span>
+                    <input type="hidden"
+                           name="availability"
+                           value="{{ app('request')->input('availability') ?? 'all' }}"
+                    >
+                    <div class="menu">
+                        <div class="item" data-value="all">{{ trans('app.all') }}</div>
+                        <div class="item" data-value="available">{{ trans('app.available') }}</div>
+                        <div class="item" data-value="archived">{{ trans('app.archived') }}</div>
+                    </div>
+                </div>
+            </div>
             <div class="item">
                 <div class="ui floating labeled icon pointing dropdown basic button">
                     <i class="sort content ascending icon"></i>

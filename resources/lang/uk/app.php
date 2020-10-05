@@ -13,6 +13,7 @@ return [
     'photos_list' => 'Список фотографій',
     'operations_list' => 'Список операцій',
     'available' => 'Наявні',
+    'availability' => 'Наявність',
     'archived' => 'Архівні',
     'add_new_operation' => 'Додати нову операцію',
 
@@ -64,6 +65,7 @@ return [
     'archived_item' => 'Архівний предмет',
 
     'wait' => 'Почекайте',
+    'search' => 'Пошук',
     'or' => 'або',
     'for' => 'для',
     'all' => 'Всі',

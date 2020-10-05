@@ -90,7 +90,7 @@ $(document).ready(function () {
     activateDataAction();
     activateCustomPopup();
 
-    $('select[name=category], input[name=sort], select[name=operationtype]').change(function () {
+    $('select[name=category], input[name=sort], select[name=operationtype], input[name=availability]').change(function () {
         var url = window.location.pathname;
         url = url + '?sort=' + $('input[name=sort]').val();
 
@@ -98,9 +98,15 @@ $(document).ready(function () {
         if ($category_input.length) {
             url = url + '&category=' + $category_input.val();
         }
+
         var $operationtype_input = $('select[name=operationtype]');
         if ($operationtype_input.length) {
             url = url + '&operationtype=' + $operationtype_input.val();
+        }
+
+        var $availability_input = $('input[name=availability]');
+        if ($availability_input.length) {
+            url = url + '&availability=' + $availability_input.val();
         }
         window.location.href = url;
     });

@@ -38,7 +38,7 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     /* Items */
     $router->get('items', 'ItemsController@index')->name('available-items');
-    $router->get('items/archive', 'ItemsController@indexArchive')->name('archived-items');
+    /*$router->get('items/archive', 'ItemsController@indexArchive')->name('archived-items');*/
     $router->get('items/create', 'ItemsController@create');
     $router->get('items/{id}/edit', 'ItemsController@edit');
     $router->get('items/{id}/show', 'ItemsController@show');
