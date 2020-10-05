@@ -21,7 +21,28 @@
         <i class="gift icon"></i>
         <div class="content">
             <div class="sub header">
-                {{ $item->category->title }}
+
+                <div class="ui large breadcrumb">
+                    <a class="section" href="/items">
+                        {{ trans('app.items') }}
+                    </a>
+
+                    <i class="right angle icon divider"></i>
+
+                    @if($item->category->hasAncestors())
+                        @foreach($item->category->ancestors()->get() as $ancestor)
+                            <a class="section" href="/items?category={{ $ancestor->id }}">
+                                {{ $ancestor->title }}
+                            </a>
+                            <i class="right angle icon divider"></i>
+                        @endforeach
+                    @endif
+
+                    <a class="section" href="/items?category={{ $item->category->id }}">
+                        {{ $item->category->title }}
+                    </a>
+                </div>
+
             </div>
             {{ $item->title }}
             @if($item->is_archived)
