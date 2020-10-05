@@ -29,7 +29,7 @@
         </div>
 
         <div class="item">
-            <select name="category" class="ui search dropdown wide-min-320">
+            <select name="category" class="ui large search dropdown wide-min-320">
                 <option value="0" @if($selected_category === 0) selected @endif>---</option>
                 @include('items._options', ['items' => $categories, 'depth' => 0])
             </select>
