@@ -279,14 +279,14 @@ class ItemsController extends Controller
         $q = $this->request->input('q');
 
         if ($q) {
-            $items->where('title', 'like', '%' . $q . '%');
-
-            // transliterato
-            $results = self::transliterato($q);
-
-            foreach ($results as $result) {
-                $items->orWhere('title', 'like', '%' . $result . '%');
-            }
+            $items->where(function($query) use ($q) {
+                $query->where('title', 'like', '%' . $q . '%');
+                // transliterato
+                $results = self::transliterato($q);
+                foreach ($results as $result) {
+                    $query->orWhere('title', 'like', '%' . $result . '%');
+                }
+            });
         }
 
         return $items;
