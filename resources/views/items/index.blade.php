@@ -131,8 +131,12 @@
                             </div>
 
                             <a href="/items/{{ $item->id }}/show" target="_blank" class="ui large header">
-                                @if(\request('q'))
-                                    {!! preg_replace('/('.\request('q').')/iu', '<mark>$1</mark>', e($item->title)) !!}
+                                @if(request('q'))
+                                    @php
+                                        $alt = \App\Http\Controllers\ItemsController::transliterato(request('q'));
+                                        $alt = $alt ? '|' . implode('|', $alt) : '';
+                                    @endphp
+                                    {!! preg_replace('/(' . request('q') . $alt . ')/iu', '<mark>$1</mark>', e($item->title)) !!}
                                 @else
                                     {{ $item->title }}
                                 @endif

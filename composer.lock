@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "03abf37a028fe78babb8a524c18666d6",
+    "content-hash": "579235d10d9b0d44439deb6ed45abc5f",
     "packages": [
         {
             "name": "brick/math",
@@ -456,6 +456,55 @@
                 }
             ],
             "time": "2020-04-13T13:17:36+00:00"
+        },
+        {
+            "name": "gulch/transliterato",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gulch/transliterato.git",
+                "reference": "e7cd44663bca6506d551cbaa1a31ab123b4e0a13"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gulch/transliterato/zipball/e7cd44663bca6506d551cbaa1a31ab123b4e0a13",
+                "reference": "e7cd44663bca6506d551cbaa1a31ab123b4e0a13",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4"
+            },
+            "require-dev": {
+                "php-coveralls/php-coveralls": "^2.2",
+                "phpunit/phpunit": "^9.0",
+                "squizlabs/php_codesniffer": "^3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "gulch\\Transliterato\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Volodymyr Gulchuk",
+                    "email": "volodymyr@gulchuk.com",
+                    "homepage": "https://gulchuk.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Package for replace text chars",
+            "keywords": [
+                "keyboard",
+                "replace",
+                "translit",
+                "words"
+            ],
+            "time": "2020-02-16T12:20:05+00:00"
         },
         {
             "name": "guzzlehttp/psr7",

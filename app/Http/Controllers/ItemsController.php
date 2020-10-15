@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\{
-    Session, URL
-};
-use App\Models\{
-    Item, Category
-};
+use App\Models\Category;
+use App\Models\Item;
+use gulch\Transliterato\BatchProcessor;
+use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
+use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
+use gulch\Transliterato\Scheme\RusToEngKeyboardLayout;
+use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
+use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
+use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 
 class ItemsController extends Controller
 {
@@ -275,9 +280,30 @@ class ItemsController extends Controller
 
         if ($q) {
             $items->where('title', 'like', '%' . $q . '%');
+
+            // transliterato
+            $results = self::transliterato($q);
+
+            foreach ($results as $result) {
+                $items->orWhere('title', 'like', '%' . $result . '%');
+            }
         }
 
         return $items;
+    }
+
+    public static function transliterato(string $q): array
+    {
+        $processor = new BatchProcessor(
+            new EngToRusKeyboardLayout(),
+            new EngToUkrKeyboardLayout(),
+            new RusToEngKeyboardLayout(),
+            new RusToUkrKeyboardLayout(),
+            new UkrToEngKeyboardLayout(),
+            new UkrToRusKeyboardLayout()
+        );
+
+        return $processor->process($q);
     }
 
     private function setCheckboxesValues($input)
