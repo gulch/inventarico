@@ -23,8 +23,7 @@ function activateDataAction() {
                                 segment.remove();
                                 break;
                         }
-                    }
-                    else {
+                    } else {
                         showErrorModalMessage(result.message);
                     }
                 }
@@ -33,7 +32,7 @@ function activateDataAction() {
     });
 }
 
-/* Модальный диалог ошибки */
+/* Error Modal */
 function showErrorModalMessage(message, text, icon) {
     if (message == undefined) {
         message = 'UNKNOWN ERROR';
@@ -60,7 +59,7 @@ function showErrorModalMessage(message, text, icon) {
     });
 }
 
-/* Активация кастомных попапов */
+/* Custom Popups Activation */
 function activateCustomPopup() {
     $('a[data-popup="1"]').each(function () {
         var $popup = $(this);
@@ -75,43 +74,66 @@ function activateCustomPopup() {
     });
 }
 
+function urlConstructor() {
+    var url = window.location.pathname;
+    url = url + '?sort=' + $('input[name=sort]').val();
+
+    var $category_input = $('select[name=category]');
+    if ($category_input.length) {
+        url = url + '&category=' + $category_input.val();
+    }
+
+    var $operationtype_input = $('select[name=operationtype]');
+    if ($operationtype_input.length) {
+        url = url + '&operationtype=' + $operationtype_input.val();
+    }
+
+    var $availability_input = $('input[name=availability]');
+    if ($availability_input.length) {
+        url = url + '&availability=' + $availability_input.val();
+    }
+
+    var $q_input = $('input[name=q]');
+    if ($q_input.length && $q_input.val()) {
+        url = url + '&q=' + $q_input.val();
+    }
+
+    return url;
+}
+
 $(document).ready(function () {
+
+    $('#q_clean').click(function () {
+        $('input[name=q]').val('');
+    });
 
     $('.message .close').on('click', function () {
         $(this).closest('.message').transition('fade');
     });
 
-    /* Активация чекбоксов */
+    /* Checkboxes Activation */
     $('.ui.checkbox').length && $('.ui.checkbox').checkbox();
 
-    /* Активация Dropdown */
+    /* Dropdown Activation */
     $('.ui.dropdown').length && $('.ui.dropdown').dropdown();
 
     activateDataAction();
     activateCustomPopup();
 
     $('select[name=category], input[name=sort], select[name=operationtype], input[name=availability]').change(function () {
-        var url = window.location.pathname;
-        url = url + '?sort=' + $('input[name=sort]').val();
-
-        var $category_input = $('select[name=category]');
-        if ($category_input.length) {
-            url = url + '&category=' + $category_input.val();
-        }
-
-        var $operationtype_input = $('select[name=operationtype]');
-        if ($operationtype_input.length) {
-            url = url + '&operationtype=' + $operationtype_input.val();
-        }
-
-        var $availability_input = $('input[name=availability]');
-        if ($availability_input.length) {
-            url = url + '&availability=' + $availability_input.val();
-        }
-        window.location.href = url;
+        window.location.href = urlConstructor();
     });
 
-    /* Галерея */
+    $('input[name=q]').keyup(function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            if ($(this).val()) {
+                window.location.href = urlConstructor();
+            }
+        }
+    });
+
+    /* Gallery */
     var galleryElements = document.getElementsByClassName("gallery");
     for (var i = 0; i < galleryElements.length; i++) {
         lightGallery(galleryElements[i], {

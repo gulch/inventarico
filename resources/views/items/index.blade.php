@@ -30,8 +30,13 @@
 
         <div class="ui search large item">
             <div class="ui transparent icon input">
-                <input class="prompt" type="text" placeholder="{{ trans('app.search') }}...">
-                <i class="search link icon"></i>
+                <input name="q"
+                       class="prompt"
+                       type="text"
+                       placeholder="{{ trans('app.search') }}..."
+                       @if(\request('q')) value="{{ \request('q') }}"@endif
+                >
+                <i id="q_clean" class="remove circle link icon"></i>
             </div>
             <div class="results"></div>
         </div>
@@ -126,7 +131,11 @@
                             </div>
 
                             <a href="/items/{{ $item->id }}/show" target="_blank" class="ui large header">
-                                {{ $item->title }}
+                                @if(\request('q'))
+                                    {!! preg_replace('/('.\request('q').')/iu', '<mark>$1</mark>', e($item->title)) !!}
+                                @else
+                                    {{ $item->title }}
+                                @endif
                             </a>
 
                             <div class="meta">

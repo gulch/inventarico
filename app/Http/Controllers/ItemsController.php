@@ -24,6 +24,8 @@ class ItemsController extends Controller
 
         $items = $this->applyAvailability($items);
 
+        $items = $this->applySearch($items);
+
         $items = $items->paginate(self::PAGINATE_COUNT);
 
         $data = [
@@ -262,6 +264,17 @@ class ItemsController extends Controller
             case 'archived':
                 $items->archived();
                 break;
+        }
+
+        return $items;
+    }
+
+    private function applySearch($items)
+    {
+        $q = $this->request->input('q');
+
+        if ($q) {
+            $items->where('title', 'like', '%' . $q . '%');
         }
 
         return $items;
