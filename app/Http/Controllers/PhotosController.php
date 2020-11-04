@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as InterventionImage;
 use App\Models\Photo;
 
@@ -234,7 +235,7 @@ class PhotosController extends Controller
             $name = substr($name, 0, 100);
         }
 
-        return strtolower(str_slug($name) . '-' . uniqid() . '.' . $ext);
+        return strtolower(Str::slug($name) . '-' . uniqid() . '.' . $ext);
     }
 
     public static function getFilePath($path, $prefix = null)
