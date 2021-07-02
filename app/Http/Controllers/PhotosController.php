@@ -62,7 +62,7 @@ class PhotosController extends Controller
 
             /* Save original file but rename with prefix "REMOVED_" */
             $original_filepath = public_path() . config('app.original_image_upload_path');
-            @rename($original_filepath . $image->path, $original_filepath . 'REMOVED_' . $image->path);
+            @rename($original_filepath . $photo->path, $original_filepath . 'REMOVED_' . $photo->path);
 
             /* Delete from DB */
             if (!$photo->delete()) {
@@ -193,6 +193,7 @@ class PhotosController extends Controller
 
             /* Optimizations */
             $img->getCore()->stripImage();
+            $img->sharpen(8);
             //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
 
             $img->save($filepath_new . $filename, $quality);
