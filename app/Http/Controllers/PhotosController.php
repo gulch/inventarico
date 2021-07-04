@@ -117,6 +117,11 @@ class PhotosController extends Controller
         }
         if ($this->request->hasFile('image') || $this->request->hasFile('file')) {
             $image = $this->request->hasFile('image') ? $this->request->file('image') : $this->request->file('file');
+            
+            if (is_array($image) && count($image) > 0) {
+                $image = $image[0];
+            }
+            
             if ($image->isValid()) {
                 $filename = $this->addUniqueID($image->getClientOriginalName());
 
@@ -133,7 +138,12 @@ class PhotosController extends Controller
 
                             case 'editor':
                                 $this->createEditorImage($filepath_original, $filename);
-                                $result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
+
+                                $result_array['filekey'] = [
+                                    'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename)
+                                ];
+
+                                //$result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
                                 break;
                         }
                     }

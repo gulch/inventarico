@@ -1,63 +1,42 @@
-{{-- Font Awesome CSS --}}
-<link href="/assets/vendor/font-awesome/4.6.3/css/fa.css" rel="stylesheet" type="text/css">
+{{-- Redactor CSS --}}
+<link href="/assets/vendor/redactor/3.4.7/redactor.css" rel="stylesheet" type="text/css">
 
-{{-- Froala CSS --}}
-<link href="/assets/vendor/froala/2.3.4/css/froala_editor.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/froala_style.css" rel="stylesheet" type="text/css">
+{{-- Redactor Plugins CSS --}}
 
-{{-- Froala Plugins CSS --}}
-<link href="/assets/vendor/froala/2.3.4/css/plugins/char_counter.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/code_view.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/colors.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/emoticons.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/table.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/video.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/image.css" rel="stylesheet" type="text/css">
 
 {{-- Include Code Mirror CSS --}}
-<link href="/assets/vendor/codemirror/5.3.0/codemirror.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/vendor/codemirror/5.62.0/codemirror.min.css" rel="stylesheet" type="text/css">
 
-{{-- Froala JS --}}
-<script src="/assets/vendor/froala/2.3.4/js/froala_editor.min.js"></script>
+{{-- Redactor JS --}}
+<script src="/assets/vendor/redactor/3.4.7/redactor.js"></script>
 
 {{-- Include Code Mirror JS --}}
-<script src="/assets/vendor/codemirror/5.3.0/codemirror.min.js"></script>
-<script src="/assets/vendor/codemirror/5.3.0/mode/xml/xml.min.js"></script>
+<script src="/assets/vendor/codemirror/5.62.0/codemirror.min.js"></script>
+<script src="/assets/vendor/codemirror/5.62.0/xml.min.js"></script>
 
-
-{{-- Froala Plugins JS --}}
-<script src="/assets/vendor/froala/2.3.4/js/plugins/char_counter.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/code_view.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/code_beautifier.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/colors.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/emoticons.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/table.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/video.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/image.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/align.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/font_size.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/link.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/lists.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/quote.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_format.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_style.min.js"></script>
+{{-- Redactor Plugins JS --}}
+<script src="/assets/vendor/redactor/3.4.7/plugins/counter/counter.js"></script>
 
 {{-- Language --}}
-<script src="/assets/vendor/froala/2.3.4/js/languages/{{ config('app.locale') }}.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/lang/{{ config('app.locale') }}.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('.wysiwyg-editor').froalaEditor({
-            language: '{{ config('app.locale') }}',
-            imageUploadURL: '/photos/upload',
-            linkAlwaysNoFollow: true,
-            linkAlwaysBlank: true,
+    $R('.wysiwyg-editor', {
+        plugins: ['counter'],
+        lang: document.documentElement.lang,
 
-            imageUploadParams: {
-                setup: 'editor'
+        imageFigure: false,
+        imageResizable: true,
+        imageUpload: '/photos/upload',
+        imageData: {
+            setup: 'editor',
+            _token: document.head.querySelector('meta[name="csrf-token"]').content
+        },
+
+        source: {
+            codemirror: {
+                lineNumbers: true
             }
-        });
-
-        $('.fr-box a:contains("Unlicensed")').parent().remove();
+        }
     });
 </script>
