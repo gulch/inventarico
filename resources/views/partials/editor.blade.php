@@ -1,63 +1,67 @@
-{{-- Font Awesome CSS --}}
-<link href="/assets/vendor/font-awesome/4.6.3/css/fa.css" rel="stylesheet" type="text/css">
+{{-- Include Code Mirror --}}
+<link href="/assets/vendor/codemirror/5.62.0/codemirror.min.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/codemirror/5.62.0/codemirror.min.js"></script>
+<script src="/assets/vendor/codemirror/5.62.0/xml.min.js"></script>
 
-{{-- Froala CSS --}}
-<link href="/assets/vendor/froala/2.3.4/css/froala_editor.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/froala_style.css" rel="stylesheet" type="text/css">
+{{-- Redactor --}}
+<link href="/assets/vendor/redactor/3.4.7/redactor.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/redactor/3.4.7/redactor.js"></script>
 
-{{-- Froala Plugins CSS --}}
-<link href="/assets/vendor/froala/2.3.4/css/plugins/char_counter.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/code_view.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/colors.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/emoticons.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/table.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/video.css" rel="stylesheet" type="text/css">
-<link href="/assets/vendor/froala/2.3.4/css/plugins/image.css" rel="stylesheet" type="text/css">
+{{-- Redactor Plugins --}}
+<script src="/assets/vendor/redactor/3.4.7/plugins/alignment.js"></script>
+<link href="/assets/vendor/redactor/3.4.7/plugins/clips.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/redactor/3.4.7/plugins/clips.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/counter.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/fontcolor.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/fontsize.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/specialchars.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/table.js"></script>
+<script src="/assets/vendor/redactor/3.4.7/plugins/video.js"></script>
 
-{{-- Include Code Mirror CSS --}}
-<link href="/assets/vendor/codemirror/5.3.0/codemirror.min.css" rel="stylesheet" type="text/css">
-
-{{-- Froala JS --}}
-<script src="/assets/vendor/froala/2.3.4/js/froala_editor.min.js"></script>
-
-{{-- Include Code Mirror JS --}}
-<script src="/assets/vendor/codemirror/5.3.0/codemirror.min.js"></script>
-<script src="/assets/vendor/codemirror/5.3.0/mode/xml/xml.min.js"></script>
-
-
-{{-- Froala Plugins JS --}}
-<script src="/assets/vendor/froala/2.3.4/js/plugins/char_counter.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/code_view.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/code_beautifier.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/colors.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/emoticons.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/table.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/video.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/image.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/align.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/font_size.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/link.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/lists.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/quote.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_format.min.js"></script>
-<script src="/assets/vendor/froala/2.3.4/js/plugins/paragraph_style.min.js"></script>
-
-{{-- Language --}}
-<script src="/assets/vendor/froala/2.3.4/js/languages/{{ config('app.locale') }}.js"></script>
+{{-- Redactor Language --}}
+<script src="/assets/vendor/redactor/3.4.7/lang/{{ config('app.locale') }}.js"></script>
+<script src="/assets/js/redactor-plugins-lang.{{ config('app.locale') }}.js"></script>
 
 <script>
-    $(document).ready(function () {
-        $('.wysiwyg-editor').froalaEditor({
-            language: '{{ config('app.locale') }}',
-            imageUploadURL: '/photos/upload',
-            linkAlwaysNoFollow: true,
-            linkAlwaysBlank: true,
+    $R('.wysiwyg-editor', {
+        lang: document.documentElement.lang,
+        formatting: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'pre', 'p', 'blockquote', 'pre'],
+        animation: false,
+        structure: true,
 
-            imageUploadParams: {
-                setup: 'editor'
+        linkTarget: '_blank',
+        linkTitle: true,
+        linkNofollow: true,
+
+        imageFigure: false,
+        imageResizable: true,
+        imageUpload: '/photos/upload',
+        multipleUpload: false,
+        imageData: {
+            setup: 'editor',
+            _token: document.head.querySelector('meta[name="csrf-token"]').content
+        },
+
+        source: {
+            codemirror: {
+                lineNumbers: true
             }
-        });
+        },
 
-        $('.fr-box a:contains("Unlicensed")').parent().remove();
+        plugins: [
+            'alignment', 
+            'clips',
+            'counter',
+            'fontcolor',
+            'fontsize',
+            'specialchars',
+            'table',
+            'video'
+        ],
+        clips: [
+            ['OFFICIAL WEBSITE', '<b>OFFICIAL WEBSITE</b>'],
+            ['купив на Aliexpress за', 'купив на <b>Aliexpress</b> за'],
+            ['купив на Amazon за', 'купив на <b>Amazon</b> за']
+        ]
     });
 </script>
