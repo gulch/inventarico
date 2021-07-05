@@ -53,3 +53,7 @@
 .wide-min-320 {
     min-width: 320px !important;
 }
+
+.redactor-styles {
+    font-family: Lato !important;
+}
