@@ -20,6 +20,7 @@
 
 {{-- Redactor Language --}}
 <script src="/assets/vendor/redactor/3.4.7/lang/{{ config('app.locale') }}.js"></script>
+<script src="/assets/js/redactor-plugins-lang.{{ config('app.locale') }}.js"></script>
 
 <script>
     $R('.wysiwyg-editor', {
@@ -58,7 +59,7 @@
             'video'
         ],
         clips: [
-            ['OFFICIAL WEBSITE', 'OFFICIAL WEBSITE'],
+            ['OFFICIAL WEBSITE', '<b>OFFICIAL WEBSITE</b>'],
             ['купив на Aliexpress за', 'купив на <b>Aliexpress</b> за'],
             ['купив на Amazon за', 'купив на <b>Amazon</b> за']
         ]
