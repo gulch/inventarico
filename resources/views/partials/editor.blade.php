@@ -22,6 +22,9 @@
 <script src="/assets/vendor/redactor/3.4.7/lang/{{ config('app.locale') }}.js"></script>
 <script src="/assets/js/redactor-plugins-lang.{{ config('app.locale') }}.js"></script>
 
+{{-- Redactor Custom Clips --}}
+<script src="/assets/js/redactor-plugin-clips.options.lang.{{ config('app.locale') }}.js"></script>
+
 <script>
     $R('.wysiwyg-editor', {
         lang: document.documentElement.lang,
@@ -49,7 +52,7 @@
         },
 
         plugins: [
-            'alignment', 
+            'alignment',
             'clips',
             'counter',
             'fontcolor',
@@ -57,11 +60,11 @@
             'specialchars',
             'table',
             'video'
-        ],
+        ]/* ,
         clips: [
             ['OFFICIAL WEBSITE', '<b>OFFICIAL WEBSITE</b>'],
             ['купив на Aliexpress за', 'купив на <b>Aliexpress</b> за'],
             ['купив на Amazon за', 'купив на <b>Amazon</b> за']
-        ]
+        ] */
     });
 </script>
