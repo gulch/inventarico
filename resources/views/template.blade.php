@@ -18,7 +18,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
 
     {{-- jQuery --}}
-    <script src="/assets/vendor/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.6.0/jquery.min.js"></script>
 
     {{-- Favicon --}}
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
