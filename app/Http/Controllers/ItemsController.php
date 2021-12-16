@@ -224,8 +224,10 @@ class ItemsController extends Controller
             return $items;
         }
 
-        $items->whereIn('id__Category',
-            \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()));
+        $items->whereIn(
+            'id__Category',
+            \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray())
+        );
 
         return $items;
     }
@@ -279,7 +281,7 @@ class ItemsController extends Controller
         $q = $this->request->input('q');
 
         if ($q) {
-            $items->where(function($query) use ($q) {
+            $items->where(function ($query) use ($q) {
                 $query->where('title', 'like', '%' . $q . '%');
                 // transliterato
                 $results = self::transliterato($q);

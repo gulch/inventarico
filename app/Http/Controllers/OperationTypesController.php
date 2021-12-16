@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\{
-    Session,
-    URL
-};
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 use App\Models\OperationType;
 
 class OperationTypesController extends Controller

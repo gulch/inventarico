@@ -45,7 +45,6 @@ class PhotosController extends Controller
         if (is_null($photo)) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         } else {
-
             if (sizeof($photo->items)) {
                 return $this->jsonResponse([
                     'message' => trans('app.photo_is_use_in_some_item')
@@ -84,7 +83,6 @@ class PhotosController extends Controller
     {
         $result = $this->doUploadImage();
         if (isset($result['path'])) {
-
             $photo = new Photo;
             $photo->setUserId();
             $photo->path = $result['path'];
@@ -117,17 +115,16 @@ class PhotosController extends Controller
         }
         if ($this->request->hasFile('image') || $this->request->hasFile('file')) {
             $image = $this->request->hasFile('image') ? $this->request->file('image') : $this->request->file('file');
-            
+
             if (is_array($image) && count($image) > 0) {
                 $image = $image[0];
             }
-            
+
             if ($image->isValid()) {
                 $filename = $this->addUniqueID($image->getClientOriginalName());
 
                 $filepath_original = self::getFilePath(config('app.original_image_upload_path'));
                 if ($image->move($filepath_original, $filename)) {
-
                     if ($setup = $this->request->get('setup')) {
                         switch ($setup) {
                             case 'photo':
@@ -193,7 +190,7 @@ class PhotosController extends Controller
                     $img->crop($width, $height);
                 }
             } else {
-                if($width || $height) {
+                if ($width || $height) {
                     $img->resize($width, $height, function ($constraint) {
                         $constraint->aspectRatio();
                         $constraint->upsize();
