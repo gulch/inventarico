@@ -4,7 +4,7 @@
         <title>INVENTARICO</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.2.4/semantic.css">
+        <link rel="stylesheet" type="text/css" href="/assets/vendor/fomantic/2.8.8/semantic.css">
         <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ config('app.version') }}">
         <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
     </head>

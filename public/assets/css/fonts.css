@@ -1,13 +1,14 @@
-@font-face {
+/* TODO - Deprecated? */
+/*@font-face {
     font-family: 'FontAwesome';
     src: url('/assets/vendor/font-awesome/4.6.3/fonts/fa.eot');
-    src: url('/assets/vendor/font-awesome/4.6.3/fonts/fa.eot?#iefix') format('embedded-opentype'), 
-         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff2') format('woff2'), 
-         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff') format('woff'), 
+    src: url('/assets/vendor/font-awesome/4.6.3/fonts/fa.eot?#iefix') format('embedded-opentype'),
+         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff2') format('woff2'),
+         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff') format('woff'),
          url('/assets/vendor/font-awesome/4.6.3/fonts/fa.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
+}*/
 
 @font-face {
     font-family: 'Lato';
