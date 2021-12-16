@@ -1,11 +1,11 @@
 {
     "name": "gulch/inventarico",
-    "description": "Inventarico system",
+    "description": "Inventarico Things Management System",
     "keywords": ["inventarico", "laravel"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "franzose/closure-table": "^6.1",
         "gulch/transliterato": "^1.0",
         "intervention/image": "^2.5",
