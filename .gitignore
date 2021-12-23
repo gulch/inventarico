@@ -3,6 +3,7 @@
 /.vscode
 .env
 /_ide_helper.php
+composer.lock
 /composer.lock
 /.phpstorm.meta.php
 /public/uploads/img/
