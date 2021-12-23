@@ -1,23 +1,21 @@
 {
     "name": "gulch/inventarico",
-    "description": "Inventarico system",
+    "description": "Inventarico Things Management System",
     "keywords": ["inventarico", "laravel"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.0",
         "franzose/closure-table": "^6.1",
         "gulch/transliterato": "^1.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "^8.0",
+        "laravel/framework": "^8.40",
         "laravel/ui": "^3.2",
         "laravelcollective/html": "^6.2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
-        "nunomaduro/collision": "^5.0",
-        "barryvdh/laravel-debugbar": "^3.5",
-        "barryvdh/laravel-ide-helper": "^2.9"
+        "nunomaduro/collision": "^5.0"
     },
     "autoload": {
         "classmap": [
@@ -26,8 +24,7 @@
         ],
         "psr-4": {
             "App\\": [
-                "app/",
-                "app/Models/"
+                "app/"
             ]
         },
         "exclude-from-classmap": [

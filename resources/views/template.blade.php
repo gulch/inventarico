@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ config('app.locale') }}">
 <head>
     <title>{{ isset($title) ? $title . ' :: ' : '' }}{{ config('app.name') }}</title>
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.2.4/semantic.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/fomantic/2.8.8/semantic.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ config('app.version') }}">
 
     @if(isset($styles))
@@ -18,17 +18,12 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
 
     {{-- jQuery --}}
-    <script src="/assets/vendor/jquery/3.5.1/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.6.0/jquery.min.js"></script>
 
     {{-- Favicon --}}
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
     <link rel="manifest" href="/favicon/site.webmanifest">
     <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
-    <link rel="shortcut icon" href="/favicon/favicon.ico">
-    <meta name="msapplication-TileColor" content="#ffc40d">
-    <meta name="msapplication-config" content="/favicon/browserconfig.xml">
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
@@ -108,7 +103,7 @@
     @endforeach
 @endif
 
-<script defer src="/assets/vendor/semantic/2.2.4/semantic.js"></script>
+<script defer src="/assets/vendor/fomantic/2.8.8/semantic.js"></script>
 <script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
 </body>
 </html>

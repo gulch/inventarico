@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\{Session, URL};
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\URL;
 use App\Models\Item;
 use App\Models\Operation;
 use App\Models\OperationType;
@@ -108,7 +109,7 @@ class OperationsController extends Controller
     {
         $id__Item = $this->request->get('id__Item');
 
-        if(!$id__Item) {
+        if (!$id__Item) {
             $this->jsonResponse([
                 'message' => trans('app.id_of_item_not_exists')
             ]);

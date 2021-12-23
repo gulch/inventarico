@@ -34,11 +34,6 @@
     </div>
 </div>
 
-<div class="field">
-    {!! Form::label('note', trans('app.note')) !!}
-    {!! Form::textarea('note', null, ['class' => 'wysiwyg-editor']) !!}
-</div>
-
 <div class="field" id="gallery">
     <h3 class="ui top attached header">
         <i class="photo icon"></i>
@@ -55,6 +50,11 @@
             ])
         </div>
     </div>
+</div>
+
+<div class="field">
+    {!! Form::label('note', trans('app.note')) !!}
+    {!! Form::textarea('note', null, ['class' => 'wysiwyg-editor']) !!}
 </div>
 
 <input type="hidden" name="id__Item" value="{{ $item->id }}">

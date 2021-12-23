@@ -1,6 +1,11 @@
 {
     "name": "Inventarico",
     "short_name": "Inventarico",
+    "display": "standalone",
+    "dir": "ltr",
+    "scope": "/",
+    "start_url": "/",
+    "orientation": "natural",
     "icons": [
         {
             "src": "/favicon/android-chrome-192x192.png",
@@ -11,6 +16,11 @@
             "src": "/favicon/android-chrome-512x512.png",
             "sizes": "512x512",
             "type": "image/png"
+        },
+        {
+            "src": "/favicon/maskable-icon-512x512.webp",
+            "sizes": "512x512",
+            "type": "image/webp"
         }
     ],
     "theme_color": "#ffffff",

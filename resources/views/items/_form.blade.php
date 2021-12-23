@@ -22,11 +22,6 @@
     {!! Form::text('title', null) !!}
 </div>
 
-<div class="field">
-    {!! Form::label('description', trans('app.description')) !!}
-    {!! Form::textarea('description', null, ['class' => 'wysiwyg-editor']) !!}
-</div>
-
 <div class="field" id="overview">
     <h3 class="ui top attached header">
         <i class="unordered list icon"></i>
@@ -50,6 +45,11 @@
         'setup' => 'photo',
         'path' => config('app.photo_image_upload_path')
     ])
+</div>
+
+<div class="field">
+    {!! Form::label('description', trans('app.description')) !!}
+    {!! Form::textarea('description', null, ['class' => 'wysiwyg-editor']) !!}
 </div>
 
 @include('partials.submit-buttons')
