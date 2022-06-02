@@ -9,13 +9,13 @@
         "franzose/closure-table": "^6.1",
         "gulch/transliterato": "^1.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "^8.40",
+        "laravel/framework": "^9.0",
         "laravel/ui": "^3.2",
         "laravelcollective/html": "^6.2"
     },
     "require-dev": {
-        "facade/ignition": "^2.0",
-        "nunomaduro/collision": "^5.0"
+        "spatie/laravel-ignition": "^1.0",
+        "nunomaduro/collision": "^6.1"
     },
     "autoload": {
         "classmap": [
