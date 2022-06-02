@@ -55,7 +55,7 @@
                     <span class="text">{{ trans('app.availability') }}</span>
                     <input type="hidden"
                            name="availability"
-                           value="{{ app('request')->input('availability') ?? 'all' }}"
+                           value="{{ request()->input('availability') ?? 'all' }}"
                     >
                     <div class="menu">
                         <div class="item" data-value="all">{{ trans('app.all') }}</div>
@@ -70,7 +70,7 @@
                     <span class="text">{{ trans('app.sorting') }}</span>
                     <input type="hidden"
                            name="sort"
-                           value="{{ app('request')->input('sort') ?? 'created_desc' }}"
+                           value="{{ request()->input('sort') ?? 'created_desc' }}"
                     >
                     <div class="menu">
                         <div class="header">{{ trans('app.created_date') }}</div>
@@ -190,8 +190,9 @@
         <div class="ui middle aligned stackable centered grid container">
             <div class="ui row">
                 {!! $items->appends([
-                    'sort' => app('request')->input('sort'),
-                    'category' => app('request')->input('category')
+                    'sort' => request()->input('sort'),
+                    'category' => request()->input('category'),
+                    'availability' => request()->input('availability'),
                     ])->links()
                 !!}
             </div>
