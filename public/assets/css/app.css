@@ -57,3 +57,7 @@
 .redactor-styles {
     font-family: Lato !important;
 }
+
+.redactor-toolbar {
+    background-color: #fff !important;
+}
