@@ -104,7 +104,7 @@
     @endforeach
 @endif
 
-<script defer src="/assets/vendor/semantic/2.4.2/semantic.js"></script>
+<script defer src="/assets/vendor/semantic/2.4.2/semantic.min.js"></script>
 <script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
 </body>
 </html>
