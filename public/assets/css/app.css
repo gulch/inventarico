@@ -61,3 +61,7 @@
 .redactor-toolbar {
     background-color: #fff !important;
 }
+
+.items-search-input {
+    margin-bottom: 1rem;
+}

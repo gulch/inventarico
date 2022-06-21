@@ -124,7 +124,11 @@ return [
     'photo_is_use_in_some_item' => 'Ця фотографія використовується в предметі(ах)',
     'photo_is_use_in_some_operation' => 'Ця фотографія використовується в операції(ях)',
     'category_has_items_cant_delete' => 'В цій категорії є предмети. Видалення неможливо!',
-    'operationtype_has_operations_cant_delete' => 'Є операції з цим типом операцій. Видалення неможливо!'
+    'operationtype_has_operations_cant_delete' => 'Є операції з цим типом операцій. Видалення неможливо!',
+
+    'ph_search' => 'Введіть пошуковий запит',
+
+
 
     /*'' => '',*/
 ];

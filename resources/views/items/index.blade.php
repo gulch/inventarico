@@ -28,19 +28,6 @@
             <i class="gift large icon"></i>
         </div>
 
-        <div class="ui search large item">
-            <div class="ui transparent icon input">
-                <input name="q"
-                       class="prompt"
-                       type="text"
-                       placeholder="{{ trans('app.search') }}..."
-                       @if(\request('q')) value="{{ \request('q') }}"@endif
-                >
-                <i id="q_clean" class="remove circle link icon"></i>
-            </div>
-            <div class="results"></div>
-        </div>
-
         <div class="item">
             <select name="category" class="ui search dropdown wide-min-320">
                 <option value="0" @if($selected_category === 0) selected @endif>{{ trans('app.all_categories') }}</option>
@@ -89,6 +76,16 @@
             </div>
         </div>
 
+    </div>
+
+
+    <div class="ui fluid big icon input items-search-input">
+        <input type="text"
+               name="q"
+               placeholder="{{ trans('app.ph_search') }}..."
+               @if(request('q')) value="{{ request('q') }}"@endif
+        >
+        <i id="q_clean" class="remove circle link icon"></i>
     </div>
 
     @if ($items)
