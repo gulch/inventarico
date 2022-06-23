@@ -1,40 +1,27 @@
-/* TODO - Deprecated? */
-/*@font-face {
-    font-family: 'FontAwesome';
-    src: url('/assets/vendor/font-awesome/4.6.3/fonts/fa.eot');
-    src: url('/assets/vendor/font-awesome/4.6.3/fonts/fa.eot?#iefix') format('embedded-opentype'),
-         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff2') format('woff2'),
-         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.woff') format('woff'),
-         url('/assets/vendor/font-awesome/4.6.3/fonts/fa.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}*/
-
 @font-face {
     font-family: 'Lato';
-    src: url('/assets/fonts/lato/2.015/bold.eot');
-    src: url('/assets/fonts/lato/2.015/bold.eot?#iefix') format('embedded-opentype'),
-         url('/assets/fonts/lato/2.015/bold.woff2') format('woff2'),
-         url('/assets/fonts/lato/2.015/bold.woff') format('woff'),
-         url('/assets/fonts/lato/2.015/bold.ttf') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-    font-display: swap;
+    font-weight: 1 999;
+    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2'),
+         url(/assets/fonts/lato/3.002/min/vf.woff) format('woff');
 }
 
 @font-face {
-    font-family: 'Lato';
-    src: url('/assets/fonts/lato/2.015/regular.eot');
-    src: url('/assets/fonts/lato/2.015/regular.eot?#iefix') format('embedded-opentype'),
-         url('/assets/fonts/lato/2.015/regular.woff2') format('woff2'),
-         url('/assets/fonts/lato/2.015/regular.woff') format('woff'),
-         url('/assets/fonts/lato/2.015/regular.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
+    font-family: 'Lato-fallback';
+    letter-spacing: -0.25px;
+    src: local('Segoe UI');
 }
 
 body {
-    font-family: 'Lato', sans-serif;
+    font-family: Lato, Lato-fallback, sans-serif !important;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: subpixel-antialiased;
+
+    /* Support for Safari and Chrome. */
     text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+     /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
 }

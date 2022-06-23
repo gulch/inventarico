@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\URL;
 use App\Models\Item;
 use App\Models\Operation;
 use App\Models\OperationType;
+
+use function view, trans, session, url;
 
 class OperationsController extends Controller
 {
     public function index()
     {
-        $operations = Operation::ofCurrentUser()->with(['type', 'item' => function ($query) {
-            $query->with('photo');
-        }]);
+        $operations = Operation::ofCurrentUser()
+            ->with([
+                'type',
+                'item' => function ($query) {
+                    $query->with('photo');
+                }
+            ]);
 
         $operationtype = $this->request->input('operationtype');
+
         if ($operationtype) {
             $operations->where('id__OperationType', $operationtype);
         }
@@ -47,11 +52,14 @@ class OperationsController extends Controller
         return view('operations.index', $data);
     }
 
-    public function create($id__Item)
+    public function create(int $id__Item)
     {
         $item = Item::findOrFail($id__Item);
+
         $this->ownerAccess($item);
-        Session::put('url.intended', url(URL::previous()));
+
+        session()->put('url.intended', url()->previous());
+
         $data = [
             'item' => $item,
             'currencies' => $this->getCurrenciesForDropDown(),
@@ -65,8 +73,11 @@ class OperationsController extends Controller
     public function edit($id)
     {
         $operation = Operation::findOrFail($id);
+
         $this->ownerAccess($operation);
-        Session::put('url.intended', url(URL::previous()));
+
+        session()->put('url.intended', url()->previous());
+
         $data = [
             'operation' => $operation,
             'item' => $operation->item,
@@ -88,51 +99,49 @@ class OperationsController extends Controller
         return $this->saveItem($id);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        $operation = Operation::find($id);
+        $operation = Operation::findOrFail($id);
+
         $this->ownerAccess($operation);
 
-        if (is_null($operation)) {
-            return json_encode(['message' => trans('app.item_not_found')]);
-        } else {
-            // Unsync photos
-            $operation->photos()->sync([]);
-            // Delete operation
-            $operation->delete();
-        }
+        // Unsync photos
+        $operation->photos()->sync([]);
 
-        return json_encode(['success' => 'OK']);
+        // Delete operation
+        $operation->delete();
+
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem($id = null)
+    private function saveItem(?int $id = null)
     {
         $id__Item = $this->request->get('id__Item');
 
         if (!$id__Item) {
-            $this->jsonResponse([
+            return $this->jsonResponse([
                 'message' => trans('app.id_of_item_not_exists')
             ]);
         }
 
         $item = Item::find($id__Item);
+
         if (!$item) {
-            $this->jsonResponse([
+            return $this->jsonResponse([
                 'message' => trans('app.item_non_exists')
             ]);
         }
+
         $this->ownerAccess($item);
 
-        if (!$id) {
-            $id = $this->request->get('id');
-        }
+        $id = $id ?? $this->request->get('id');
 
         $validation = $this->validateData();
 
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/operations');
+                $validation['redirect'] = session()->pull('url.intended', '/operations');
             }
 
             if ($id) {
@@ -143,6 +152,7 @@ class OperationsController extends Controller
                 $operation->setUserId();
                 $operation->save();
             }
+
             $validation['id'] = $operation->id;
 
             $operation_input = array_map('trim', $this->request->only([
@@ -154,17 +164,17 @@ class OperationsController extends Controller
                 'price',
                 'currency'
             ]));
+
             $operation->update($operation_input);
 
             // Save operation Photos
-            $operation_photos = $this->request->get('operation_photos');
             $this->syncPhotos($operation, $this->request->get('operation_photos'));
         }
 
         return $this->jsonResponse($validation);
     }
 
-    private function validateData()
+    private function validateData(): array
     {
         $data = [];
 
@@ -191,37 +201,28 @@ class OperationsController extends Controller
 
     private function syncPhotos(Operation $operation, $photos)
     {
-        if (is_null($photos)) {
-            $photos = [];
-        }
-        $operation->photos()->sync($photos);
+        $operation->photos()->sync($photos ?? []);
     }
 
-    private function getOperationTypesForDropdown()
+    private function getOperationTypesForDropdown(): array
     {
-        $result = ['0' => '---'] + OperationType::ofCurrentUser()->pluck('title', 'id')->all();
-
-        return $result;
+        return ['0' => '---'] + OperationType::ofCurrentUser()->pluck('title', 'id')->all();
     }
 
-    private function getCurrenciesForDropDown()
+    private function getCurrenciesForDropDown(): array
     {
-        $result = [
+        return [
             'UAH' => trans('app.uah'),
             'USD' => trans('app.usd'),
             'EUR' => trans('app.eur')
         ];
-
-        return $result;
     }
 
-    private function getConditionsForDropDown()
+    private function getConditionsForDropDown(): array
     {
-        $result = [
+        return [
             'NEW' => trans('app.new'),
             'USED' => trans('app.used')
         ];
-
-        return $result;
     }
 }

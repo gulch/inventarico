@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" type="text/css" href="/assets/vendor/fomantic/2.8.8/semantic.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.4.2/semantic.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ config('app.version') }}">
 
     @if(isset($styles))
@@ -21,9 +21,10 @@
     <script src="/assets/vendor/jquery/3.6.0/jquery.min.js"></script>
 
     {{-- Favicon --}}
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
-    <link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="icon" href="/favicon.ico" sizes="any">
+    <link rel="icon" href="/favicon/favicon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="/favicon/app.webmanifest">
     <meta name="theme-color" content="#ffffff">
 </head>
 <body>
@@ -103,7 +104,7 @@
     @endforeach
 @endif
 
-<script defer src="/assets/vendor/fomantic/2.8.8/semantic.js"></script>
+<script defer src="/assets/vendor/semantic/2.4.2/semantic.min.js"></script>
 <script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
 </body>
 </html>

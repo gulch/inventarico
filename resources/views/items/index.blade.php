@@ -28,19 +28,6 @@
             <i class="gift large icon"></i>
         </div>
 
-        <div class="ui search large item">
-            <div class="ui transparent icon input">
-                <input name="q"
-                       class="prompt"
-                       type="text"
-                       placeholder="{{ trans('app.search') }}..."
-                       @if(\request('q')) value="{{ \request('q') }}"@endif
-                >
-                <i id="q_clean" class="remove circle link icon"></i>
-            </div>
-            <div class="results"></div>
-        </div>
-
         <div class="item">
             <select name="category" class="ui search dropdown wide-min-320">
                 <option value="0" @if($selected_category === 0) selected @endif>{{ trans('app.all_categories') }}</option>
@@ -55,7 +42,7 @@
                     <span class="text">{{ trans('app.availability') }}</span>
                     <input type="hidden"
                            name="availability"
-                           value="{{ app('request')->input('availability') ?? 'all' }}"
+                           value="{{ request()->input('availability') ?? 'all' }}"
                     >
                     <div class="menu">
                         <div class="item" data-value="all">{{ trans('app.all') }}</div>
@@ -70,7 +57,7 @@
                     <span class="text">{{ trans('app.sorting') }}</span>
                     <input type="hidden"
                            name="sort"
-                           value="{{ app('request')->input('sort') ?? 'created_desc' }}"
+                           value="{{ request()->input('sort') ?? 'created_desc' }}"
                     >
                     <div class="menu">
                         <div class="header">{{ trans('app.created_date') }}</div>
@@ -89,6 +76,16 @@
             </div>
         </div>
 
+    </div>
+
+
+    <div class="ui fluid big icon input items-search-input">
+        <input type="text"
+               name="q"
+               placeholder="{{ trans('app.ph_search') }}..."
+               @if(request('q')) value="{{ request('q') }}"@endif
+        >
+        <i id="q_clean" class="remove circle link icon"></i>
     </div>
 
     @if ($items)
@@ -190,8 +187,9 @@
         <div class="ui middle aligned stackable centered grid container">
             <div class="ui row">
                 {!! $items->appends([
-                    'sort' => app('request')->input('sort'),
-                    'category' => app('request')->input('category')
+                    'sort' => request()->input('sort'),
+                    'category' => request()->input('category'),
+                    'availability' => request()->input('availability'),
                     ])->links()
                 !!}
             </div>
