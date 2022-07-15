@@ -1,11 +1,8 @@
-/vendor
-/.idea
-/.vscode
 .env
-/_ide_helper.php
-composer.lock
-/composer.lock
+/.idea
 /.phpstorm.meta.php
+/.vscode
+/_ide_helper.php
+/composer.lock
 /public/uploads/img/
-public/uploads/img/editor/
-resources/views/errors/
+/vendor
