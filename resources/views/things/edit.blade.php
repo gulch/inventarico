@@ -1,10 +1,10 @@
 @extends('template', [
-    'title' => trans('app.items') . ' → ' . trans('app.editing') . ' «' . $item->title . '»',
+    'title' => trans('app.things') . ' → ' . trans('app.editing') . ' «' . $item->title . '»',
 ])
 
 @section('content')
     <h1 class="ui header">
-        <i class="gift icon"></i>
+        <i class="tag icon"></i>
         {{ trans('app.editing') }} &laquo;{{ $item->title }}&raquo;
     </h1>
 

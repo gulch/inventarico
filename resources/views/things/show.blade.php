@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => trans('app.items') . ' → ' . $item->title,
+    'title' => trans('app.things') . ' → ' . $item->title,
     'scripts' => [
         [
             'load' => 'defer',
@@ -18,13 +18,13 @@
 @section('content')
 
     <h1 class="ui header">
-        <i class="gift icon"></i>
+        <i class="tag icon"></i>
         <div class="content">
             <div class="sub header">
 
                 <div class="ui large breadcrumb">
                     <a class="section" href="/items">
-                        {{ trans('app.items') }}
+                        {{ trans('app.things') }}
                     </a>
 
                     <i class="right angle icon divider"></i>
@@ -47,7 +47,7 @@
             {{ $item->title }}
             @if($item->is_archived)
                 <div class="ui left pointing teal label">
-                    {{ trans('app.archived_item') }}
+                    {{ trans('app.archived_thing') }}
                 </div>
             @endif
         </div>

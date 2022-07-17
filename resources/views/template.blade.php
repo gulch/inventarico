@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <title>{{ isset($title) ? $title . ' :: ' : '' }}{{ config('app.name') }}</title>
     <meta name="robots" content="noindex">
@@ -44,9 +44,9 @@
             {{ trans('app.categories') }}
         </a>
 
-        <a href="/items" class="item">
-            <i class="gift icon"></i>
-            {{ trans('app.items') }}
+        <a href="/things" class="item">
+            <i class="tag icon"></i>
+            {{ trans('app.things') }}
         </a>
 
         <a href="/operations" class="item">
@@ -76,7 +76,7 @@
                     >
                         {{ trans('app.logout') }}
                     </a>
-                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
                         {{ csrf_field() }}
                     </form>
                 </div>

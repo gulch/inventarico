@@ -4,7 +4,7 @@
 
 @section('content')
     <h1 class="ui header">
-        <i class="gift icon"></i>
+        <i class="tag icon"></i>
         {{ trans('app.editing_operation_for') }} &laquo;{{ $item->title }}&raquo;
     </h1>
 

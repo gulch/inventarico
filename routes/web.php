@@ -3,10 +3,10 @@
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\PhotosController;
+use App\Http\Controllers\ThingsController;
 use Illuminate\Routing\Router;
 
 /**
@@ -44,13 +44,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->delete('operation-types/{id}', [OperationTypesController::class, 'destroy']);
 
     /* Items */
-    $router->get('items', [ItemsController::class, 'index'])->name('available-items');
-    $router->get('items/create', [ItemsController::class, 'create']);
-    $router->get('items/{id}/edit', [ItemsController::class, 'edit']);
-    $router->get('items/{id}/show', [ItemsController::class, 'show']);
-    $router->post('items', [ItemsController::class, 'store']);
-    $router->patch('items/{id}', [ItemsController::class, 'update']);
-    $router->delete('items/{id}', [ItemsController::class, 'destroy']);
+    $router->get('things', [ThingsController::class, 'index'])->name('available-items');
+    $router->get('things/create', [ThingsController::class, 'create']);
+    $router->get('things/{id}/edit', [ThingsController::class, 'edit']);
+    $router->get('things/{id}/show', [ThingsController::class, 'show']);
+    $router->post('things', [ThingsController::class, 'store']);
+    $router->patch('things/{id}', [ThingsController::class, 'update']);
+    $router->delete('things/{id}', [ThingsController::class, 'destroy']);
 
     /* Operations */
     $router->get('operations', [OperationsController::class, 'index']);

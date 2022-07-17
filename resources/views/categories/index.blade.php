@@ -1,4 +1,4 @@
-@extends('template', ['title' => trans('app.categories') . ' :: INVENTARICO' ])
+@extends('template', ['title' => trans('app.categories') . ' :: INVENTARICO'])
 
 @section('content')
 
@@ -46,8 +46,8 @@
 
                             <div class="ui statistic tiny right floated">
                                 <div class="value">
-                                    <i class="gift icon"></i>
-                                    {{ $category->items->count() }}
+                                    <i class="tag icon"></i>
+                                    {{ $category->things->count() }}
                                 </div>
                             </div>
 

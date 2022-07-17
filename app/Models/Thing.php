@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
-class Item extends BaseModel
+class Thing extends BaseModel
 {
-    protected $table = 'Item';
+    protected $table = 'Thing';
 
     protected $fillable = [
         'title',
         'description',
         'overview',
-
         'is_archived',
+
+        'id__Photo',
+        'id__Category',
     ];
 
     /* -------------- Scopes -------------- */
@@ -28,8 +30,13 @@ class Item extends BaseModel
 
     /* -------------- Relations -------------- */
 
-    public function operations()
+    public function photo()
     {
-        return $this->hasMany(Operation::class, 'id__Item');
+        return $this->belongsTo(Photo::class, 'id__Photo');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'id__Category');
     }
 }
