@@ -1,7 +1,7 @@
 <div class="ui four doubling cards">
     @if($photos)
         @foreach($photos as $photo)
-            <div class="card segment">
+            <div class="card segment action-segment">
                 <a href="{{ config('app.photo_image_upload_path') . $photo->path }}"
                    class="image text-centered lightbox"
                 >

@@ -109,7 +109,7 @@
 
     @foreach ($thing->instances as $instance)
         <div class="ui raised segments">
-            <div class="ui segment">
+            <div class="ui segment action-segment">
                 <div class="ui items">
                     <div class="item">
                         <div class="content">
