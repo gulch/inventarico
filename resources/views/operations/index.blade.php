@@ -11,7 +11,7 @@
 
     <div class="ui stackable menu">
         <div class="item">
-            <i class="file text outline large icon"></i>
+            <i class="cube large icon"></i>
         </div>
 
         <div class="item">

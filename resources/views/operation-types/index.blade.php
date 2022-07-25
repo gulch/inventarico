@@ -21,7 +21,7 @@
 
     <div class="ui stackable menu">
         <div class="item">
-            <i class="play large icon"></i>
+            <i class="cubes large icon"></i>
         </div>
     </div>
 

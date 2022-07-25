@@ -2,7 +2,7 @@
     @foreach ($instance->operations()->orderBy('operated_at', 'desc')->get() as $operation)
         <div class="event">
             <div class="label">
-                <i class="cube circular icon"></i>
+                <i class="cube icon"></i>
             </div>
             <div class="content">
 

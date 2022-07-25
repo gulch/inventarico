@@ -50,7 +50,7 @@
         </a>
 
         <a href="/operations" class="item">
-            <i class="file text outline icon"></i>
+            <i class="cube icon"></i>
             {{ trans('app.operations') }}
         </a>
 

@@ -57,6 +57,7 @@ class ThingsController extends Controller
     public function create()
     {
         $data = [
+            'thing' => null,
             'categories' => $this->getCategoriesForDropdown(),
             'selected_category' => 0,
         ];

@@ -30,7 +30,7 @@
 
     <div class="ui bottom attached segment">
         @include('partials.overviews', [
-            'overviews' => isset($thing) ? $thing->overview : null
+            'overviews' => $thing?->overview
         ])
     </div>
 </div>
