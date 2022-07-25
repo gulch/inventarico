@@ -68,3 +68,9 @@
         scroll-behavior: smooth;
     }
 }
+
+.operation-note {
+    font-size: larger !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+}

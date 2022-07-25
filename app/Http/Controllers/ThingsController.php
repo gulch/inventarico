@@ -19,7 +19,7 @@ class ThingsController extends Controller
     public function index()
     {
         $things = Thing::query()
-            ->with('photo', 'category')
+            ->with('photo', 'category', 'instances')
             ->ofCurrentUser();
 
         $things = $this->applyCategory($things);
@@ -48,10 +48,10 @@ class ThingsController extends Controller
         $this->ownerAccess($thing);
 
         $data = [
-            'thing' => $thing
+            'thing' => $thing,
         ];
 
-        return view('things.show', $data);
+        return view('things.show.show', $data);
     }
 
     public function create()
@@ -129,7 +129,7 @@ class ThingsController extends Controller
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/items');
+                $validation['redirect'] = session()->pull('url.intended', '/things');
             }
 
             if ($id) {

@@ -2,18 +2,20 @@
 
 namespace App\Models;
 
-class Thing extends BaseModel
+class Instance extends BaseModel
 {
-    protected $table = 'Thing';
+    protected $table = 'Instance';
 
     protected $fillable = [
         'title',
         'description',
         'overview',
+
+        'price',
+
         'is_archived',
 
-        'id__Photo',
-        'id__Category',
+        'id__Thing',
     ];
 
     /* -------------- Scopes -------------- */
@@ -30,18 +32,13 @@ class Thing extends BaseModel
 
     /* -------------- Relations -------------- */
 
-    public function photo()
+    public function thing()
     {
-        return $this->belongsTo(Photo::class, 'id__Photo');
+        return $this->belongsTo(Thing::class, 'id__Thing');
     }
 
-    public function category()
+    public function operations()
     {
-        return $this->belongsTo(Category::class, 'id__Category');
-    }
-
-    public function instances()
-    {
-        return $this->hasMany(Instance::class, 'id__Thing');
+        return $this->hasMany(Operation::class, 'id__Instance');
     }
 }

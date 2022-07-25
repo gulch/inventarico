@@ -15,7 +15,7 @@ class Operation extends BaseModel
         'price',
         'currency',
         'note',
-        'id__Item',
+        'id__Instance',
         'id__OperationType'
     ];
 
@@ -31,9 +31,9 @@ class Operation extends BaseModel
         return $this->belongsTo(OperationType::class, 'id__OperationType');
     }
 
-    public function item()
+    public function instance()
     {
-        return $this->belongsTo(Item::class, 'id__Item');
+        return $this->belongsTo(Instance::class, 'id__Instance');
     }
 
     public function photos()

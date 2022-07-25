@@ -3,13 +3,13 @@
 return [
     'dashboard' => 'Головна панель',
     'categories' => 'Категорії',
-    'things' => 'Предмети',
+    'things' => 'Речі',
     'operations' => 'Операції',
     'photos' => 'Фотографії',
     'operation_types' => 'Типи операцій',
     'categories_list' => 'Список категорій',
     'operation_types_list' => 'Список типів операцій',
-    'things_list' => 'Список предметів',
+    'things_list' => 'Список речей',
     'photos_list' => 'Список фотографій',
     'operations_list' => 'Список операцій',
     'available' => 'Наявні',
@@ -61,8 +61,8 @@ return [
     'usd' => 'долар',
     'uah' => 'гривня',
     'eur' => 'євро',
-    'q_archived_thing' => 'Архівний предмет?',
-    'archived_thing' => 'Архівний предмет',
+    'q_archived_thing' => 'Архівна річ?',
+    'archived_thing' => 'Архівна річ',
 
     'wait' => 'Почекайте',
     'search' => 'Пошук',
@@ -79,12 +79,13 @@ return [
     'do_save_n_close' => 'Зберегти і закрити',
     'do_add' => 'Додати',
     'do_edit' => 'Редагувати',
-    'do_edit_thing' => 'Редагувати предмет',
+    'do_edit_thing' => 'Редагувати річ',
     'do_remove' => 'Видалити',
     'do_choose_image' => 'Обрати зображення',
     'do_add_field' => 'Додати поле',
     'do_cancel' => 'Скасувати',
     'do_add_operation' => 'Додати операцію',
+    'do_add_instance' => 'Додати екземпляр',
 
     'editing' => 'Редагування',
     'creating' => 'Створення',
@@ -92,7 +93,7 @@ return [
     'creating_new_category' => 'Створення нової категорії',
     'creating_new_operation_type' => 'Створення нового типу операції',
     'creating_new_operation' => 'Створення нової операції',
-    'creating_new_thing' => 'Створення нового предмету',
+    'creating_new_thing' => 'Створення нової речі',
     'editing_operation_for' => 'Редагування операції для',
     'kind_of_operation' => 'Тип операції',
     'expenditure' => 'Видаткова',
@@ -118,17 +119,17 @@ return [
     'image_not_found' => 'Зображення не знайдено',
     'enter_description_for_image' => 'Введіть опис (alt атрибут)',
     'description_non_exists' => 'Немає опису',
-    'id_of_item_not_exists' => 'Не задано ID предмету',
-    'thing_non_exists' => 'Такого предмету не існує',
+    'id_of_thing_not_exists' => 'Не задано ID речі',
+    'thing_non_exists' => 'Такої речі не існує',
 
-    'photo_is_use_in_some_things' => 'Ця фотографія використовується в предметі(ах)',
+    'photo_is_use_in_some_things' => 'Ця фотографія використовується в речах',
     'photo_is_use_in_some_operation' => 'Ця фотографія використовується в операції(ях)',
-    'category_has_items_cant_delete' => 'В цій категорії є предмети. Видалення неможливо!',
+    'category_has_things_cant_delete' => 'В цій категорії є речі. Видалення неможливо!',
     'operationtype_has_operations_cant_delete' => 'Є операції з цим типом операцій. Видалення неможливо!',
 
     'ph_search' => 'Введіть пошуковий запит',
 
-
+    'instances' => 'Екземпляри',
 
     /*'' => '',*/
 ];

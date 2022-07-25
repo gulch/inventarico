@@ -4,7 +4,7 @@
     <div class="header">
         <div class="ui checkbox">
             {!! Form::checkbox('is_archived', 1) !!}
-            {!! Form::label('is_archived', trans('app.q_archived_item')) !!}
+            {!! Form::label('is_archived', trans('app.q_archived_thing')) !!}
         </div>
     </div>
 </div>
@@ -30,7 +30,7 @@
 
     <div class="ui bottom attached segment">
         @include('partials.overviews', [
-            'overviews' => isset($item) ? $item->overview : null
+            'overviews' => isset($thing) ? $thing->overview : null
         ])
     </div>
 </div>
@@ -39,8 +39,8 @@
     {!! Form::label('id__Photo', trans('app.photo')) !!}
     @include('partials.image-upload-or-choose', [
         'field_name' => 'id__Photo',
-        'id' => isset($item) ? $item->id__Photo : null,
-        'image' => isset($item) ? $item->photo : null,
+        'id' => $thing?->id__Photo,
+        'image' => $thing?->photo,
         'key' => uniqid(),
         'setup' => 'photo',
         'path' => config('app.photo_image_upload_path')

@@ -47,13 +47,13 @@ class PhotosController extends Controller
         } else {
             if (sizeof($photo->items)) {
                 return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_item')
+                    'message' => trans('app.photo_is_use_in_some_thing')
                 ]);
             }
 
             if (sizeof($photo->operations)) {
                 return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_item')
+                    'message' => trans('app.photo_is_use_in_some_thing')
                 ]);
             }
 

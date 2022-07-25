@@ -3,6 +3,6 @@
             @if($selected_category == $item->id) selected @endif
     >{!! $depth ? ' ' . str_repeat('&nbsp;&nbsp;&nbsp;', $depth) . ' ' : '' !!}{{ $item->title }}</option>
     @if($item->hasChildren())
-        @include('items._options', ['items' => $item->getChildren(), 'depth' => $depth + 1])
+        @include('things._options', ['items' => $item->getChildren(), 'depth' => $depth + 1])
     @endif
 @endforeach

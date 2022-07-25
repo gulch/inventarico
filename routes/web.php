@@ -3,6 +3,7 @@
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InstancesController;
 use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\OperationsController;
 use App\Http\Controllers\PhotosController;
@@ -16,6 +17,7 @@ $router->get('/', [HomeController::class, 'index']);
 $router->auth();
 
 $router->group(['middleware' => 'auth'], function () use ($router) {
+
     $router->get('dashboard', [DashboardController::class, 'index']);
 
     /* Photos */
@@ -54,9 +56,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     /* Operations */
     $router->get('operations', [OperationsController::class, 'index']);
-    $router->get('operations/create/{id__Item}', [OperationsController::class, 'create']);
+    $router->get('operations/create/{id__Instance}', [OperationsController::class, 'create']);
     $router->get('operations/{id}/edit', [OperationsController::class, 'edit']);
     $router->post('operations', [OperationsController::class, 'store']);
     $router->patch('operations/{id}', [OperationsController::class, 'update']);
     $router->delete('operations/{id}', [OperationsController::class, 'destroy']);
+
+    /* Instances */
+    $router->get('instances/create/{id__Thing}', [InstancesController::class, 'create']);
+    $router->get('instances/generate', [InstancesController::class, 'generate']);
 });

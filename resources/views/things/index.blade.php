@@ -15,7 +15,7 @@
         </div>
 
         <div class="middle aligned right aligned four wide column">
-            <a href="/items/create" class="ui big labeled icon basic button">
+            <a href="/things/create" class="ui big labeled icon basic button">
                 <i class="add icon"></i>
                 {{ trans('app.do_add') }}
             </a>
@@ -115,8 +115,8 @@
 
                             <div class="ui statistic tiny right floated">
                                 <div class="value">
-                                    <i class="cubes icon"></i>
-                                    {{-- {{ $thing->operations->count() }} --}}
+                                    <i class="shopping cart icon"></i>
+                                    {{ $thing->instances->count() }}
                                 </div>
 
                                 @if($thing->is_archived)
@@ -126,7 +126,7 @@
                                 @endif
                             </div>
 
-                            <a href="/items/{{ $thing->id }}/show" target="_blank" class="ui large header">
+                            <a href="/things/{{ $thing->id }}/show" target="_blank" class="ui large header">
                                 @if(request('q'))
                                     @php
                                         $alt = \App\Http\Controllers\ItemsController::transliterato(request('q'));
@@ -141,7 +141,7 @@
                             <div class="meta">
                                 <p>
                                     {{ trans('app.category') }}:
-                                    <a href="/items?category={{ $thing->category->id }}">
+                                    <a href="/things?category={{ $thing->category->id }}">
                                         {{ $thing->category->title }}
                                     </a>
                                 </p>
@@ -153,12 +153,13 @@
 
                             <div class="extra">
 
-                                <a href="/operations/create/{{ $thing->id }}">
-                                    <i class="cubes icon"></i>{{ trans('app.do_add_operation') }}
+                                <a href="/instances/create/{{ $thing->id }}">
+                                    <i class="shopping cart icon"></i>
+                                    {{ trans('app.do_add_instance') }}
                                 </a>
 
-                                <a href="/items/{{ $thing->id }}/edit">
-                                    <i class="edit icon"></i>{{ trans('app.do_edit') }}
+                                <a href="/things/{{ $thing->id }}/edit">
+                                    <i class="edit outline icon"></i>{{ trans('app.do_edit') }}
                                 </a>
 
                                 <a data-popup="1">
@@ -168,7 +169,7 @@
                                     <div class="ui huge header center aligned">{{ trans('app.q_delete') }}</div>
                                     <span class="ui negative button"
                                           data-action-name="remove"
-                                          data-action="/items/{{ $thing->id }}"
+                                          data-action="/things/{{ $thing->id }}"
                                           data-method="DELETE">{{ trans('app.yes') }}
                                         </span>
                                     <span class="ui button">{{ trans('app.no') }}</span>

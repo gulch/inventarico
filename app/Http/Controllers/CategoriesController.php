@@ -59,7 +59,7 @@ class CategoriesController extends Controller
         } else {
             if (sizeof($category->items)) {
                 return $this->jsonResponse([
-                    'message' => trans('app.category_has_items_cant_delete')
+                    'message' => trans('app.category_has_things_cant_delete')
                 ]);
             }
 
