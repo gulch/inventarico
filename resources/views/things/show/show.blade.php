@@ -113,24 +113,73 @@
                 <div class="ui items">
                     <div class="item">
                         <div class="content">
+
                             <div class="header">
                                 <i class="shopping cart icon"></i>
                                 {{ $instance->title }}
                             </div>
+
+                            @if ($instance->description)
+                                <div class="description operation-note">
+                                    {!! $instance->description !!}
+                                </div>
+                            @endif
+
                             <div class="description">
-                                <p>
-                                    <span class="ui teal tag label">
-                                        {{ $instance->price }}
-                                    </span>
-                                </p>
+
+                                <span class="ui teal tag large label">
+                                    {{ $instance->price }}
+                                </span>
+
+                                @if (isset($instance->overview) && ($instance_overviews = json_decode($instance->overview, true)))
+
+                                    @php
+                                        usort($instance_overviews, function ($a, $b) {
+                                            return $a['order'] <=> $b['order'];
+                                        });
+                                    @endphp
+
+                                    @foreach ($instance_overviews as $inov)
+                                        <span class="ui blue large label"
+                                              title="{{ $inov['description'] }}"
+                                        >
+                                            {{ $inov['title'] }}
+                                            <span class="detail">
+                                                {{ $inov['value'] }}
+                                            </span>
+                                        </span>
+                                    @endforeach
+
+                                @endif
+
                             </div>
+
                             <div class="extra">
                                 {{ trans('app.created_at') }}: {{ $instance->created_at->format('d.m.Y H:i') }}
                                 &nbsp;
+
+                                <a href="/operations/create/{{ $instance->id }}">
+                                    <i class="cube icon"></i>
+                                    {{ trans('app.do_add_operation') }}
+                                </a>
+
                                 <a href="/instances/{{ $instance->id }}/edit">
                                     <i class="edit outline icon"></i>
                                     {{ trans('app.do_edit') }}
                                 </a>
+
+                                <a data-popup="1">
+                                    <i class="remove circle icon"></i>{{ trans('app.do_remove') }}
+                                </a>
+                                <div class="ui custom popup">
+                                    <div class="ui huge header center aligned">{{ trans('app.q_delete') }}</div>
+                                    <span class="ui negative button" data-action-name="remove"
+                                        data-action="/instances/{{ $instance->id }}"
+                                        data-method="DELETE">{{ trans('app.yes') }}
+                                    </span>
+                                    <span class="ui button">{{ trans('app.no') }}</span>
+                                </div>
+
                             </div>
                         </div>
                     </div>

@@ -10,9 +10,9 @@
 </div>
 
 <div class="field">
-    {!! Form::label('id__Category', trans('app.category').'*') !!}
+    {!! Form::label('id__Category', trans('app.category') . '*') !!}
     <select name="id__Category" class="ui search dropdown">
-        <option value="0" @if($selected_category === 0) selected @endif>---</option>
+        <option value="0" @if ($selected_category === 0) selected @endif>---</option>
         @include('things._options', ['items' => $categories, 'depth' => 0])
     </select>
 </div>
@@ -30,7 +30,7 @@
 
     <div class="ui bottom attached segment">
         @include('partials.overviews', [
-            'overviews' => $thing?->overview
+            'overviews' => $thing?->overview,
         ])
     </div>
 </div>
@@ -43,7 +43,7 @@
         'image' => $thing?->photo,
         'key' => uniqid(),
         'setup' => 'photo',
-        'path' => config('app.photo_image_upload_path')
+        'path' => config('app.photo_image_upload_path'),
     ])
 </div>
 

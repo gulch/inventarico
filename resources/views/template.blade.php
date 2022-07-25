@@ -93,6 +93,8 @@
 
 <div class="ui hidden divider"></div>
 <div class="ui hidden divider"></div>
+<div class="ui hidden divider"></div>
+<div class="ui hidden divider"></div>
 
 @if(isset($scripts))
     @foreach($scripts as $js)

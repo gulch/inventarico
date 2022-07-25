@@ -64,5 +64,8 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
 
     /* Instances */
     $router->get('instances/create/{id__Thing}', [InstancesController::class, 'create']);
-    $router->get('instances/generate', [InstancesController::class, 'generate']);
+    $router->get('instances/{id}/edit', [InstancesController::class, 'edit']);
+    $router->post('instances', [InstancesController::class, 'store']);
+    $router->patch('instances/{id}', [InstancesController::class, 'update']);
+    $router->delete('instances/{id}', [InstancesController::class, 'destroy']);
 });

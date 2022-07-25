@@ -67,7 +67,7 @@ class ThingsController extends Controller
         return view('things.create', $data);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $thing = Thing::findOrFail($id);
 
@@ -89,12 +89,12 @@ class ThingsController extends Controller
         return $this->saveThing();
     }
 
-    public function update($id)
+    public function update(int $id)
     {
         return $this->saveThing($id);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $thing = Thing::find($id);
 
@@ -104,14 +104,22 @@ class ThingsController extends Controller
             return json_encode(['message' => trans('app.item_not_found')]);
         }
 
-        // Unsync photos from operations
-        if ($thing->operations) {
+        // remove instances
+        if ($thing->instances) {
+
+            // TODO: Unsync photos from instance operations
+
+            $thing->instances()->delete();
+        }
+
+        // TODO: Unsync photos from instance operations
+        /* if ($thing->operations) {
             foreach ($thing->operations as $o) {
                 $o->photos()->sync([]);
             }
             // Delete operations
             $thing->operations()->delete();
-        }
+        } */
 
         // Delete item
         $thing->delete();
