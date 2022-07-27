@@ -4,22 +4,22 @@
 <script src="/assets/vendor/codemirror/5.62.0/xml.min.js"></script>
 
 {{-- Redactor --}}
-<link href="/assets/vendor/redactor/3.4.7/redactor.css" rel="stylesheet" type="text/css">
-<script src="/assets/vendor/redactor/3.4.7/redactor.js"></script>
+<link href="/assets/vendor/redactor/3.5.2/redactor.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/redactor/3.5.2/redactor.js"></script>
 
 {{-- Redactor Plugins --}}
-<script src="/assets/vendor/redactor/3.4.7/plugins/alignment.js"></script>
-<link href="/assets/vendor/redactor/3.4.7/plugins/clips.css" rel="stylesheet" type="text/css">
-<script src="/assets/vendor/redactor/3.4.7/plugins/clips.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/counter.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/fontcolor.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/fontsize.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/specialchars.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/table.js"></script>
-<script src="/assets/vendor/redactor/3.4.7/plugins/video.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/alignment.js"></script>
+<link href="/assets/vendor/redactor/3.5.2/plugins/clips.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/redactor/3.5.2/plugins/clips.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/counter.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/fontcolor.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/fontsize.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/specialchars.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/table.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/video.js"></script>
 
 {{-- Redactor Language --}}
-<script src="/assets/vendor/redactor/3.4.7/lang/{{ config('app.locale') }}.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/lang/{{ config('app.locale') }}.js"></script>
 <script src="/assets/js/redactor-plugins-lang.{{ config('app.locale') }}.js"></script>
 
 {{-- Redactor Custom Clips --}}
@@ -60,11 +60,6 @@
             'specialchars',
             'table',
             'video'
-        ]/* ,
-        clips: [
-            ['OFFICIAL WEBSITE', '<b>OFFICIAL WEBSITE</b>'],
-            ['купив на Aliexpress за', 'купив на <b>Aliexpress</b> за'],
-            ['купив на Amazon за', 'купив на <b>Amazon</b> за']
-        ] */
+        ]
     });
 </script>
