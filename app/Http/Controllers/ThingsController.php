@@ -47,6 +47,15 @@ class ThingsController extends Controller
 
         $this->ownerAccess($thing);
 
+        $thing->instances = $thing->instances()
+            ->with([
+                'operations' => function($query) {
+                    $query->orderBy('operated_at', 'desc');
+                }
+            ])
+            ->orderBy('published_at', 'desc')
+            ->get();
+
         $data = [
             'thing' => $thing,
         ];
@@ -254,6 +263,12 @@ class ThingsController extends Controller
         $sort = $this->request->input('sort');
 
         switch ($sort) {
+            case 'published_desc':
+                $things->orderBy('published_at', 'desc');
+                break;
+            case 'published_asc':
+                $things->orderBy('published_at');
+                break;
             case 'updated_desc':
                 $things->orderBy('updated_at', 'desc');
                 break;

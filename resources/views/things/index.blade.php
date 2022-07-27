@@ -57,9 +57,13 @@
                     <span class="text">{{ trans('app.sorting') }}</span>
                     <input type="hidden"
                            name="sort"
-                           value="{{ request()->input('sort') ?? 'created_desc' }}"
+                           value="{{ request()->input('sort') ?? 'published_desc' }}"
                     >
                     <div class="menu">
+                        <div class="header">{{ trans('app.published_date') }}</div>
+                        <div class="item" data-value="published_desc">{{ trans('app.new_first') }}</div>
+                        <div class="item" data-value="published_asc">{{ trans('app.old_first') }}</div>
+                        <div class="divider"></div>
                         <div class="header">{{ trans('app.created_date') }}</div>
                         <div class="item" data-value="created_desc">{{ trans('app.new_first') }}</div>
                         <div class="item" data-value="created_asc">{{ trans('app.old_first') }}</div>
@@ -149,6 +153,8 @@
                                 {{ trans('app.created_at') }}: {{ $thing->created_at->format('d.m.Y H:i:s') }}
                                 <br>
                                 {{ trans('app.updated_at') }}: {{ $thing->updated_at->format('d.m.Y H:i:s') }}
+                                <br>
+                                {{ trans('app.published_at') }}: {{ $thing->published_at->format('d.m.Y H:i:s') }}
                             </div>
 
                             <div class="extra">

@@ -114,7 +114,13 @@
                     <div class="item">
                         <div class="content">
 
-                            <div class="header">
+                            <p class="grey-text"
+                               title="{{ trans('app.published_date') }}"
+                            >
+                                {{ $instance->published_at->format('d.m.Y H:i') }}
+                            </p>
+
+                            <div class="header header-margins">
                                 <i class="shopping cart icon"></i>
                                 {{ $instance->title }}
                             </div>
@@ -127,7 +133,7 @@
 
                             <div class="description">
 
-                                <span class="ui teal tag large label">
+                                <span class="ui tag large label">
                                     {{ $instance->price }}
                                 </span>
 
@@ -140,7 +146,7 @@
                                     @endphp
 
                                     @foreach ($instance_overviews as $inov)
-                                        <span class="ui blue large label"
+                                        <span class="ui basic large label"
                                               title="{{ $inov['description'] }}"
                                         >
                                             {{ $inov['title'] }}

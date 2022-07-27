@@ -105,6 +105,7 @@ class InstancesController extends Controller
                     'title',
                     'description',
                     'is_archived',
+                    'published_at',
                     'price',
                     'id__Thing',
                 ])

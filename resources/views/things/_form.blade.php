@@ -9,6 +9,14 @@
     </div>
 </div>
 
+<div class="inline field">
+    @php
+    $published_date = $thing?->published_at?->format('Y-m-d H:i:s') ?? date('Y-m-d H:i:00');
+    @endphp
+    {!! Form::label('published_at', trans('app.published_date') . '*') !!}
+    {!! Form::text('published_at', $published_date, ['class' => 'datetimepicker', 'readonly' => true]) !!}
+</div>
+
 <div class="field">
     {!! Form::label('id__Category', trans('app.category') . '*') !!}
     <select name="id__Category" class="ui search dropdown">
@@ -55,3 +63,5 @@
 @include('partials.submit-buttons')
 
 @include('partials.editor')
+
+@include('partials.flatpickr')

@@ -1,5 +1,5 @@
 <div class="ui feed">
-    @foreach ($instance->operations()->orderBy('operated_at', 'desc')->get() as $operation)
+    @foreach ($instance->operations as $operation)
         <div class="event action-segment">
             <div class="label">
                 <i class="cube icon"></i>

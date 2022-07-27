@@ -24,6 +24,8 @@ return [
     'alphabet_desc' => 'В зворотньому порядку',
     'created_date' => 'Дата створення',
     'updated_date' => 'Дата редагування',
+    'published_date' => 'Дата публікації',
+
     'new_first' => 'спочатку нові',
     'old_first' => 'спочатку перші',
 
@@ -44,6 +46,7 @@ return [
     'operated_date' => 'Дата операції',
     'created_at' => 'Створено',
     'updated_at' => 'Відредаговано',
+    'published_at' => 'Опубліковано',
     'overview' => 'Рецензія',
     'photo' => 'Фото',
     'description' => 'Опис',

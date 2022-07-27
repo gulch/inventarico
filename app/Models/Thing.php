@@ -2,19 +2,28 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+
 class Thing extends BaseModel
 {
     protected $table = 'Thing';
+
+    protected $dates = ['published_at'];
 
     protected $fillable = [
         'title',
         'description',
         'overview',
         'is_archived',
-
+        'published_at',
         'id__Photo',
         'id__Category',
     ];
+
+    public function setPublishedAtAttribute($date)
+    {
+        $this->attributes['published_at'] = Carbon::createFromFormat('d.m.Y H:i', $date);
+    }
 
     /* -------------- Scopes -------------- */
 
