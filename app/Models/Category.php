@@ -21,8 +21,8 @@ class Category extends Entity implements EntityInterface
 
     /* -------------- Relations -------------- */
 
-    public function items()
+    public function things()
     {
-        return $this->hasMany(Item::class, 'id__Category');
+        return $this->hasMany(Thing::class, 'id__Category');
     }
 }

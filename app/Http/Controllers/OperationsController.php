@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Instance;
 use App\Models\Item;
 use App\Models\Operation;
 use App\Models\OperationType;
@@ -10,13 +11,19 @@ use function view, trans, session, url;
 
 class OperationsController extends Controller
 {
+    private const PAGINATE_COUNT = 25;
+
     public function index()
     {
         $operations = Operation::ofCurrentUser()
             ->with([
                 'type',
-                'item' => function ($query) {
-                    $query->with('photo');
+                'instance' => function ($query) {
+                    $query->with([
+                        'thing' => function ($query) {
+                            $query->with('photo');
+                        }
+                    ]);
                 }
             ]);
 
@@ -42,7 +49,7 @@ class OperationsController extends Controller
                 $operations->orderBy('operated_at', 'desc');
         }
 
-        $operations = $operations->paginate(10);
+        $operations = $operations->paginate(self::PAGINATE_COUNT);
 
         $data = [
             'operations' => $operations,
@@ -52,16 +59,16 @@ class OperationsController extends Controller
         return view('operations.index', $data);
     }
 
-    public function create(int $id__Item)
+    public function create(int $id__Instance)
     {
-        $item = Item::findOrFail($id__Item);
+        $instance = Instance::findOrFail($id__Instance);
 
-        $this->ownerAccess($item);
+        $this->ownerAccess($instance);
 
         session()->put('url.intended', url()->previous());
 
         $data = [
-            'item' => $item,
+            'instance' => $instance,
             'currencies' => $this->getCurrenciesForDropDown(),
             'conditions' => $this->getConditionsForDropDown(),
             'operationTypes' => $this->getOperationTypesForDropdown()
@@ -70,7 +77,7 @@ class OperationsController extends Controller
         return view('operations.create', $data);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $operation = Operation::findOrFail($id);
 
@@ -80,7 +87,7 @@ class OperationsController extends Controller
 
         $data = [
             'operation' => $operation,
-            'item' => $operation->item,
+            'instance' => $operation->instance,
             'currencies' => $this->getCurrenciesForDropDown(),
             'conditions' => $this->getConditionsForDropDown(),
             'operationTypes' => $this->getOperationTypesForDropdown()
@@ -116,23 +123,23 @@ class OperationsController extends Controller
 
     private function saveItem(?int $id = null)
     {
-        $id__Item = $this->request->get('id__Item');
+        $id__Instance = $this->request->get('id__Instance');
 
-        if (!$id__Item) {
+        if (!$id__Instance) {
             return $this->jsonResponse([
-                'message' => trans('app.id_of_item_not_exists')
+                'message' => trans('app.id_of_instance_not_exists')
             ]);
         }
 
-        $item = Item::find($id__Item);
+        $instance = Instance::find($id__Instance);
 
-        if (!$item) {
+        if (!$instance) {
             return $this->jsonResponse([
                 'message' => trans('app.item_non_exists')
             ]);
         }
 
-        $this->ownerAccess($item);
+        $this->ownerAccess($instance);
 
         $id = $id ?? $this->request->get('id');
 
@@ -157,7 +164,7 @@ class OperationsController extends Controller
 
             $operation_input = array_map('trim', $this->request->only([
                 'id__OperationType',
-                'id__Item',
+                'id__Instance',
                 'operated_at',
                 'note',
                 'condition',
@@ -181,7 +188,6 @@ class OperationsController extends Controller
         $v = $this->getValidationFactory()->make($this->request->all(), [
             'id__OperationType' => 'required|numeric|min:1',
             'operated_at' => 'required',
-            'price' => 'required|numeric',
         ]);
 
         if ($v->fails()) {
@@ -221,6 +227,7 @@ class OperationsController extends Controller
     private function getConditionsForDropDown(): array
     {
         return [
+            'NONE' => '---',
             'NEW' => trans('app.new'),
             'USED' => trans('app.used')
         ];

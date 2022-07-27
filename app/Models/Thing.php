@@ -2,19 +2,28 @@
 
 namespace App\Models;
 
-class Item extends BaseModel
+use Carbon\Carbon;
+
+class Thing extends BaseModel
 {
-    protected $table = 'Item';
+    protected $table = 'Thing';
+
+    protected $dates = ['published_at'];
 
     protected $fillable = [
         'title',
         'description',
         'overview',
         'is_archived',
-
+        'published_at',
         'id__Photo',
-        'id__Category'
+        'id__Category',
     ];
+
+    public function setPublishedAtAttribute($date)
+    {
+        $this->attributes['published_at'] = Carbon::createFromFormat('d.m.Y H:i', $date);
+    }
 
     /* -------------- Scopes -------------- */
 
@@ -40,8 +49,8 @@ class Item extends BaseModel
         return $this->belongsTo(Category::class, 'id__Category');
     }
 
-    public function operations()
+    public function instances()
     {
-        return $this->hasMany(Operation::class, 'id__Item');
+        return $this->hasMany(Instance::class, 'id__Thing');
     }
 }

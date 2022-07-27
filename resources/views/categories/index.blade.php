@@ -1,4 +1,4 @@
-@extends('template', ['title' => trans('app.categories') . ' :: INVENTARICO' ])
+@extends('template', ['title' => trans('app.categories') . ' :: INVENTARICO'])
 
 @section('content')
 
@@ -46,12 +46,12 @@
 
                             <div class="ui statistic tiny right floated">
                                 <div class="value">
-                                    <i class="gift icon"></i>
-                                    {{ $category->items->count() }}
+                                    <i class="tag icon"></i>
+                                    {{ $category->things->count() }}
                                 </div>
                             </div>
 
-                            <a href="/items?category={{ $category->id }}" class="ui large header">
+                            <a href="/things?category={{ $category->id }}" class="ui large header">
                                 {{ $category->title }}
                             </a>
 
@@ -62,7 +62,7 @@
                             <div class="extra">
 
                                 <a href="/categories/{{ $category->id }}/edit">
-                                    <i class="edit icon"></i>{{ trans('app.do_edit') }}
+                                    <i class="edit outline icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
                                     <i class="remove circle icon"></i>{{ trans('app.do_remove') }}

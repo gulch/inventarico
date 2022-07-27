@@ -1,13 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <title>{{ isset($title) ? $title . ' :: ' : '' }}{{ config('app.name') }}</title>
     <meta name="robots" content="noindex">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.4.2/semantic.css">
-    <link rel="stylesheet" type="text/css" href="/assets/css/fonts.css?v={{ config('app.version') }}">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.4.2/semantic.min.css">
 
     @if(isset($styles))
         @foreach($styles as $style)
@@ -44,13 +43,13 @@
             {{ trans('app.categories') }}
         </a>
 
-        <a href="/items" class="item">
-            <i class="gift icon"></i>
-            {{ trans('app.items') }}
+        <a href="/things" class="item">
+            <i class="tag icon"></i>
+            {{ trans('app.things') }}
         </a>
 
         <a href="/operations" class="item">
-            <i class="file text outline icon"></i>
+            <i class="cube icon"></i>
             {{ trans('app.operations') }}
         </a>
 
@@ -76,7 +75,7 @@
                     >
                         {{ trans('app.logout') }}
                     </a>
-                    <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
+                    <form id="logout-form" action="/logout" method="POST" style="display: none;">
                         {{ csrf_field() }}
                     </form>
                 </div>
@@ -91,6 +90,8 @@
     @yield('content')
 </div>
 
+<div class="ui hidden divider"></div>
+<div class="ui hidden divider"></div>
 <div class="ui hidden divider"></div>
 <div class="ui hidden divider"></div>
 

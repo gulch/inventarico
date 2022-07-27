@@ -48,7 +48,7 @@
                             <div class="extra">
 
                                 <a href="/operation-types/{{ $operationType->id }}/edit">
-                                    <i class="edit icon"></i>{{ trans('app.do_edit') }}
+                                    <i class="edit outline icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
                                     <i class="remove circle icon"></i>{{ trans('app.do_remove') }}

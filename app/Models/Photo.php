@@ -16,8 +16,8 @@ class Photo extends BaseModel
         return $this->belongsToMany(Operation::class, 'Operation_Photo', 'id__Photo', 'id__Operation');
     }
 
-    public function items()
+    public function things()
     {
-        return $this->hasMany(Item::class, 'id__Photo');
+        return $this->hasMany(Thing::class, 'id__Photo');
     }
 }

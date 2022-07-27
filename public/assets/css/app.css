@@ -1,3 +1,31 @@
+@font-face {
+    font-family: 'Lato';
+    font-weight: 1 999;
+    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2'),
+         url(/assets/fonts/lato/3.002/min/vf.woff) format('woff');
+}
+
+@font-face {
+    font-family: 'Lato-fallback';
+    letter-spacing: -0.25px;
+    src: local('Segoe UI');
+}
+
+body {
+    font-family: Lato, Lato-fallback, sans-serif !important;
+
+    /* Support for all WebKit browsers. */
+    -webkit-font-smoothing: subpixel-antialiased;
+
+    /* Support for Safari and Chrome. */
+    text-rendering: optimizeLegibility;
+
+    /* Support for Firefox. */
+    -moz-osx-font-smoothing: grayscale;
+
+     /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
+}
+
 .hide {
     display: none !important;
 }
@@ -67,4 +95,20 @@
     html:focus-within {
         scroll-behavior: smooth;
     }
+}
+
+.operation-note {
+    font-size: larger !important;
+    padding-top: .5rem !important;
+    padding-bottom: 1rem !important;
+    margin-top: 0px !important;
+}
+
+.grey-text {
+    color: rgba(0, 0, 0, 0.4) !important;
+}
+
+.header-margins {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use App\Models\Item;
+use App\Models\Thing;
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -11,108 +11,132 @@ use gulch\Transliterato\Scheme\RusToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\URL;
 
-class ItemsController extends Controller
+class ThingsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
 
     public function index()
     {
-        $items = Item::with('photo', 'category', 'operations')
+        $things = Thing::query()
+            ->with('photo', 'category', 'instances')
             ->ofCurrentUser();
 
-        $items = $this->applyCategory($items);
+        $things = $this->applyCategory($things);
 
-        $items = $this->applySort($items);
+        $things = $this->applySort($things);
 
-        $items = $this->applyAvailability($items);
+        $things = $this->applyAvailability($things);
 
-        $items = $this->applySearch($items);
+        $things = $this->applySearch($things);
 
-        $items = $items->paginate(self::PAGINATE_COUNT);
+        $things = $things->paginate(self::PAGINATE_COUNT);
 
         $data = [
-            'items' => $items,
+            'things' => $things,
             'categories' => $this->getCategoriesForDropdown(),
             'selected_category' => $this->request->input('category') ?? 0,
         ];
 
-        return view('items.index', $data);
+        return view('things.index', $data);
     }
 
     public function show($id)
     {
-        $item = Item::findOrFail($id);
-        $this->ownerAccess($item);
+        $thing = Thing::findOrFail($id);
+
+        $this->ownerAccess($thing);
+
+        $thing->instances = $thing->instances()
+            ->with([
+                'operations' => function($query) {
+                    $query->orderBy('operated_at', 'desc');
+                }
+            ])
+            ->orderBy('published_at', 'desc')
+            ->get();
+
         $data = [
-            'item' => $item
+            'thing' => $thing,
         ];
 
-        return view('items.show', $data);
+        return view('things.show.show', $data);
     }
 
     public function create()
     {
         $data = [
+            'thing' => null,
             'categories' => $this->getCategoriesForDropdown(),
             'selected_category' => 0,
         ];
-        Session::put('url.intended', url(URL::previous()));
 
-        return view('items.create', $data);
+        session()->put('url.intended', url()->previous());
+
+        return view('things.create', $data);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
-        $item = Item::findOrFail($id);
-        $this->ownerAccess($item);
-        Session::put('url.intended', url(URL::previous()));
+        $thing = Thing::findOrFail($id);
+
+        $this->ownerAccess($thing);
+
+        session()->put('url.intended', url()->previous());
+
         $data = [
-            'item' => $item,
+            'thing' => $thing,
             'categories' => $this->getCategoriesForDropdown(),
-            'selected_category' => $item->id__Category,
+            'selected_category' => $thing->id__Category,
         ];
 
-        return view('items.edit', $data);
+        return view('things.edit', $data);
     }
 
     public function store()
     {
-        return $this->saveItem();
+        return $this->saveThing();
     }
 
-    public function update($id)
+    public function update(int $id)
     {
-        return $this->saveItem($id);
+        return $this->saveThing($id);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
-        $item = Item::find($id);
-        $this->ownerAccess($item);
+        $thing = Thing::find($id);
 
-        if (is_null($item)) {
+        $this->ownerAccess($thing);
+
+        if (is_null($thing)) {
             return json_encode(['message' => trans('app.item_not_found')]);
-        } else {
-            // Unsync photos from operations
-            if ($item->operations) {
-                foreach ($item->operations as $o) {
-                    $o->photos()->sync([]);
-                }
-                // Delete operations
-                $item->operations()->delete();
-            }
-
-            // Delete item
-            $item->delete();
         }
+
+        // remove instances
+        if ($thing->instances) {
+
+            // TODO: Unsync photos from instance operations
+
+            $thing->instances()->delete();
+        }
+
+        // TODO: Unsync photos from instance operations
+        /* if ($thing->operations) {
+            foreach ($thing->operations as $o) {
+                $o->photos()->sync([]);
+            }
+            // Delete operations
+            $thing->operations()->delete();
+        } */
+
+        // Delete item
+        $thing->delete();
 
         return json_encode(['success' => 'OK']);
     }
 
-    private function saveItem($id = null)
+    private function saveThing(?int $id = null)
     {
         if (!$id) {
             $id = $this->request->get('id');
@@ -123,20 +147,21 @@ class ItemsController extends Controller
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/items');
+                $validation['redirect'] = session()->pull('url.intended', '/things');
             }
 
             if ($id) {
-                $item = Item::findOrFail($id);
-                $this->ownerAccess($item);
+                $thing = Thing::findOrFail($id);
+                $this->ownerAccess($thing);
             } else {
-                $item = new Item;
-                $item->setUserId();
-                $item->save();
+                $thing = new Thing;
+                $thing->setUserId();
+                $thing->save();
             }
-            $validation['id'] = $item->id;
 
-            $item_input = \array_map(
+            $validation['id'] = $thing->id;
+
+            $thing_input = \array_map(
                 'trim',
                 $this->request->only([
                     'title',
@@ -147,11 +172,11 @@ class ItemsController extends Controller
                 ])
             );
             $overview = $this->getOverview();
-            $item_input = \array_merge($item_input, compact('overview'));
+            $thing_input = \array_merge($thing_input, compact('overview'));
 
-            $item_input = $this->setCheckboxesValues($item_input);
+            $thing_input = $this->setCheckboxesValues($thing_input);
 
-            $item->update($item_input);
+            $thing->update($thing_input);
         }
 
         return $this->jsonResponse($validation);
@@ -193,6 +218,7 @@ class ItemsController extends Controller
         $value = $this->request->get('o_value');
 
         $overview = [];
+
         if (\is_array($title)) {
             $count = \sizeof($title);
             for ($i = 0; $i < $count; ++$i) {
@@ -210,78 +236,84 @@ class ItemsController extends Controller
         return json_encode($overview, JSON_UNESCAPED_UNICODE);
     }
 
-    private function applyCategory($items)
+    private function applyCategory($things)
     {
         $category_id = $this->request->input('category');
 
         if (!$category_id) {
-            return $items;
+            return $things;
         }
 
         $category = Category::find($category_id);
 
         if (!$category) {
-            return $items;
+            return $things;
         }
 
-        $items->whereIn(
+        $things->whereIn(
             'id__Category',
             \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray())
         );
 
-        return $items;
+        return $things;
     }
 
-    private function applySort($items)
+    private function applySort($things)
     {
         $sort = $this->request->input('sort');
 
         switch ($sort) {
+            case 'published_desc':
+                $things->orderBy('published_at', 'desc');
+                break;
+            case 'published_asc':
+                $things->orderBy('published_at');
+                break;
             case 'updated_desc':
-                $items->orderBy('updated_at', 'desc');
+                $things->orderBy('updated_at', 'desc');
                 break;
             case 'updated_asc':
-                $items->orderBy('updated_at');
+                $things->orderBy('updated_at');
                 break;
             case 'alphabet_desc':
-                $items->orderBy('title', 'desc');
+                $things->orderBy('title', 'desc');
                 break;
             case 'alphabet_asc':
-                $items->orderBy('title', 'asc');
+                $things->orderBy('title', 'asc');
                 break;
             case 'created_asc':
-                $items->orderBy('created_at');
+                $things->orderBy('created_at');
                 break;
             case 'created_desc':
             default:
-                $items->orderBy('created_at', 'desc');
+                $things->orderBy('created_at', 'desc');
         }
 
-        return $items;
+        return $things;
     }
 
-    private function applyAvailability($items)
+    private function applyAvailability($things)
     {
         $availability = $this->request->input('availability');
 
         switch ($availability) {
             case 'available':
-                $items->available();
+                $things->available();
                 break;
             case 'archived':
-                $items->archived();
+                $things->archived();
                 break;
         }
 
-        return $items;
+        return $things;
     }
 
-    private function applySearch($items)
+    private function applySearch($things)
     {
         $q = $this->request->input('q');
 
         if ($q) {
-            $items->where(function ($query) use ($q) {
+            $things->where(function ($query) use ($q) {
                 $query->where('title', 'like', '%' . $q . '%');
                 // transliterato
                 $results = self::transliterato($q);
@@ -291,7 +323,7 @@ class ItemsController extends Controller
             });
         }
 
-        return $items;
+        return $things;
     }
 
     public static function transliterato(string $q): array

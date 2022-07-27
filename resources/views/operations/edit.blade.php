@@ -1,11 +1,11 @@
 @extends('template', [
-    'title' => trans('app.operations') . ' → ' . trans('app.editing_operation_for') . ' «' . $item->title . '»',
+    'title' => trans('app.operations') . ' → ' . trans('app.editing_operation_for') . ' «' . $instance->title . '»',
 ])
 
 @section('content')
     <h1 class="ui header">
-        <i class="gift icon"></i>
-        {{ trans('app.editing_operation_for') }} &laquo;{{ $item->title }}&raquo;
+        <i class="tag icon"></i>
+        {{ trans('app.editing_operation_for') }} &laquo;{{ $instance->title }}&raquo;
     </h1>
 
     <div class="ui warning form segment">

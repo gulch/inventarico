@@ -5,7 +5,7 @@ function activateDataAction() {
         var action_name = elem.attr('data-action-name');
         var segment = elem.closest('div[data-action-element]');
         if (!segment.length) {
-            segment = elem.closest('.segment');
+            segment = elem.closest('.action-segment');
         }
         var params = '_token=' + $('meta[name="csrf-token"]').attr('content');
         if (elem.attr('data-method')) params += '&_method=' + elem.attr('data-method');

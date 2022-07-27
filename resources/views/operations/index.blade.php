@@ -11,7 +11,7 @@
 
     <div class="ui stackable menu">
         <div class="item">
-            <i class="file text outline large icon"></i>
+            <i class="cube large icon"></i>
         </div>
 
         <div class="item">
@@ -58,8 +58,8 @@
                      data-action-element="1"
                 >
                     <div class="image">
-                        @if($operation->item->photo)
-                            <img src="{{ config('app.thumb_image_upload_path') . $operation->item->photo->path }}">
+                        @if($operation->instance?->thing?->photo)
+                            <img src="{{ config('app.thumb_image_upload_path') . $operation->instance->thing->photo->path }}">
                         @else
                             <img src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg">
                         @endif
@@ -71,26 +71,30 @@
                             <div class="ui large header">
                                 &laquo;{{ $operation->type->title }}&raquo;
                                 {{ trans('app.for') }}
-                                <a href="/items/{{ $operation->item->id }}/show">
-                                    {{ $operation->item->title }}
+                                <a href="/things/{{ $operation->instance->thing->id }}/show">
+                                    {{ $operation->instance->title }}
                                 </a>
                             </div>
 
                             <div class="meta">
+                            <p>
 
+                                <i class="clock outline icon"></i>
+                                {{ $operation->operated_at->format('d.m.Y H:i:s') }}
+
+                            </p>
                                 <p>
-                                    <span class="ui large basic label">
-                                        <i class="clock icon"></i>
-                                        {{ $operation->operated_at->format('d.m.Y H:i:s') }}
-                                    </span>
+                                    @if($operation->condition !== 'NONE')
+                                        <span class="ui large label">
+                                            {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
+                                        </span>
+                                    @endif
 
-                                    <span class="ui large label">
-                                        {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
-                                    </span>
-
-                                    <span class="ui left pointing teal basic label">
-                                        {{ $operation->price }} {{ $operation->currency }}
-                                    </span>
+                                    @if($operation->price > 0)
+                                        <span class="ui left pointing teal basic label">
+                                            {{ $operation->price }} {{ $operation->currency }}
+                                        </span>
+                                    @endif
                                 </p>
 
                                 {{ trans('app.created_at') }}: {{ $operation->created_at->format('d.m.Y H:i:s') }}
@@ -101,7 +105,7 @@
                             <div class="extra">
 
                                 <a href="/operations/{{ $operation->id }}/edit">
-                                    <i class="edit icon"></i>{{ trans('app.do_edit') }}
+                                    <i class="edit outline icon"></i>{{ trans('app.do_edit') }}
                                 </a>
                                 <a data-popup="1">
                                     <i class="remove circle icon"></i>{{ trans('app.do_remove') }}

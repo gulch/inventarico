@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as InterventionImage;
-use App\Models\Photo;
 
 class PhotosController extends Controller
 {
@@ -45,15 +46,15 @@ class PhotosController extends Controller
         if (is_null($photo)) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         } else {
-            if (sizeof($photo->items)) {
+            if (sizeof($photo->things)) {
                 return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_item')
+                    'message' => trans('app.photo_is_use_in_some_thing')
                 ]);
             }
 
             if (sizeof($photo->operations)) {
                 return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_item')
+                    'message' => trans('app.photo_is_use_in_some_thing')
                 ]);
             }
 
@@ -204,6 +205,28 @@ class PhotosController extends Controller
             //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
 
             $img->save($filepath_new . $filename, $quality);
+
+            $this->mozJpegOptimize($filepath_new . $filename);
+        }
+    }
+
+    private function mozJpegOptimize($original, $options = [])
+    {
+        $new = $options['output_filename'] ?? $original;
+        $suffix = '.TEST';
+
+        $quality = $options['quality'] ?? '';
+        $quality = $quality ? '-quality ' . $quality : '';
+
+        $cmd = "mozjpeg -optimize -progressive {$quality} {$original} > {$new}{$suffix}";
+
+        $result = exec($cmd);
+
+        if (filesize($new . $suffix)) {
+            exec("mv {$new}{$suffix} {$new}");
+        } else {
+            @unlink($new . $suffix);
+            Log::warning('Can not create MozJpeg image for: ' . $new . '. Exec returns: ' . $result);
         }
     }
 
