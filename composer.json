@@ -12,8 +12,7 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^9.0",
         "laravel/ui": "^3.2",
-        "laravelcollective/html": "^6.2",
-        "voku/html-min": "^4.5"
+        "laravelcollective/html": "^6.2"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
