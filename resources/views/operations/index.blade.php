@@ -84,13 +84,17 @@
 
                             </p>
                                 <p>
-                                    <span class="ui large label">
-                                        {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
-                                    </span>
+                                    @if($operation->condition !== 'NONE')
+                                        <span class="ui large label">
+                                            {{ $operation->condition === 'NEW' ? trans('app.new') : trans('app.used') }}
+                                        </span>
+                                    @endif
 
-                                    <span class="ui left pointing teal basic label">
-                                        {{ $operation->price }} {{ $operation->currency }}
-                                    </span>
+                                    @if($operation->price > 0)
+                                        <span class="ui left pointing teal basic label">
+                                            {{ $operation->price }} {{ $operation->currency }}
+                                        </span>
+                                    @endif
                                 </p>
 
                                 {{ trans('app.created_at') }}: {{ $operation->created_at->format('d.m.Y H:i:s') }}
