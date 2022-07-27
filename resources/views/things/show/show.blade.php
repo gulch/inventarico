@@ -109,10 +109,16 @@
 
     @foreach ($thing->instances as $instance)
         <div class="ui raised segments">
-            <div class="ui segment action-segment">
+            <div class="ui segment action-segment @if($instance->is_archived) secondary @endif">
                 <div class="ui items">
                     <div class="item">
                         <div class="content">
+
+                            @if($instance->is_archived)
+                                <p class="ui grey large ribbon label">
+                                    {{ trans('app.archived_instance') }}
+                                </p>
+                            @endif
 
                             <p class="grey-text"
                                title="{{ trans('app.published_date') }}"
@@ -192,7 +198,7 @@
                 </div>
             </div>
 
-            <div class="ui segment">
+            <div class="ui segment @if($instance->is_archived) secondary @endif">
                 @include('things.show._operations')
             </div>
         </div>

@@ -134,6 +134,7 @@ return [
 
     'instances' => 'Екземпляри',
     'q_archived_instance' => 'Архівний екземпляр?',
+    'archived_instance' => 'Архівний екземпляр',
     'creating_new_instance' => 'Створення нового екземпляру',
 
     /*'' => '',*/
