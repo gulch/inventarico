@@ -46,7 +46,7 @@ class PhotosController extends Controller
         if (is_null($photo)) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         } else {
-            if (sizeof($photo->items)) {
+            if (sizeof($photo->things)) {
                 return $this->jsonResponse([
                     'message' => trans('app.photo_is_use_in_some_thing')
                 ]);
