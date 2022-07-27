@@ -136,6 +136,13 @@ return [
     'q_archived_instance' => 'Архівний екземпляр?',
     'archived_instance' => 'Архівний екземпляр',
     'creating_new_instance' => 'Створення нового екземпляру',
+    'active_instances_sum' => 'Сумарна вартість<br>наявних екземплярів',
+    'active_things_count' => 'Всього<br>наявних речей',
+    'archived_things_count' => 'Всього<br>архівних речей',
+    'active_instances_count' => 'Всього<br>наявних екземплярів',
+    'archived_instances_count' => 'Всього<br>архівних екземплярів',
+
+
 
     /*'' => '',*/
 ];
