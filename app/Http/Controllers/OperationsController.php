@@ -68,6 +68,7 @@ class OperationsController extends Controller
         session()->put('url.intended', url()->previous());
 
         $data = [
+            'operation' => null,
             'instance' => $instance,
             'currencies' => $this->getCurrenciesForDropDown(),
             'conditions' => $this->getConditionsForDropDown(),

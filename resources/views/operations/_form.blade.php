@@ -1,13 +1,9 @@
 @include('partials.error-message')
 
 <div class="inline field">
-    <?php
-    if (isset($operation)) {
-        $operated_date = $operation->operated_at->format('Y-m-d H:i:s');
-    } else {
-        $operated_date = date('Y-m-d H:i:00');
-    }
-    ?>
+    @php
+    $operated_date = $operation?->operated_at?->format('d.m.Y H:i:s') ?? date('d.m.Y H:i:00');
+    @endphp
     {!! Form::label('operated_at', trans('app.operated_date') . '*') !!}
     {!! Form::text('operated_at', $operated_date, ['class' => 'datetimepicker', 'readonly' => true]) !!}
 </div>
