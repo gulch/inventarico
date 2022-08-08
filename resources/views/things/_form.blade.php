@@ -11,7 +11,7 @@
 
 <div class="inline field">
     @php
-    $published_date = $thing?->published_at?->format('Y-m-d H:i:s') ?? date('Y-m-d H:i:00');
+    $published_date = $thing?->published_at?->format('d.m.Y H:i:s') ?? date('d.m.Y H:i:00');
     @endphp
     {!! Form::label('published_at', trans('app.published_date') . '*') !!}
     {!! Form::text('published_at', $published_date, ['class' => 'datetimepicker', 'readonly' => true]) !!}

@@ -168,7 +168,8 @@ class ThingsController extends Controller
                     'description',
                     'is_archived',
                     'id__Photo',
-                    'id__Category'
+                    'id__Category',
+                    'published_at',
                 ])
             );
             $overview = $this->getOverview();
@@ -286,7 +287,7 @@ class ThingsController extends Controller
                 break;
             case 'created_desc':
             default:
-                $things->orderBy('created_at', 'desc');
+                $things->orderBy('published_at', 'desc');
         }
 
         return $things;
