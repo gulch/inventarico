@@ -14,6 +14,7 @@
 <script src="/assets/vendor/redactor/3.5.2/plugins/counter.js"></script>
 <script src="/assets/vendor/redactor/3.5.2/plugins/fontcolor.js"></script>
 <script src="/assets/vendor/redactor/3.5.2/plugins/fontsize.js"></script>
+<script src="/assets/vendor/redactor/3.5.2/plugins/fontfamily.js"></script>
 <script src="/assets/vendor/redactor/3.5.2/plugins/specialchars.js"></script>
 <script src="/assets/vendor/redactor/3.5.2/plugins/table.js"></script>
 <script src="/assets/vendor/redactor/3.5.2/plugins/video.js"></script>
@@ -47,9 +48,30 @@
 
         source: {
             codemirror: {
-                lineNumbers: true
+                lineNumbers: true,
+                lineWrapping: true,
+                mode: "text/html"
             }
         },
+
+        fontcolors: [
+            '#ff8484', // price red
+            '#78c600', // price green
+            '#00c253', // another green
+            '#a3a3a3', // grey
+            '#1fa4f8' // pastel blue
+        ],
+
+        fontfamily: [
+            'Arial',
+            'Tahoma',
+            'Segoe UI',
+            'Times New Roman',
+            'Consolas',
+            'JetBrains Mono',
+            'Source Sans Pro',
+            'monospace'
+        ],
 
         plugins: [
             'alignment',
@@ -57,6 +79,7 @@
             'counter',
             'fontcolor',
             'fontsize',
+            'fontfamily',
             'specialchars',
             'table',
             'video'
