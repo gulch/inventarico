@@ -53,6 +53,7 @@ class ThingsController extends Controller
                     $query->orderBy('operated_at', 'desc');
                 }
             ])
+            ->orderBy('is_archived', 'asc')
             ->orderBy('published_at', 'desc')
             ->get();
 
