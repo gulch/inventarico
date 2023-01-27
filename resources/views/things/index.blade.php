@@ -102,7 +102,7 @@
     @if ($things)
         <div class="ui relaxed divided items">
             @foreach($things as $thing)
-                <div class="item"
+                <div class="item @if($thing->is_archived) archived-item @endif"
                      data-id="{{ $thing->id }}"
                      data-action-element="1"
                 >
