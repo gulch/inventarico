@@ -1,18 +1,23 @@
 @font-face {
+    font-display: swap;
     font-family: 'Lato';
     font-weight: 1 999;
-    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2'),
-         url(/assets/fonts/lato/3.002/min/vf.woff) format('woff');
+    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2');
 }
 
 @font-face {
     font-family: 'Lato-fallback';
-    letter-spacing: -0.25px;
-    src: local('Segoe UI');
+    font-style: normal;
+    font-weight: 400;
+    src: local('Arial');
+    ascent-override: 99.52%;
+    descent-override: 21.48%;
+    line-gap-override: 0.00%;
+    size-adjust: 99.17%;
 }
 
 body {
-    font-family: Lato, Lato-fallback, sans-serif !important;
+    font-family: 'Lato', 'Lato-fallback' !important;
 
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: subpixel-antialiased;
@@ -23,7 +28,7 @@ body {
     /* Support for Firefox. */
     -moz-osx-font-smoothing: grayscale;
 
-     /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
+    /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
 }
 
 .hide {
@@ -51,20 +56,21 @@ body {
     display: inline-block;
     min-width: 2em;
     min-height: 2em;
-    line-height: 2em;
-    font-size: 1.4em;
+    line-height: 1.9em;
+    font-size: 1.6em;
     margin: 1px;
     vertical-align: middle;
     color: gray;
     text-align: center;
 }
 
-.pagination li:not(.active):not(.disabled){
-    border: 1px solid rgba(34,36,38,.15);
-    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+.pagination li:not(.active):not(.disabled) {
+    border: 1px solid rgba(34, 36, 38, .15);
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
     border-radius: 2em;
     color: black;
 }
+
 /* Pagination styles --END-- */
 
 .ui.cards>.card>.image>img,
@@ -114,6 +120,6 @@ body {
 }
 
 .archived-item {
-    background-color: hsl(0deg 0% 44% / 10%);
-    background-image: repeating-linear-gradient(-45deg,transparent,transparent 35px,hsla(0,0%,100%,.5) 0,hsla(0,0%,100%,.5) 70px);
+    background-color: hsl(0deg 0% 55% / 10%) !important;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, hsla(0, 0%, 100%, .5) 0, hsla(0, 0%, 100%, .5) 70px) !important;
 }
