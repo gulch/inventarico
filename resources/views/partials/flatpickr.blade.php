@@ -1,8 +1,8 @@
 {{-- Flatpickr --}}
-<link rel="stylesheet" type="text/css" href="/assets/vendor/flatpickr/4.6.13/flatpickr.min.css">
+<link rel="stylesheet" type="text/css" href="/assets/vendor/flatpickr/3.0.5/flatpickr.min.css">
 
-<script defer src="/assets/vendor/flatpickr/4.6.13/flatpickr.min.js"></script>
-<script defer src="/assets/vendor/flatpickr/4.6.13/{{ config('app.locale') }}.min.js"></script>
+<script defer src="/assets/vendor/flatpickr/3.0.5/flatpickr.min.js"></script>
+<script defer src="/assets/vendor/flatpickr/3.0.5/l10n/{{ config('app.locale') }}.js"></script>
 
 <script>
     $(document).ready(function () {
