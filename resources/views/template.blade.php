@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.4.2/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/semantic/2.5.0/semantic.min.css">
 
     @if(isset($styles))
         @foreach($styles as $style)
@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
 
     {{-- jQuery --}}
-    <script src="/assets/vendor/jquery/3.6.0/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.6.3/jquery.min.js"></script>
 
     {{-- Favicon --}}
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -105,7 +105,7 @@
     @endforeach
 @endif
 
-<script defer src="/assets/vendor/semantic/2.4.2/semantic.min.js"></script>
+<script defer src="/assets/vendor/semantic/2.5.0/semantic.min.js"></script>
 <script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
 </body>
 </html>
