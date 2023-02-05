@@ -1,23 +1,11 @@
 @font-face {
-    font-display: swap;
     font-family: 'Lato';
     font-weight: 1 999;
     src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2');
 }
 
-@font-face {
-    font-family: 'Lato-fallback';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Arial');
-    ascent-override: 99.52%;
-    descent-override: 21.48%;
-    line-gap-override: 0.00%;
-    size-adjust: 99.17%;
-}
-
 body {
-    font-family: 'Lato', 'Lato-fallback' !important;
+    font-family: 'Lato' !important;
 
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: subpixel-antialiased;
