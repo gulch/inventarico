@@ -7,7 +7,11 @@ use Carbon\Carbon;
 class Operation extends BaseModel
 {
     protected $table = 'Operation';
-    protected $dates = ['operated_at'];
+
+    protected $casts = [
+        'operated_at' => 'datetime',
+    ];
+
 
     protected $fillable = [
         'operated_at',

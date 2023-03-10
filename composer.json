@@ -10,13 +10,12 @@
         "gulch/minify": "^1.0",
         "gulch/transliterato": "^1.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^10.0",
         "laravel/ui": "^4.1",
-        "laravelcollective/html": "^6.2"
+        "laravelcollective/html": "^6.4"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^1.0",
-        "nunomaduro/collision": "^6.1"
+
     },
     "autoload": {
         "classmap": [
@@ -58,6 +57,7 @@
         ]
     },
     "config": {
+        "minimum-stability": "stable",
         "preferred-install": "dist",
         "sort-packages": true,
         "optimize-autoloader": true

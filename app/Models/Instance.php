@@ -8,7 +8,9 @@ class Instance extends BaseModel
 {
     protected $table = 'Instance';
 
-    protected $dates = ['published_at'];
+    protected $casts = [
+        'published_at' => 'datetime',
+    ];
 
     protected $fillable = [
         'title',
