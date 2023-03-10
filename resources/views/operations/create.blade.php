@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => trans('app.operations') . ' → ' . trans('app.creating_new_operation') . ' ' . trans('app.for') . ' «' . $instance->title . '»',
+    'title' => trans('app.operations') . ' › ' . trans('app.creating_new_operation') . ' ' . trans('app.for') . ' «' . $instance->title . '»',
 ])
 
 @section('content')

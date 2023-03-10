@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => trans('app.things') . ' → ' . $thing->title,
+    'title' => trans('app.things') . ' › ' . $thing->title,
     'scripts' => [
         [
             'load' => 'defer',

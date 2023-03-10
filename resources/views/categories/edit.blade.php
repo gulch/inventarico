@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => trans('app.categories') . ' → ' . trans('app.editing') . ' «' . $category->title . '»',
+    'title' => trans('app.categories') . ' › ' . trans('app.editing') . ' «' . $category->title . '»',
 ])
 
 @section('content')

@@ -1,5 +1,5 @@
 @extends('template', [
-    'title' => trans('app.photos') . ' → ' . trans('app.editing') . ' «' . $photo->path . '»',
+    'title' => trans('app.photos') . ' › ' . trans('app.editing') . ' «' . $photo->path . '»',
 ])
 
 @section('content')
