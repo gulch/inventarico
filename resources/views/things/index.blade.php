@@ -102,7 +102,7 @@
     @if ($things)
         <div class="ui relaxed divided items">
             @foreach($things as $thing)
-                <div class="item @if($thing->is_archived) archived-item @endif"
+                <div class="item"
                      data-id="{{ $thing->id }}"
                      data-action-element="1"
                 >
@@ -114,7 +114,7 @@
                         @endif
                     </div>
 
-                    <div class="content">
+                    <div class="content @if($thing->is_archived) archived-item @endif">
                         <div class="ui basic segment">
 
                             <div class="ui statistic tiny right floated">
