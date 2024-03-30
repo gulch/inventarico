@@ -111,3 +111,14 @@ body {
     background-color: hsl(0deg 0% 55% / 10%) !important;
     background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, hsla(0, 0%, 100%, .5) 0, hsla(0, 0%, 100%, .5) 70px) !important;
 }
+
+.things-items .item img {
+    border-radius: 1em !important;
+    border: solid 1px #dbdbdb !important;
+    margin-left: 1rem !important;
+}
+
+.things-items .item .content {
+    padding-left: 2rem !important;
+    padding-right: 1rem !important;
+}
