@@ -92,9 +92,12 @@
     <div class="ui clearing divider"></div>
 
     @if ($things)
-        <div class="ui relaxed divided items">
+        <div class="ui relaxed divided items things-items">
             @foreach ($things as $thing)
-                <div class="item" data-id="{{ $thing->id }}" data-action-element="1">
+                <div class="item @if ($thing->is_archived) archived-item @endif"
+                     data-id="{{ $thing->id }}"
+                     data-action-element="1"
+                >
                     <div class="image">
                         @if ($thing->photo)
                             <img src="{{ config('app.thumb_image_upload_path') . $thing->photo->path }}">
@@ -103,7 +106,7 @@
                         @endif
                     </div>
 
-                    <div class="content @if ($thing->is_archived) archived-item @endif">
+                    <div class="content">
                         <div class="ui statistic tiny right floated">
                             <div class="value">
                                 <i class="shopping cart icon"></i>
