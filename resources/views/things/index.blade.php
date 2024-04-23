@@ -32,7 +32,7 @@
             <select name="category" class="ui search dropdown wide-min-320">
                 <option value="0" @if ($selected_category === 0) selected @endif>{{ trans('app.all_categories') }}
                 </option>
-                @include('items._options', ['items' => $categories, 'depth' => 0])
+                @include('things._options', ['items' => $categories, 'depth' => 0])
             </select>
         </div>
 
