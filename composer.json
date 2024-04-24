@@ -1,17 +1,17 @@
 {
     "name": "gulch/inventarico",
     "description": "Inventarico Things Management System",
-    "keywords": ["inventarico", "laravel"],
+    "keywords": ["inventarico"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=8.1",
+        "php": ">=8.3",
         "franzose/closure-table": "^6.1",
         "gulch/collective-html": "^6.5",
         "gulch/minify": "^1.0",
         "gulch/transliterato": "^1.0",
         "intervention/image": "^2.5",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "^11.0",
         "laravel/ui": "^4.1"
     },
     "require-dev": {
@@ -44,28 +44,37 @@
             "Tests\\": "tests/"
         }
     },
-    "extra": {
-        "laravel": {
-            "dont-discover": [
-
-            ]
-        }
-    },
     "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate"
-        ],
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
         ]
     },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
     "config": {
-        "minimum-stability": "stable",
+        "optimize-autoloader": true,
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
-    }
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }

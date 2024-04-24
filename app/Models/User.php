@@ -33,7 +33,7 @@ class User extends Authenticatable
 
     public function items()
     {
-        return $this->hasMany(Item::class, 'id__User');
+        return $this->hasMany(Thing::class, 'id__User');
     }
 
     public function categories()

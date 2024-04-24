@@ -3,9 +3,7 @@
 namespace App\Services;
 
 use gulch\Minify\Minifier;
-use gulch\Minify\Processor\AttributesSimplifier;
 use gulch\Minify\Processor\HtmlCommentsRemover;
-use gulch\Minify\Processor\QuotesRemover;
 use gulch\Minify\Processor\WhitespacesRemover;
 
 use function app;
