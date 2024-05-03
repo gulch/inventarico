@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-class OperationType extends BaseModel
+final class OperationType extends BaseModel
 {
     public const KIND_OF = [
         'neutral',
@@ -15,7 +17,7 @@ class OperationType extends BaseModel
     protected $fillable = [
         'title',
         'kind',
-        'id__User'
+        'id__User',
     ];
 
     public function operations()

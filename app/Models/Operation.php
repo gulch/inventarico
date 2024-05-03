@@ -1,17 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Carbon\Carbon;
 
-class Operation extends BaseModel
+final class Operation extends BaseModel
 {
     protected $table = 'Operation';
 
     protected $casts = [
         'operated_at' => 'datetime',
     ];
-
 
     protected $fillable = [
         'operated_at',
@@ -20,10 +21,10 @@ class Operation extends BaseModel
         'currency',
         'note',
         'id__Instance',
-        'id__OperationType'
+        'id__OperationType',
     ];
 
-    public function setOperatedAtAttribute($date)
+    public function setOperatedAtAttribute($date): void
     {
         $this->attributes['operated_at'] = Carbon::createFromFormat('d.m.Y H:i', $date);
     }

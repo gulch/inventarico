@@ -1,9 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Thing;
+
+use function array_map;
+use function array_merge;
+use function count;
+
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -12,9 +19,25 @@ use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
 
-class ThingsController extends Controller
+use function is_array;
+
+final class ThingsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
+
+    public static function transliterato(string $q): array
+    {
+        $processor = new BatchProcessor(
+            new EngToRusKeyboardLayout(),
+            new EngToUkrKeyboardLayout(),
+            new RusToEngKeyboardLayout(),
+            new RusToUkrKeyboardLayout(),
+            new UkrToEngKeyboardLayout(),
+            new UkrToRusKeyboardLayout(),
+        );
+
+        return $processor->process($q);
+    }
 
     public function index()
     {
@@ -49,9 +72,9 @@ class ThingsController extends Controller
 
         $thing->instances = $thing->instances()
             ->with([
-                'operations' => function($query) {
+                'operations' => function ($query): void {
                     $query->orderBy('operated_at', 'desc');
-                }
+                },
             ])
             ->orderBy('is_archived', 'asc')
             ->orderBy('published_at', 'desc')
@@ -110,7 +133,7 @@ class ThingsController extends Controller
 
         $this->ownerAccess($thing);
 
-        if (is_null($thing)) {
+        if (null === $thing) {
             return json_encode(['message' => trans('app.item_not_found')]);
         }
 
@@ -139,7 +162,7 @@ class ThingsController extends Controller
 
     private function saveThing(?int $id = null)
     {
-        if (!$id) {
+        if ( ! $id) {
             $id = $this->request->get('id');
         }
 
@@ -155,14 +178,14 @@ class ThingsController extends Controller
                 $thing = Thing::findOrFail($id);
                 $this->ownerAccess($thing);
             } else {
-                $thing = new Thing;
+                $thing = new Thing();
                 $thing->setUserId();
                 $thing->save();
             }
 
             $validation['id'] = $thing->id;
 
-            $thing_input = \array_map(
+            $thing_input = array_map(
                 'trim',
                 $this->request->only([
                     'title',
@@ -171,10 +194,10 @@ class ThingsController extends Controller
                     'id__Photo',
                     'id__Category',
                     'published_at',
-                ])
+                ]),
             );
             $overview = $this->getOverview();
-            $thing_input = \array_merge($thing_input, compact('overview'));
+            $thing_input = array_merge($thing_input, compact('overview'));
 
             $thing_input = $this->setCheckboxesValues($thing_input);
 
@@ -221,9 +244,9 @@ class ThingsController extends Controller
 
         $overview = [];
 
-        if (\is_array($title)) {
-            $count = \sizeof($title);
-            for ($i = 0; $i < $count; ++$i) {
+        if (is_array($title)) {
+            $count = count($title);
+            for ($i = 0; $i < $count; $i++) {
                 if ($value[$i] && $title[$i]) {
                     $o = [];
                     $o['title'] = trim($title[$i]);
@@ -242,19 +265,19 @@ class ThingsController extends Controller
     {
         $category_id = $this->request->input('category');
 
-        if (!$category_id) {
+        if ( ! $category_id) {
             return $things;
         }
 
         $category = Category::find($category_id);
 
-        if (!$category) {
+        if ( ! $category) {
             return $things;
         }
 
         $things->whereIn(
             'id__Category',
-            \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray())
+            array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()),
         );
 
         return $things;
@@ -315,7 +338,7 @@ class ThingsController extends Controller
         $q = $this->request->input('q');
 
         if ($q) {
-            $things->where(function ($query) use ($q) {
+            $things->where(function ($query) use ($q): void {
                 $query->where('title', 'like', '%' . $q . '%');
                 // transliterato
                 $results = self::transliterato($q);
@@ -328,23 +351,9 @@ class ThingsController extends Controller
         return $things;
     }
 
-    public static function transliterato(string $q): array
-    {
-        $processor = new BatchProcessor(
-            new EngToRusKeyboardLayout(),
-            new EngToUkrKeyboardLayout(),
-            new RusToEngKeyboardLayout(),
-            new RusToUkrKeyboardLayout(),
-            new UkrToEngKeyboardLayout(),
-            new UkrToRusKeyboardLayout()
-        );
-
-        return $processor->process($q);
-    }
-
     private function setCheckboxesValues($input)
     {
-        if (!isset($input['is_archived'])) {
+        if ( ! isset($input['is_archived'])) {
             $input['is_archived'] = 0;
         }
 

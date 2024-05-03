@@ -1,15 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Instance;
-use App\Models\Item;
 use App\Models\Operation;
 use App\Models\OperationType;
 
-use function view, trans, session, url;
+use function session;
+use function trans;
+use function url;
+use function view;
 
-class OperationsController extends Controller
+final class OperationsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
 
@@ -18,13 +22,13 @@ class OperationsController extends Controller
         $operations = Operation::ofCurrentUser()
             ->with([
                 'type',
-                'instance' => function ($query) {
+                'instance' => function ($query): void {
                     $query->with([
-                        'thing' => function ($query) {
+                        'thing' => function ($query): void {
                             $query->with('photo');
-                        }
+                        },
                     ]);
-                }
+                },
             ]);
 
         $operationtype = $this->request->input('operationtype');
@@ -53,7 +57,7 @@ class OperationsController extends Controller
 
         $data = [
             'operations' => $operations,
-            'operationTypes' => ['0' => '-- '.trans('app.all').' --'] + OperationType::pluck('title', 'id')->all()
+            'operationTypes' => ['0' => '-- ' . trans('app.all') . ' --'] + OperationType::pluck('title', 'id')->all(),
         ];
 
         return view('operations.index', $data);
@@ -72,7 +76,7 @@ class OperationsController extends Controller
             'instance' => $instance,
             'currencies' => $this->getCurrenciesForDropDown(),
             'conditions' => $this->getConditionsForDropDown(),
-            'operationTypes' => $this->getOperationTypesForDropdown()
+            'operationTypes' => $this->getOperationTypesForDropdown(),
         ];
 
         return view('operations.create', $data);
@@ -91,7 +95,7 @@ class OperationsController extends Controller
             'instance' => $operation->instance,
             'currencies' => $this->getCurrenciesForDropDown(),
             'conditions' => $this->getConditionsForDropDown(),
-            'operationTypes' => $this->getOperationTypesForDropdown()
+            'operationTypes' => $this->getOperationTypesForDropdown(),
         ];
 
         return view('operations.edit', $data);
@@ -126,23 +130,23 @@ class OperationsController extends Controller
     {
         $id__Instance = $this->request->get('id__Instance');
 
-        if (!$id__Instance) {
+        if ( ! $id__Instance) {
             return $this->jsonResponse([
-                'message' => trans('app.id_of_instance_not_exists')
+                'message' => trans('app.id_of_instance_not_exists'),
             ]);
         }
 
         $instance = Instance::find($id__Instance);
 
-        if (!$instance) {
+        if ( ! $instance) {
             return $this->jsonResponse([
-                'message' => trans('app.item_non_exists')
+                'message' => trans('app.item_non_exists'),
             ]);
         }
 
         $this->ownerAccess($instance);
 
-        $id = $id ?? $this->request->get('id');
+        $id ??= $this->request->get('id');
 
         $validation = $this->validateData();
 
@@ -156,7 +160,7 @@ class OperationsController extends Controller
                 $operation = Operation::findOrFail($id);
                 $this->ownerAccess($operation);
             } else {
-                $operation = new Operation;
+                $operation = new Operation();
                 $operation->setUserId();
                 $operation->save();
             }
@@ -170,7 +174,7 @@ class OperationsController extends Controller
                 'note',
                 'condition',
                 'price',
-                'currency'
+                'currency',
             ]));
 
             $operation->update($operation_input);
@@ -206,7 +210,7 @@ class OperationsController extends Controller
         return $data;
     }
 
-    private function syncPhotos(Operation $operation, $photos)
+    private function syncPhotos(Operation $operation, $photos): void
     {
         $operation->photos()->sync($photos ?? []);
     }
@@ -221,7 +225,7 @@ class OperationsController extends Controller
         return [
             'UAH' => trans('app.uah'),
             'USD' => trans('app.usd'),
-            'EUR' => trans('app.eur')
+            'EUR' => trans('app.eur'),
         ];
     }
 
@@ -230,7 +234,7 @@ class OperationsController extends Controller
         return [
             'NONE' => '---',
             'NEW' => trans('app.new'),
-            'USED' => trans('app.used')
+            'USED' => trans('app.used'),
         ];
     }
 }

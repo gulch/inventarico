@@ -1,16 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
 use App\Models\Category;
+use Illuminate\Support\Facades\Session;
 
-class CategoriesController extends Controller
+use function request;
+
+final class CategoriesController extends Controller
 {
+    public static function getCategoriesForDropdown()
+    {
+        return Category::ofCurrentUser()
+            ->orderBy('title')
+            ->get()
+            ->toTree();
+    }
     public function index()
     {
         $data = [
-            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(10)
+            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(10),
         ];
 
         return view('categories.index', $data);
@@ -54,24 +65,24 @@ class CategoriesController extends Controller
         $category = Category::find($id);
         $this->ownerAccess($category);
 
-        if (is_null($category)) {
+        if (null === $category) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
-        } else {
-            if (sizeof($category->items)) {
-                return $this->jsonResponse([
-                    'message' => trans('app.category_has_things_cant_delete')
-                ]);
-            }
-
-            $category->delete();
         }
+
+        if (count($category->items)) {
+            return $this->jsonResponse([
+                'message' => trans('app.category_has_things_cant_delete'),
+            ]);
+        }
+
+        $category->delete();
 
         return json_encode(['success' => 'OK']);
     }
 
     private function saveItem($id = null)
     {
-        if (!$id) {
+        if ( ! $id) {
             $id = $this->request->get('id');
         }
 
@@ -87,13 +98,13 @@ class CategoriesController extends Controller
                 $category = Category::findOrFail($id);
                 $this->ownerAccess($category);
             } else {
-                $category = new Category;
+                $category = new Category();
                 $category->setUserId();
                 $category->save();
             }
             $category->update($this->request->all());
 
-            if ($parent_id = \request('parent_id')) {
+            if ($parent_id = request('parent_id')) {
                 $parent_category = Category::find($parent_id);
 
                 if ($parent_category) {
@@ -127,13 +138,5 @@ class CategoriesController extends Controller
         }
 
         return $data;
-    }
-
-    public static function getCategoriesForDropdown()
-    {
-        return Category::ofCurrentUser()
-            ->orderBy('title')
-            ->get()
-            ->toTree();
     }
 }

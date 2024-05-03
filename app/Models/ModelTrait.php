@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 trait ModelTrait
 {
     public static function getTableName()
     {
-        return (new static)->getTable();
+        return (new static())->getTable();
     }
 
-    public function setUserId($id = null)
+    public function setUserId($id = null): void
     {
         if (null === $id) {
             $id = auth()->user()->id;

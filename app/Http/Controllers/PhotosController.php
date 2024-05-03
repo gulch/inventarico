@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
@@ -7,12 +9,36 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as InterventionImage;
 
-class PhotosController extends Controller
+final class PhotosController extends Controller
 {
+    public static function getFilePath($path, $prefix = null)
+    {
+        if ( ! $prefix) {
+            $prefix = date('/Y/m/');
+        }
+        $file_path = public_path() . $path . $prefix;
+
+        if ( ! file_exists($file_path)) {
+            mkdir($file_path, 750, true);
+        }
+
+        return $file_path;
+    }
+
+    public static function getFileLink($path, $filename)
+    {
+        return url('/') . $path . date('/Y/m/') . $filename;
+    }
+
+    public static function removeImageFile($path): void
+    {
+        @unlink(public_path() . config('app.thumb_image_upload_path') . $path);
+        @unlink(public_path() . config('app.photo_image_upload_path') . $path);
+    }
     public function index()
     {
         $data = [
-            'photos' => Photo::ofCurrentUser()->latest()->paginate(24)
+            'photos' => Photo::ofCurrentUser()->latest()->paginate(24),
         ];
 
         return view('photos.index', $data);
@@ -24,7 +50,7 @@ class PhotosController extends Controller
         $this->ownerAccess($photo);
 
         $data = [
-            'photo' => $photo
+            'photo' => $photo,
         ];
 
         return view('photos.edit', $data);
@@ -43,34 +69,34 @@ class PhotosController extends Controller
     {
         $photo = Photo::find($id);
         $this->ownerAccess($photo);
-        if (is_null($photo)) {
+        if (null === $photo) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
-        } else {
-            if (sizeof($photo->things)) {
-                return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_thing')
-                ]);
-            }
-
-            if (sizeof($photo->operations)) {
-                return $this->jsonResponse([
-                    'message' => trans('app.photo_is_use_in_some_thing')
-                ]);
-            }
-
-            self::removeImageFile($photo->path);
-
-            /* Save original file but rename with prefix "REMOVED_" */
-            $original_filepath = public_path() . config('app.original_image_upload_path');
-            @rename($original_filepath . $photo->path, $original_filepath . 'REMOVED_' . $photo->path);
-
-            /* Delete from DB */
-            if (!$photo->delete()) {
-                return $this->jsonResponse([
-                    'message' => trans('app.can_not_delete_image')
-                ]);
-            }
         }
+        if (count($photo->things)) {
+            return $this->jsonResponse([
+                'message' => trans('app.photo_is_use_in_some_thing'),
+            ]);
+        }
+
+        if (count($photo->operations)) {
+            return $this->jsonResponse([
+                'message' => trans('app.photo_is_use_in_some_thing'),
+            ]);
+        }
+
+        self::removeImageFile($photo->path);
+
+        /* Save original file but rename with prefix "REMOVED_" */
+        $original_filepath = public_path() . config('app.original_image_upload_path');
+        @rename($original_filepath . $photo->path, $original_filepath . 'REMOVED_' . $photo->path);
+
+        /* Delete from DB */
+        if ( ! $photo->delete()) {
+            return $this->jsonResponse([
+                'message' => trans('app.can_not_delete_image'),
+            ]);
+        }
+
 
         return $this->jsonResponse(['success' => 'ok']);
     }
@@ -84,7 +110,7 @@ class PhotosController extends Controller
     {
         $result = $this->doUploadImage();
         if (isset($result['path'])) {
-            $photo = new Photo;
+            $photo = new Photo();
             $photo->setUserId();
             $photo->path = $result['path'];
             $photo->save();
@@ -102,7 +128,7 @@ class PhotosController extends Controller
         $photos = Photo::ofCurrentUser()->latest()->get();
         $result = [
             'success' => 1,
-            'content' => view('partials.images-list', compact('photos'))->render()
+            'content' => view('partials.images-list', compact('photos'))->render(),
         ];
 
         return $this->jsonResponse($result);
@@ -138,7 +164,7 @@ class PhotosController extends Controller
                                 $this->createEditorImage($filepath_original, $filename);
 
                                 $result_array['filekey'] = [
-                                    'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename)
+                                    'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename),
                                 ];
 
                                 //$result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
@@ -156,7 +182,7 @@ class PhotosController extends Controller
                 $result_array['message'] = trans('app.incorrect_image_format');
             }
         } else {
-            $result_array['message'] =trans('app.image_not_found');
+            $result_array['message'] = trans('app.image_not_found');
         }
 
         return $result_array;
@@ -169,20 +195,20 @@ class PhotosController extends Controller
         $width = null,
         $height = null,
         $crop = false,
-        $quality = null
-    ) {
+        $quality = null,
+    ): void {
         $ii = InterventionImage::getManager();
         $ii->configure(['driver' => 'imagick']);
         $img = $ii->make($filepath_original . $filename);
         if ($img) {
             if ($width && $height) {
                 if (($img->height() / $img->width()) < ($height / $width)) {
-                    $img->resize(null, $height, function ($constraint) {
+                    $img->resize(null, $height, function ($constraint): void {
                         $constraint->aspectRatio();
                         /*$constraint->upsize();*/
                     });
                 } else {
-                    $img->resize($width, null, function ($constraint) {
+                    $img->resize($width, null, function ($constraint): void {
                         $constraint->aspectRatio();
                         /*$constraint->upsize();*/
                     });
@@ -192,7 +218,7 @@ class PhotosController extends Controller
                 }
             } else {
                 if ($width || $height) {
-                    $img->resize($width, $height, function ($constraint) {
+                    $img->resize($width, $height, function ($constraint): void {
                         $constraint->aspectRatio();
                         $constraint->upsize();
                     });
@@ -210,7 +236,7 @@ class PhotosController extends Controller
         }
     }
 
-    private function mozJpegOptimize($original, $options = [])
+    private function mozJpegOptimize($original, $options = []): void
     {
         $new = $options['output_filename'] ?? $original;
         $suffix = '.TEST';
@@ -233,7 +259,7 @@ class PhotosController extends Controller
     /*
      * Post Image
      */
-    private function createPhotoImage($filepath_original, $filename)
+    private function createPhotoImage($filepath_original, $filename): void
     {
         $filepath = self::getFilePath(config('app.photo_image_upload_path'));
         $this->manipulateImagebyInvervention($filepath_original, $filepath, $filename);
@@ -242,7 +268,7 @@ class PhotosController extends Controller
     /*
      * Thumb Image
      */
-    private function createThumbImage($filepath_original, $filename)
+    private function createThumbImage($filepath_original, $filename): void
     {
         $filepath_small = self::getFilePath(config('app.thumb_image_upload_path'));
         $this->manipulateImagebyInvervention($filepath_original, $filepath_small, $filename, 175, 130, true);
@@ -251,7 +277,7 @@ class PhotosController extends Controller
     /*
      * Editor Image
      */
-    private function createEditorImage($filepath_original, $filename)
+    private function createEditorImage($filepath_original, $filename): void
     {
         $filepath = self::getFilePath(config('app.editor_image_upload_path'));
         $this->manipulateImagebyInvervention($filepath_original, $filepath, $filename, 1080, null, false);
@@ -262,35 +288,10 @@ class PhotosController extends Controller
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
         $name = pathinfo($filename, PATHINFO_FILENAME);
 
-        if (strlen($name) > 100) {
-            $name = substr($name, 0, 100);
+        if (mb_strlen($name) > 100) {
+            $name = mb_substr($name, 0, 100);
         }
 
-        return strtolower(Str::slug($name) . '-' . uniqid() . '.' . $ext);
-    }
-
-    public static function getFilePath($path, $prefix = null)
-    {
-        if (!$prefix) {
-            $prefix = date('/Y/m/');
-        }
-        $file_path = public_path() . $path . $prefix;
-
-        if (!file_exists($file_path)) {
-            mkdir($file_path, 750, true);
-        }
-
-        return $file_path;
-    }
-
-    public static function getFileLink($path, $filename)
-    {
-        return url('/') . $path . date('/Y/m/') . $filename;
-    }
-
-    public static function removeImageFile($path)
-    {
-        @unlink(public_path() . config('app.thumb_image_upload_path') . $path);
-        @unlink(public_path() . config('app.photo_image_upload_path') . $path);
+        return mb_strtolower(Str::slug($name) . '-' . uniqid() . '.' . $ext);
     }
 }

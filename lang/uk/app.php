@@ -142,7 +142,5 @@ return [
     'active_instances_count' => 'Всього<br>наявних екземплярів',
     'archived_instances_count' => 'Всього<br>архівних екземплярів',
 
-
-
     /*'' => '',*/
 ];

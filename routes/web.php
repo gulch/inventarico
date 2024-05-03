@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstancesController;
-use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\OperationsController;
+use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ThingsController;
 use Illuminate\Routing\Router;
@@ -16,7 +18,7 @@ use Illuminate\Routing\Router;
 $router->get('/', [HomeController::class, 'index']);
 $router->auth();
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['middleware' => 'auth'], function () use ($router): void {
 
     $router->get('dashboard', [DashboardController::class, 'index']);
 

@@ -1,17 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Models\OperationType;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\URL;
-use App\Models\OperationType;
 
-class OperationTypesController extends Controller
+final class OperationTypesController extends Controller
 {
     public function index()
     {
         $data = [
-            'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(10)
+            'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(10),
         ];
 
         return view('operation-types.index', $data);
@@ -20,6 +22,7 @@ class OperationTypesController extends Controller
     public function create()
     {
         Session::put('url.intended', url(URL::previous()));
+
         return view('operation-types.create');
     }
 
@@ -29,7 +32,7 @@ class OperationTypesController extends Controller
         $this->ownerAccess($operationType);
         Session::put('url.intended', url(URL::previous()));
         $data = [
-            'operationType' => $operationType
+            'operationType' => $operationType,
         ];
 
         return view('operation-types.edit', $data);
@@ -50,32 +53,32 @@ class OperationTypesController extends Controller
         $operationType = OperationType::find($id);
         $this->ownerAccess($operationType);
 
-        if (is_null($operationType)) {
+        if (null === $operationType) {
             return json_encode(['message' => trans('app.item_not_found')]);
-        } else {
-            if (sizeof($operationType->operations)) {
-                return $this->jsonResponse([
-                    'message' => trans('app.operationtype_has_operations_cant_delete')
-                ]);
-            }
-
-            // Delete Operation Type
-            $operationType->delete();
         }
+        if (count($operationType->operations)) {
+            return $this->jsonResponse([
+                'message' => trans('app.operationtype_has_operations_cant_delete'),
+            ]);
+        }
+
+        // Delete Operation Type
+        $operationType->delete();
+
 
         return json_encode(['success' => 'OK']);
     }
 
     private function saveItem($id = null)
     {
-        if (!$id) {
+        if ( ! $id) {
             $id = $this->request->get('id');
         }
 
         $validation = $this->validateData();
 
         if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>'.trans('app.saved');
+            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
                 $validation['redirect'] = Session::pull('url.intended', '/operation-types');
             }
@@ -84,7 +87,7 @@ class OperationTypesController extends Controller
                 $operationType = OperationType::findOrFail($id);
                 $this->ownerAccess($operationType);
             } else {
-                $operationType = new OperationType;
+                $operationType = new OperationType();
                 $operationType->setUserId();
                 $operationType->save();
             }

@@ -1,23 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
-use Franzose\ClosureTable\Models\Entity;
 use Franzose\ClosureTable\Contracts\EntityInterface;
+use Franzose\ClosureTable\Models\Entity;
 
-class Category extends Entity implements EntityInterface
+final class Category extends Entity implements EntityInterface
 {
     use ModelTrait;
+
+    public $timestamps = true;
 
     protected $table = 'Category';
 
     protected $closure = CategoryClosure::class;
 
     protected $fillable = [
-        'title'
+        'title',
     ];
-
-    public $timestamps = true;
 
     /* -------------- Relations -------------- */
 

@@ -1,11 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\Instance;
 use App\Models\Thing;
 
-class InstancesController extends Controller
+use function array_map;
+use function array_merge;
+use function count;
+use function is_array;
+
+final class InstancesController extends Controller
 {
     public function create(int $id__Thing)
     {
@@ -55,7 +62,7 @@ class InstancesController extends Controller
 
         $this->ownerAccess($instance);
 
-        if (is_null($instance)) {
+        if (null === $instance) {
             return json_encode(['message' => trans('app.item_not_found')]);
         }
 
@@ -76,7 +83,7 @@ class InstancesController extends Controller
 
     private function saveInstance(?int $id = null)
     {
-        if (!$id) {
+        if ( ! $id) {
             $id = $this->request->get('id');
         }
 
@@ -92,14 +99,14 @@ class InstancesController extends Controller
                 $instance = Instance::findOrFail($id);
                 $this->ownerAccess($instance);
             } else {
-                $instance = new Instance;
+                $instance = new Instance();
                 $instance->setUserId();
                 $instance->save();
             }
 
             $validation['id'] = $instance->id;
 
-            $instance_input = \array_map(
+            $instance_input = array_map(
                 'trim',
                 $this->request->only([
                     'title',
@@ -108,12 +115,12 @@ class InstancesController extends Controller
                     'published_at',
                     'price',
                     'id__Thing',
-                ])
+                ]),
             );
 
             $overview = $this->getOverview();
 
-            $instance_input = \array_merge($instance_input, compact('overview'));
+            $instance_input = array_merge($instance_input, compact('overview'));
 
             $instance_input = $this->setCheckboxesValues($instance_input);
 
@@ -131,9 +138,9 @@ class InstancesController extends Controller
 
         $overview = [];
 
-        if (\is_array($title)) {
-            $count = \sizeof($title);
-            for ($i = 0; $i < $count; ++$i) {
+        if (is_array($title)) {
+            $count = count($title);
+            for ($i = 0; $i < $count; $i++) {
                 if ($value[$i] && $title[$i]) {
                     $o = [];
                     $o['title'] = trim($title[$i]);
@@ -174,7 +181,7 @@ class InstancesController extends Controller
 
     private function setCheckboxesValues($input)
     {
-        if (!isset($input['is_archived'])) {
+        if ( ! isset($input['is_archived'])) {
             $input['is_archived'] = 0;
         }
 

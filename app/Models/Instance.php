@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Carbon\Carbon;
 
-class Instance extends BaseModel
+final class Instance extends BaseModel
 {
     protected $table = 'Instance';
 
@@ -22,7 +24,7 @@ class Instance extends BaseModel
         'id__Thing',
     ];
 
-    public function setPublishedAtAttribute($date)
+    public function setPublishedAtAttribute($date): void
     {
         $this->attributes['published_at'] = Carbon::createFromFormat('d.m.Y H:i', $date);
     }
