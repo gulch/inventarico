@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->use([
-            \App\Http\Middleware\MinifyHTML::class,
+            App\Http\Middleware\MinifyHTML::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

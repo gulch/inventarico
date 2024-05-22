@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 
 use function request;
+use function trans;
+use function view;
 
 final class CategoriesController extends Controller
 {
-    public static function getCategoriesForDropdown()
+    public static function getCategoriesForDropdown(): Collection
     {
         return Category::ofCurrentUser()
             ->orderBy('title')
             ->get()
             ->toTree();
     }
+
     public function index()
     {
         $data = [
@@ -37,10 +41,12 @@ final class CategoriesController extends Controller
         return view('categories.create', $data);
     }
 
-    public function edit($id)
+    public function edit(int $id)
     {
         $category = Category::findOrFail($id);
+
         $this->ownerAccess($category);
+
         $data = [
             'category' => $category,
             'parent_category' => $category->parent_id,
@@ -55,18 +61,21 @@ final class CategoriesController extends Controller
         return $this->saveItem();
     }
 
-    public function update($id)
+    public function update(int $id)
     {
         return $this->saveItem($id);
     }
 
-    public function destroy($id)
+    public function destroy(int $id)
     {
         $category = Category::find($id);
+
         $this->ownerAccess($category);
 
         if (null === $category) {
-            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
+            return $this->jsonResponse([
+                'message' => trans('app.item_not_found'),
+            ]);
         }
 
         if (count($category->items)) {
@@ -77,14 +86,12 @@ final class CategoriesController extends Controller
 
         $category->delete();
 
-        return json_encode(['success' => 'OK']);
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem($id = null)
+    private function saveItem(?int $id = null)
     {
-        if ( ! $id) {
-            $id = $this->request->get('id');
-        }
+        $id = $id ?? $this->request->get('id');
 
         $validation = $this->validateData();
 
@@ -123,7 +130,13 @@ final class CategoriesController extends Controller
     {
         $data = [];
 
-        $v = $this->getValidationFactory()->make($this->request->all(), ['title' => 'required']);
+        $v = $this->getValidationFactory()
+            ->make(
+                $this->request->all(),
+                [
+                    'title' => 'required',
+                ]
+            );
 
         if ($v->fails()) {
             $data['success'] = 0;
