@@ -17,7 +17,7 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
 
     {{-- jQuery --}}
-    <script src="/assets/vendor/jquery/3.6.3/jquery.min.js"></script>
+    <script src="/assets/vendor/jquery/3.7.1/jquery.min.js"></script>
 
     {{-- Favicon --}}
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -32,7 +32,7 @@
     <a href="/" class="header item">
         <b>INVENTARICO</b>
     </a>
-    @if(!auth()->guest())
+    @if(auth()->check())
         <a href="/dashboard" class="item">
             <i class="dashboard icon"></i>
             {{ trans('app.dashboard') }}
