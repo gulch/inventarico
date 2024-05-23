@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCategorytRequest;
 use App\Models\Category;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Session;
 
-use function request;
+use function session;
 use function trans;
 use function view;
 
@@ -41,10 +41,8 @@ final class CategoriesController extends Controller
         return view('categories.create', $data);
     }
 
-    public function edit(int $id)
+    public function edit(Category $category)
     {
-        $category = Category::findOrFail($id);
-
         $this->ownerAccess($category);
 
         $data = [
@@ -56,31 +54,31 @@ final class CategoriesController extends Controller
         return view('categories.edit', $data);
     }
 
-    public function store()
+    public function store(StoreCategorytRequest $request)
     {
-        return $this->saveItem();
+        return $this->saveCategory($request);
     }
 
-    public function update(int $id)
+    public function update(StoreCategorytRequest $request, Category $category)
     {
-        return $this->saveItem($id);
+        return $this->saveCategory($request, $category);
     }
 
-    public function destroy(int $id)
+    public function destroy(Category $category)
     {
-        $category = Category::find($id);
-
         $this->ownerAccess($category);
 
-        if (null === $category) {
+        /* Check if category has things */
+        if ($category->things->count() > 0) {
             return $this->jsonResponse([
-                'message' => trans('app.item_not_found'),
+                'message' => trans('app.category_has_things_cant_delete'),
             ]);
         }
 
-        if (count($category->items)) {
+        /* Check if category is parent and has children */
+        if ($category->isParent()) {
             return $this->jsonResponse([
-                'message' => trans('app.category_has_things_cant_delete'),
+                'message' => trans('app.category_is_parent_cant_delete'),
             ]);
         }
 
@@ -89,67 +87,36 @@ final class CategoriesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem(?int $id = null)
+    private function saveCategory(StoreCategorytRequest $request, ?Category $category = null)
     {
-        $id = $id ?? $this->request->get('id');
-
-        $validation = $this->validateData();
-
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/categories');
-            }
-
-            if ($id) {
-                $category = Category::findOrFail($id);
-                $this->ownerAccess($category);
-            } else {
-                $category = new Category();
-                $category->setUserId();
-                $category->save();
-            }
-            $category->update($this->request->all());
-
-            if ($parent_id = request('parent_id')) {
-                $parent_category = Category::find($parent_id);
-
-                if ($parent_category) {
-                    $category->moveTo(0, $parent_category);
-                    //$parent_category->addChild($category);
-                }
-            }
-
-            $validation['id'] = $category->id;
-        }
-
-        return $this->jsonResponse($validation);
-    }
-
-    private function validateData()
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()
-            ->make(
-                $this->request->all(),
-                [
-                    'title' => 'required',
-                ]
-            );
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
+        if ($category) {
+            $this->ownerAccess($category);
         } else {
-            $data['success'] = 'OK';
+            $category = new Category();
+            $category->setUserId();
+            $category->save();
         }
 
-        return $data;
+        $category->update($request->validated());
+
+        $result = [
+            'id' => $category->id,
+            'success'=> 1,
+            'message'=> '✔️ ' . trans('app.saved'),
+        ];
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/categories');
+        }
+
+        if ($parent_id = $request->get('parent_id')) {
+            $parent_category = Category::find($parent_id);
+
+            if ($parent_category) {
+                $category->moveTo(0, $parent_category);
+            }
+        }
+
+        return $this->jsonResponse($result);
     }
 }

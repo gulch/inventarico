@@ -1,9 +1,7 @@
 <div class="ui hidden divider"></div>
 <div class="field">
-    <a id="save-button"
-       data-content="{{ trans('app.save_tooltip') }}"
-       data-variation="tiny"
-       class="ui green button">{{ trans('app.do_save') }}</a>
+    <a id="save-button" data-content="{{ trans('app.save_tooltip') }}" data-variation="tiny"
+        class="ui green button">{{ trans('app.do_save') }}</a>
     <a id="save-n-close-button" class="ui olive button">{{ trans('app.do_save_n_close') }}</a>
     <div class="ui message hide save-message"></div>
 </div>
@@ -19,7 +17,7 @@
     initSubmitButtons();
 
     function activateSubmitButton() {
-        var send_func = function ($btn, do_redirect) {
+        var send_func = function($btn, do_redirect) {
             if (typeof do_redirect == "undefined") {
                 do_redirect = 0;
             }
@@ -35,13 +33,13 @@
                 data: form_data,
                 dataType: "json",
                 timeout: 10000,
-                success: function (result) {
-                    if (result.success == 'OK') {
+                success: function(result) {
+                    if (typeof result.success !== "undefined") {
                         if (result.redirect) {
                             window.location.href = result.redirect;
                         }
-                        if(result.id) {
-                            if(!form.find('input[name="id"]').length) {
+                        if (result.id) {
+                            if (!form.find('input[name="id"]').length) {
                                 $('<input>').attr({
                                     type: 'hidden',
                                     value: result.id,
@@ -50,27 +48,31 @@
                             }
                         }
                     }
-                    if (result.message) {
-                        form.find('.save-message').html(result.message).removeClass('hide');
-                    }
-                    form.find('.dimmer').remove();
+
                 },
-                error: function (request, status, err) {
+                error: function(request, status, err) {
                     if (status == "timeout") {
                         showErrorModalMessage("{{ trans('app.timeout_error_message') }}");
                     } else {
-                        showErrorModalMessage("{{ trans('app.undefined_error_message') }}");
+                        if (request.responseJSON.message) {
+                            form.find('.save-message').html(request.responseJSON.message).removeClass('hide');
+                        } else {
+                            showErrorModalMessage("{{ trans('app.undefined_error_message') }}");
+                        }
                     }
+
+                },
+                complete: function() {
                     form.find('.dimmer').remove();
                 }
             });
         }
 
-        $('#save-button').click(function () {
+        $('#save-button').click(function() {
             send_func($(this), 0);
         });
 
-        $('#save-n-close-button').click(function () {
+        $('#save-n-close-button').click(function() {
             send_func($(this), 1);
         });
     }

@@ -32,12 +32,13 @@ $router->group(['middleware' => 'auth'], function () use ($router): void {
     $router->post('photos/all/list', [PhotosController::class, 'getAllImagesList']);
 
     /* Categories */
-    $router->get('categories', [CategoriesController::class, 'index']);
+    $router->resource('categories', CategoriesController::class);
+    /* $router->get('categories', [CategoriesController::class, 'index']);
     $router->get('categories/create', [CategoriesController::class, 'create']);
     $router->get('categories/{id}/edit', [CategoriesController::class, 'edit']);
     $router->post('categories', [CategoriesController::class, 'store']);
     $router->patch('categories/{id}', [CategoriesController::class, 'update']);
-    $router->delete('categories/{id}', [CategoriesController::class, 'destroy']);
+    $router->delete('categories/{id}', [CategoriesController::class, 'destroy']); */
 
     /* Operation Types */
     $router->get('operation-types', [OperationTypesController::class, 'index']);
