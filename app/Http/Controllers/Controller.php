@@ -14,7 +14,10 @@ use function abort;
 use function auth;
 use function json_encode;
 
-class Controller extends BaseController
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_UNICODE;
+
+final class Controller extends BaseController
 {
     use AuthorizesRequests;
     use DispatchesJobs;
@@ -29,7 +32,7 @@ class Controller extends BaseController
 
     protected function jsonResponse(mixed $data): string
     {
-        return json_encode($data, \JSON_UNESCAPED_UNICODE | \JSON_PRETTY_PRINT);
+        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 
     protected function ownerAccess($item): void

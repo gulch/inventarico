@@ -101,8 +101,8 @@ final class CategoriesController extends Controller
 
         $result = [
             'id' => $category->id,
-            'success'=> 1,
-            'message'=> '✔️ ' . trans('app.saved'),
+            'success' => 1,
+            'message' => '✔️ ' . trans('app.saved'),
         ];
 
         if ($request->get('do_redirect')) {

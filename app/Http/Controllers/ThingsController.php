@@ -6,11 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Thing;
-
-use function array_map;
-use function array_merge;
-use function count;
-
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -19,6 +14,9 @@ use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
 
+use function array_map;
+use function array_merge;
+use function count;
 use function is_array;
 
 final class ThingsController extends Controller
