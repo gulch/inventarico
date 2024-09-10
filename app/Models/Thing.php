@@ -5,9 +5,18 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-final class Thing extends BaseModel
+/**
+ * @property int $id__Category
+ * @property int $id__User
+ */
+final class Thing extends Eloquent
 {
+    use ModelTrait;
+
     protected $table = 'Thing';
 
     protected $casts = [
@@ -43,17 +52,17 @@ final class Thing extends BaseModel
 
     /* -------------- Relations -------------- */
 
-    public function photo()
+    public function photo(): BelongsTo
     {
         return $this->belongsTo(Photo::class, 'id__Photo');
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'id__Category');
     }
 
-    public function instances()
+    public function instances(): HasMany
     {
         return $this->hasMany(Instance::class, 'id__Thing');
     }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCategorytRequest;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
-use Illuminate\Support\Collection;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 
 use function session;
 use function trans;
@@ -14,18 +14,20 @@ use function view;
 
 final class CategoriesController extends Controller
 {
-    public static function getCategoriesForDropdown(): Collection
+    public static function getCategoriesForDropdown(): ClosureTableCollection
     {
-        return Category::ofCurrentUser()
+        $categories = Category::query()
+            ->ofCurrentUser()
             ->orderBy('title')
-            ->get()
-            ->toTree();
+            ->get();
+
+        return (new ClosureTableCollection($categories))->toTree();
     }
 
     public function index()
     {
         $data = [
-            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(10),
+            'categories' => Category::query()->ofCurrentUser()->orderBy('title')->paginate(10),
         ];
 
         return view('categories.index', $data);
@@ -54,12 +56,12 @@ final class CategoriesController extends Controller
         return view('categories.edit', $data);
     }
 
-    public function store(StoreCategorytRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         return $this->saveCategory($request);
     }
 
-    public function update(StoreCategorytRequest $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $category)
     {
         return $this->saveCategory($request, $category);
     }
@@ -87,7 +89,7 @@ final class CategoriesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveCategory(StoreCategorytRequest $request, ?Category $category = null)
+    private function saveCategory(StoreCategoryRequest $request, ?Category $category = null)
     {
         if ($category) {
             $this->ownerAccess($category);

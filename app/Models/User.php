@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -19,7 +20,9 @@ final class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name',
+        'email',
+        'password',
     ];
 
     /**
@@ -28,32 +31,33 @@ final class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /* -------------- Relations -------------- */
 
-    public function items()
+    public function items(): HasMany
     {
         return $this->hasMany(Thing::class, 'id__User');
     }
 
-    public function categories()
+    public function categories(): HasMany
     {
         return $this->hasMany(Category::class, 'id__User');
     }
 
-    public function photos()
+    public function photos(): HasMany
     {
         return $this->hasMany(Photo::class, 'id__User');
     }
 
-    public function operations()
+    public function operations(): HasMany
     {
         return $this->hasMany(Operation::class, 'id__User');
     }
 
-    public function operationTypes()
+    public function operationTypes(): HasMany
     {
         return $this->hasMany(OperationType::class, 'id__User');
     }

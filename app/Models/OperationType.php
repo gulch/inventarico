@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-final class OperationType extends BaseModel
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+/**
+ * @property int $id__User
+ */
+final class OperationType extends Eloquent
 {
+    use ModelTrait;
+
     public const KIND_OF = [
         'neutral',
         'expenditure',
@@ -20,7 +28,7 @@ final class OperationType extends BaseModel
         'id__User',
     ];
 
-    public function operations()
+    public function operations(): HasMany
     {
         return $this->hasMany(Operation::class, 'id__OperationType');
     }

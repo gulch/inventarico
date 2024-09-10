@@ -19,7 +19,8 @@ final class OperationsController extends Controller
 
     public function index()
     {
-        $operations = Operation::ofCurrentUser()
+        $operations = Operation::query()
+            ->ofCurrentUser()
             ->with([
                 'type',
                 'instance' => function ($query): void {

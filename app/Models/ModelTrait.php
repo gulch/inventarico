@@ -6,12 +6,13 @@ namespace App\Models;
 
 trait ModelTrait
 {
-    public static function getTableName()
+    /* TODO: remove unused */
+    /* public static function getTableName(): string
     {
         return (new static())->getTable();
-    }
+    } */
 
-    public function setUserId($id = null): void
+    public function setUserId(?int $id = null): void
     {
         if (null === $id) {
             $id = auth()->user()->id;
@@ -21,6 +22,7 @@ trait ModelTrait
 
     public function scopeOfCurrentUser($query)
     {
-        return $query = $query->where('id__User', auth()->user()->id);
+        return $query->where('id__User', auth()->user()->id);
     }
+
 }

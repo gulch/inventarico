@@ -15,6 +15,7 @@
         "laravel/ui": "^4.1"
     },
     "require-dev": {
+        "larastan/larastan": "^2.9",
         "laravel/pint": "^1.15"
     },
     "repositories": [

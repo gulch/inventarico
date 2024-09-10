@@ -4,8 +4,14 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-final class Photo extends BaseModel
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+final class Photo extends Eloquent
 {
+    use ModelTrait;
+
     protected $table = 'Photo';
 
     protected $fillable = [
@@ -13,12 +19,12 @@ final class Photo extends BaseModel
         'description',
     ];
 
-    public function operations()
+    public function operations(): BelongsToMany
     {
         return $this->belongsToMany(Operation::class, 'Operation_Photo', 'id__Photo', 'id__Operation');
     }
 
-    public function things()
+    public function things(): HasMany
     {
         return $this->hasMany(Thing::class, 'id__Photo');
     }
