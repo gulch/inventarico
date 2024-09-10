@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 use function session;
 use function trans;
@@ -24,7 +26,7 @@ final class CategoriesController extends Controller
         return (new ClosureTableCollection($categories))->toTree();
     }
 
-    public function index()
+    public function index(): View
     {
         $data = [
             'categories' => Category::query()->ofCurrentUser()->orderBy('title')->paginate(10),
@@ -33,7 +35,7 @@ final class CategoriesController extends Controller
         return view('categories.index', $data);
     }
 
-    public function create()
+    public function create(): View
     {
         $data = [
             'parent_category' => 0,
@@ -43,7 +45,7 @@ final class CategoriesController extends Controller
         return view('categories.create', $data);
     }
 
-    public function edit(Category $category)
+    public function edit(Category $category): View
     {
         $this->ownerAccess($category);
 
@@ -56,17 +58,17 @@ final class CategoriesController extends Controller
         return view('categories.edit', $data);
     }
 
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
         return $this->saveCategory($request);
     }
 
-    public function update(StoreCategoryRequest $request, Category $category)
+    public function update(StoreCategoryRequest $request, Category $category): JsonResponse
     {
         return $this->saveCategory($request, $category);
     }
 
-    public function destroy(Category $category)
+    public function destroy(Category $category): JsonResponse
     {
         $this->ownerAccess($category);
 
@@ -89,8 +91,10 @@ final class CategoriesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveCategory(StoreCategoryRequest $request, ?Category $category = null)
-    {
+    private function saveCategory(
+        StoreCategoryRequest $request,
+        ?Category $category = null
+    ): JsonResponse {
         if ($category) {
             $this->ownerAccess($category);
         } else {

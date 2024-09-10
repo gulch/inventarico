@@ -7,6 +7,8 @@ namespace App\Http\Controllers;
 use App\Models\Instance;
 use App\Models\Operation;
 use App\Models\OperationType;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 use function session;
 use function trans;
@@ -17,7 +19,7 @@ final class OperationsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
 
-    public function index()
+    public function index(): View
     {
         $operations = Operation::query()
             ->ofCurrentUser()
@@ -64,7 +66,7 @@ final class OperationsController extends Controller
         return view('operations.index', $data);
     }
 
-    public function create(int $id__Instance)
+    public function create(int $id__Instance): View
     {
         $instance = Instance::findOrFail($id__Instance);
 
@@ -83,7 +85,7 @@ final class OperationsController extends Controller
         return view('operations.create', $data);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $operation = Operation::findOrFail($id);
 
@@ -102,17 +104,17 @@ final class OperationsController extends Controller
         return view('operations.edit', $data);
     }
 
-    public function store()
+    public function store(): JsonResponse
     {
         return $this->saveItem();
     }
 
-    public function update($id)
+    public function update(int $id): JsonResponse
     {
         return $this->saveItem($id);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $operation = Operation::findOrFail($id);
 
@@ -127,7 +129,7 @@ final class OperationsController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem(?int $id = null)
+    private function saveItem(?int $id = null): JsonResponse
     {
         $id__Instance = $this->request->get('id__Instance');
 
@@ -187,6 +189,9 @@ final class OperationsController extends Controller
         return $this->jsonResponse($validation);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function validateData(): array
     {
         $data = [];
@@ -211,16 +216,25 @@ final class OperationsController extends Controller
         return $data;
     }
 
-    private function syncPhotos(Operation $operation, $photos): void
+    /**
+     * @param null|array<int, int> $photos
+     */
+    private function syncPhotos(Operation $operation, ?array $photos): void
     {
         $operation->photos()->sync($photos ?? []);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getOperationTypesForDropdown(): array
     {
         return ['0' => '---'] + OperationType::ofCurrentUser()->pluck('title', 'id')->all();
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getCurrenciesForDropDown(): array
     {
         return [
@@ -230,6 +244,9 @@ final class OperationsController extends Controller
         ];
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getConditionsForDropDown(): array
     {
         return [

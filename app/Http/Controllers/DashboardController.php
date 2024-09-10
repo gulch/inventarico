@@ -6,10 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Instance;
 use App\Models\Thing;
+use Illuminate\View\View;
+
+use function view;
 
 final class DashboardController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $data = [
             'active_instances_sum' => Instance::where('is_archived', 0)->sum('price'),

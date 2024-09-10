@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+
 trait ModelTrait
 {
     /* TODO: remove unused */
@@ -20,9 +23,12 @@ trait ModelTrait
         $this->id__User = $id;
     }
 
-    public function scopeOfCurrentUser($query)
+    /**
+     * @param Builder<Model> $query
+     */
+    public function scopeOfCurrentUser(Builder $query): void
     {
-        return $query->where('id__User', auth()->user()->id);
+        $query->where('id__User', auth()->user()->id);
     }
 
 }

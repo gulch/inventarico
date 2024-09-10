@@ -6,15 +6,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Instance;
 use App\Models\Thing;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 use function array_map;
 use function array_merge;
 use function count;
 use function is_array;
+use function session;
+use function url;
 
 final class InstancesController extends Controller
 {
-    public function create(int $id__Thing)
+    public function create(int $id__Thing): View
     {
         $thing = Thing::findOrFail($id__Thing);
 
@@ -30,7 +34,7 @@ final class InstancesController extends Controller
         return view('instances.create', $data);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $instance = Instance::findOrFail($id);
 
@@ -46,44 +50,38 @@ final class InstancesController extends Controller
         return view('instances.edit', $data);
     }
 
-    public function store()
+    public function store(): JsonResponse
     {
         return $this->saveInstance();
     }
 
-    public function update(int $id)
+    public function update(int $id): JsonResponse
     {
         return $this->saveInstance($id);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $instance = Instance::findOrFail($id);
 
         $this->ownerAccess($instance);
 
-        if (null === $instance) {
-            return json_encode(['message' => trans('app.item_not_found')]);
-        }
-
         // Unsync photos from operations
-        if ($instance->operations) {
-            foreach ($instance->operations as $o) {
-                $o->photos()->sync([]);
-            }
-            // Delete operations
-            $instance->operations()->delete();
+        foreach ($instance->operations as $o) {
+            $o->photos()->sync([]);
         }
+        // Delete operations
+        $instance->operations()->delete();
 
         // Delete item
         $instance->delete();
 
-        return json_encode(['success' => 'OK']);
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveInstance(?int $id = null)
+    private function saveInstance(?int $id = null): JsonResponse
     {
-        if ( ! $id) {
+        if (! $id) {
             $id = $this->request->get('id');
         }
 
@@ -130,7 +128,7 @@ final class InstancesController extends Controller
         return $this->jsonResponse($validation);
     }
 
-    private function getOverview()
+    private function getOverview(): string
     {
         $title = $this->request->get('o_title');
         $description = $this->request->get('o_description');
@@ -152,10 +150,13 @@ final class InstancesController extends Controller
             }
         }
 
-        return json_encode($overview, JSON_UNESCAPED_UNICODE);
+        return json_encode($overview, \JSON_UNESCAPED_UNICODE);
     }
 
-    private function validateData()
+    /**
+     * @return array<string, string> $input
+     */
+    private function validateData(): array
     {
         $data = [];
 
@@ -179,9 +180,13 @@ final class InstancesController extends Controller
         return $data;
     }
 
-    private function setCheckboxesValues($input)
+    /**
+     * @param array<string, string> $input
+     * @return array<string, string>
+     */
+    private function setCheckboxesValues(array $input): array
     {
-        if ( ! isset($input['is_archived'])) {
+        if (! isset($input['is_archived'])) {
             $input['is_archived'] = 0;
         }
 

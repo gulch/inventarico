@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Thing;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -13,6 +14,8 @@ use gulch\Transliterato\Scheme\RusToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
 use function array_map;
 use function array_merge;
@@ -37,7 +40,7 @@ final class ThingsController extends Controller
         return $processor->process($q);
     }
 
-    public function index()
+    public function index(): View
     {
         $things = Thing::query()
             ->with('photo', 'category', 'instances')
@@ -62,7 +65,7 @@ final class ThingsController extends Controller
         return view('things.index', $data);
     }
 
-    public function show($id)
+    public function show(int $id): View
     {
         $thing = Thing::findOrFail($id);
 
@@ -85,7 +88,7 @@ final class ThingsController extends Controller
         return view('things.show.show', $data);
     }
 
-    public function create()
+    public function create(): View
     {
         $data = [
             'thing' => null,
@@ -98,7 +101,7 @@ final class ThingsController extends Controller
         return view('things.create', $data);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $thing = Thing::findOrFail($id);
 
@@ -115,33 +118,31 @@ final class ThingsController extends Controller
         return view('things.edit', $data);
     }
 
-    public function store()
+    public function store(): JsonResponse
     {
         return $this->saveThing();
     }
 
-    public function update(int $id)
+    public function update(int $id): JsonResponse
     {
         return $this->saveThing($id);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $thing = Thing::find($id);
 
         $this->ownerAccess($thing);
 
         if (null === $thing) {
-            return json_encode(['message' => trans('app.item_not_found')]);
+            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         }
 
         // remove instances
-        if ($thing->instances) {
 
-            // TODO: Unsync photos from instance operations
+        // TODO: Unsync photos from instance operations
 
-            $thing->instances()->delete();
-        }
+        $thing->instances()->delete();
 
         // TODO: Unsync photos from instance operations
         /* if ($thing->operations) {
@@ -155,12 +156,12 @@ final class ThingsController extends Controller
         // Delete item
         $thing->delete();
 
-        return json_encode(['success' => 'OK']);
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveThing(?int $id = null)
+    private function saveThing(?int $id = null): JsonResponse
     {
-        if ( ! $id) {
+        if (! $id) {
             $id = $this->request->get('id');
         }
 
@@ -205,7 +206,7 @@ final class ThingsController extends Controller
         return $this->jsonResponse($validation);
     }
 
-    private function validateData()
+    private function validateData(): array
     {
         $data = [];
 
@@ -229,7 +230,7 @@ final class ThingsController extends Controller
         return $data;
     }
 
-    private function getCategoriesForDropdown()
+    private function getCategoriesForDropdown(): ClosureTableCollection
     {
         return CategoriesController::getCategoriesForDropdown();
     }
@@ -263,13 +264,13 @@ final class ThingsController extends Controller
     {
         $category_id = $this->request->input('category');
 
-        if ( ! $category_id) {
+        if (! $category_id) {
             return $things;
         }
 
         $category = Category::find($category_id);
 
-        if ( ! $category) {
+        if (! $category) {
             return $things;
         }
 
@@ -351,7 +352,7 @@ final class ThingsController extends Controller
 
     private function setCheckboxesValues($input)
     {
-        if ( ! isset($input['is_archived'])) {
+        if (! isset($input['is_archived'])) {
             $input['is_archived'] = 0;
         }
 

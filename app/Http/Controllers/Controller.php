@@ -7,12 +7,12 @@ namespace App\Http\Controllers;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 
 use function abort;
 use function auth;
-use function json_encode;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_UNICODE;
@@ -30,14 +30,17 @@ class Controller extends BaseController
         $this->request = $request;
     }
 
-    protected function jsonResponse(mixed $data): string
+    protected function jsonResponse(mixed $data): JsonResponse
     {
-        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return new JsonResponse(
+            data: $data,
+            options: JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT,
+        );
     }
 
-    protected function ownerAccess($item): void
+    protected function ownerAccess(?object $item): void
     {
-        if (auth()->user()->id !== $item->id__User) {
+        if (auth()->user()->id !== $item?->id__User) {
             abort(403, 'Forbidden');
         }
     }

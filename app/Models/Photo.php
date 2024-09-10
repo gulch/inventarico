@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-final class Photo extends Eloquent
+final class Photo extends Model
 {
     use ModelTrait;
 
@@ -19,11 +19,17 @@ final class Photo extends Eloquent
         'description',
     ];
 
+    /**
+     * @return BelongsToMany<Operation>
+     */
     public function operations(): BelongsToMany
     {
         return $this->belongsToMany(Operation::class, 'Operation_Photo', 'id__Photo', 'id__Operation');
     }
 
+    /**
+     * @return HasMany<Thing>
+     */
     public function things(): HasMany
     {
         return $this->hasMany(Thing::class, 'id__Photo');

@@ -13,12 +13,12 @@ final class PhotosController extends Controller
 {
     public static function getFilePath($path, $prefix = null)
     {
-        if ( ! $prefix) {
+        if (! $prefix) {
             $prefix = date('/Y/m/');
         }
         $file_path = public_path() . $path . $prefix;
 
-        if ( ! file_exists($file_path)) {
+        if (! file_exists($file_path)) {
             mkdir($file_path, 750, true);
         }
 
@@ -91,7 +91,7 @@ final class PhotosController extends Controller
         @rename($original_filepath . $photo->path, $original_filepath . 'REMOVED_' . $photo->path);
 
         /* Delete from DB */
-        if ( ! $photo->delete()) {
+        if (! $photo->delete()) {
             return $this->jsonResponse([
                 'message' => trans('app.can_not_delete_image'),
             ]);
@@ -141,6 +141,10 @@ final class PhotosController extends Controller
             $result_array['key'] = $this->request->get('key');
         }
         if ($this->request->hasFile('image') || $this->request->hasFile('file')) {
+
+            /**
+             * @var \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
+             */
             $image = $this->request->hasFile('image') ? $this->request->file('image') : $this->request->file('file');
 
             if (is_array($image) && count($image) > 0) {
@@ -151,33 +155,31 @@ final class PhotosController extends Controller
                 $filename = $this->addUniqueID($image->getClientOriginalName());
 
                 $filepath_original = self::getFilePath(config('app.original_image_upload_path'));
-                if ($image->move($filepath_original, $filename)) {
-                    if ($setup = $this->request->get('setup')) {
-                        switch ($setup) {
-                            case 'photo':
-                                $this->createPhotoImage($filepath_original, $filename);
-                                $this->createThumbImage($filepath_original, $filename);
-                                $result_array['filelink'] = self::getFileLink(config('app.thumb_image_upload_path'), $filename);
-                                break;
+                $image->move($filepath_original, $filename);
 
-                            case 'editor':
-                                $this->createEditorImage($filepath_original, $filename);
+                if ($setup = $this->request->get('setup')) {
+                    switch ($setup) {
+                        case 'photo':
+                            $this->createPhotoImage($filepath_original, $filename);
+                            $this->createThumbImage($filepath_original, $filename);
+                            $result_array['filelink'] = self::getFileLink(config('app.thumb_image_upload_path'), $filename);
+                            break;
 
-                                $result_array['filekey'] = [
-                                    'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename),
-                                ];
+                        case 'editor':
+                            $this->createEditorImage($filepath_original, $filename);
 
-                                //$result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
-                                break;
-                        }
+                            $result_array['filekey'] = [
+                                'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename),
+                            ];
+
+                            //$result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
+                            break;
                     }
-
-                    $result_array['success'] = 'OK';
-                    $result_array['path'] = date('/Y/m/') . $filename;
-                    $result_array['type'] = $setup;
-                } else {
-                    $result_array['message'] = trans('app.can_not_move_image_to_folder_message');
                 }
+
+                $result_array['success'] = 'OK';
+                $result_array['path'] = date('/Y/m/') . $filename;
+                $result_array['type'] = $setup;
             } else {
                 $result_array['message'] = trans('app.incorrect_image_format');
             }
@@ -200,40 +202,39 @@ final class PhotosController extends Controller
         $ii = InterventionImage::getManager();
         $ii->configure(['driver' => 'imagick']);
         $img = $ii->make($filepath_original . $filename);
-        if ($img) {
-            if ($width && $height) {
-                if (($img->height() / $img->width()) < ($height / $width)) {
-                    $img->resize(null, $height, function ($constraint): void {
-                        $constraint->aspectRatio();
-                        /*$constraint->upsize();*/
-                    });
-                } else {
-                    $img->resize($width, null, function ($constraint): void {
-                        $constraint->aspectRatio();
-                        /*$constraint->upsize();*/
-                    });
-                }
-                if ($crop) {
-                    $img->crop($width, $height);
-                }
+
+        if ($width && $height) {
+            if (($img->height() / $img->width()) < ($height / $width)) {
+                $img->resize(null, $height, function ($constraint): void {
+                    $constraint->aspectRatio();
+                    /*$constraint->upsize();*/
+                });
             } else {
-                if ($width || $height) {
-                    $img->resize($width, $height, function ($constraint): void {
-                        $constraint->aspectRatio();
-                        $constraint->upsize();
-                    });
-                }
+                $img->resize($width, null, function ($constraint): void {
+                    $constraint->aspectRatio();
+                    /*$constraint->upsize();*/
+                });
             }
-
-            /* Optimizations */
-            $img->getCore()->stripImage();
-            $img->sharpen(8);
-            //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
-
-            $img->save($filepath_new . $filename, $quality);
-
-            $this->mozJpegOptimize($filepath_new . $filename);
+            if ($crop) {
+                $img->crop($width, $height);
+            }
+        } else {
+            if ($width || $height) {
+                $img->resize($width, $height, function ($constraint): void {
+                    $constraint->aspectRatio();
+                    $constraint->upsize();
+                });
+            }
         }
+
+        /* Optimizations */
+        $img->getCore()->stripImage();
+        $img->sharpen(8);
+        //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
+
+        $img->save($filepath_new . $filename, $quality);
+
+        $this->mozJpegOptimize($filepath_new . $filename);
     }
 
     private function mozJpegOptimize($original, $options = []): void

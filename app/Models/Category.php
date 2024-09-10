@@ -15,11 +15,7 @@ final class Category extends Entity
 
     protected $table = 'Category';
 
-    /**
-     * ClosureTable model instance.
-     *
-     * @var CategoryClosure
-     */
+    /* ClosureTable model instance. */
     protected $closure = CategoryClosure::class;
 
     protected $fillable = [
@@ -28,6 +24,9 @@ final class Category extends Entity
 
     /* -------------- Relations -------------- */
 
+    /**
+     * @return HasMany<Thing>
+     */
     public function things(): HasMany
     {
         return $this->hasMany(Thing::class, 'id__Category');

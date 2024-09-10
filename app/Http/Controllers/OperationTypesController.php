@@ -5,12 +5,17 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\OperationType;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
+
+use function session;
+use function trans;
+use function url;
+use function view;
 
 final class OperationTypesController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $data = [
             'operationTypes' => OperationType::ofCurrentUser()->latest()->paginate(10),
@@ -19,18 +24,21 @@ final class OperationTypesController extends Controller
         return view('operation-types.index', $data);
     }
 
-    public function create()
+    public function create(): View
     {
-        Session::put('url.intended', url(URL::previous()));
+        session()->put('url.intended', url()->previous());
 
         return view('operation-types.create');
     }
 
-    public function edit($id)
+    public function edit(int $id): View
     {
         $operationType = OperationType::findOrFail($id);
+
         $this->ownerAccess($operationType);
-        Session::put('url.intended', url(URL::previous()));
+
+        session()->put('url.intended', url()->previous());
+
         $data = [
             'operationType' => $operationType,
         ];
@@ -38,23 +46,24 @@ final class OperationTypesController extends Controller
         return view('operation-types.edit', $data);
     }
 
-    public function store()
+    public function store(): JsonResponse
     {
         return $this->saveItem();
     }
 
-    public function update($id)
+    public function update(int $id): JsonResponse
     {
         return $this->saveItem($id);
     }
 
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $operationType = OperationType::find($id);
+
         $this->ownerAccess($operationType);
 
         if (null === $operationType) {
-            return json_encode(['message' => trans('app.item_not_found')]);
+            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         }
         if (count($operationType->operations)) {
             return $this->jsonResponse([
@@ -65,11 +74,10 @@ final class OperationTypesController extends Controller
         // Delete Operation Type
         $operationType->delete();
 
-
-        return json_encode(['success' => 'OK']);
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem($id = null)
+    private function saveItem(?int $id = null): JsonResponse
     {
         if ( ! $id) {
             $id = $this->request->get('id');
@@ -80,7 +88,7 @@ final class OperationTypesController extends Controller
         if ($validation['success']) {
             $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
             if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/operation-types');
+                $validation['redirect'] = session()->pull('url.intended', '/operation-types');
             }
 
             if ($id) {
@@ -98,7 +106,10 @@ final class OperationTypesController extends Controller
         return $this->jsonResponse($validation);
     }
 
-    private function validateData()
+    /**
+     * @return array<string, string>
+     */
+    private function validateData(): array
     {
         $data = [];
 

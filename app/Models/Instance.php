@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace App\Models;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property int $id__User
  */
-final class Instance extends Eloquent
+final class Instance extends Model
 {
     use ModelTrait;
 
@@ -32,30 +33,42 @@ final class Instance extends Eloquent
         'id__Thing',
     ];
 
-    public function setPublishedAtAttribute($date): void
+    public function setPublishedAtAttribute(string $date): void
     {
         $this->attributes['published_at'] = Carbon::createFromFormat('d.m.Y H:i', $date);
     }
 
     /* -------------- Scopes -------------- */
 
-    public function scopeArchived($query)
+    /**
+     * @param Builder<Model> $query
+     */
+    public function scopeArchived(Builder $query): void
     {
-        return $query->where('is_archived', 1);
+        $query->where('is_archived', 1);
     }
 
-    public function scopeAvailable($query)
+    /**
+     * @param Builder<Model> $query
+     */
+    public function scopeAvailable(Builder $query): void
     {
-        return $query->where('is_archived', 0);
+        $query->where('is_archived', 0);
     }
 
     /* -------------- Relations -------------- */
 
+    /**
+     * @return BelongsTo<Thing, $this>
+     */
     public function thing(): BelongsTo
     {
         return $this->belongsTo(Thing::class, 'id__Thing');
     }
 
+    /**
+     * @return HasMany<Operation>
+     */
     public function operations(): HasMany
     {
         return $this->hasMany(Operation::class, 'id__Instance');

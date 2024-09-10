@@ -35,8 +35,9 @@ final class RegisterController extends Controller
         $this->middleware('guest');
     }
 
-    /*
+    /**
      * Get a validator for an incoming registration request.
+     * @param array<string, string> $data
      */
     protected function validator(array $data): Validator
     {
@@ -47,8 +48,9 @@ final class RegisterController extends Controller
         ]);
     }
 
-    /*
+    /**
      * Create a new user instance after a valid registration.
+     * @param array<string, string> $data
      */
     protected function create(array $data): User
     {
