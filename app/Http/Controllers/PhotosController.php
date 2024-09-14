@@ -5,37 +5,32 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Photo;
-use Illuminate\Support\Facades\Log;
+use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
-use Intervention\Image\ImageManagerStatic as InterventionImage;
+use Illuminate\View\View;
+
+use function config;
+use function date;
+use function file_exists;
+use function mb_strlen;
+use function mb_substr;
+use function mkdir;
+use function pathinfo;
+use function public_path;
+use function redirect;
+use function rename;
+use function trans;
+use function unlink;
+use function url;
+use function view;
 
 final class PhotosController extends Controller
 {
-    public static function getFilePath($path, $prefix = null)
-    {
-        if (! $prefix) {
-            $prefix = date('/Y/m/');
-        }
-        $file_path = public_path() . $path . $prefix;
+    private string $path_prefix = date('/Y/m/');
 
-        if (! file_exists($file_path)) {
-            mkdir($file_path, 750, true);
-        }
-
-        return $file_path;
-    }
-
-    public static function getFileLink($path, $filename)
-    {
-        return url('/') . $path . date('/Y/m/') . $filename;
-    }
-
-    public static function removeImageFile($path): void
-    {
-        @unlink(public_path() . config('app.thumb_image_upload_path') . $path);
-        @unlink(public_path() . config('app.photo_image_upload_path') . $path);
-    }
-    public function index()
+    public function index(): View
     {
         $data = [
             'photos' => Photo::ofCurrentUser()->latest()->paginate(24),
@@ -44,9 +39,10 @@ final class PhotosController extends Controller
         return view('photos.index', $data);
     }
 
-    public function edit($id)
+    public function edit(int $id): View
     {
         $photo = Photo::findOrFail($id);
+
         $this->ownerAccess($photo);
 
         $data = [
@@ -56,35 +52,41 @@ final class PhotosController extends Controller
         return view('photos.edit', $data);
     }
 
-    public function update($id)
+    public function update(int $id): RedirectResponse
     {
         $photo = Photo::findOrFail($id);
+
         $this->ownerAccess($photo);
+
         $photo->update($this->request->all());
 
         return redirect()->intended('/photos');
     }
 
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
         $photo = Photo::find($id);
+
         $this->ownerAccess($photo);
+
         if (null === $photo) {
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         }
-        if (count($photo->things)) {
+
+        if ($photo->things->count()) {
             return $this->jsonResponse([
                 'message' => trans('app.photo_is_use_in_some_thing'),
             ]);
         }
 
-        if (count($photo->operations)) {
+        if ($photo->operations->count()) {
             return $this->jsonResponse([
                 'message' => trans('app.photo_is_use_in_some_thing'),
             ]);
         }
 
-        self::removeImageFile($photo->path);
+        @unlink(public_path() . config('app.thumb_image_upload_path') . $photo->path);
+        @unlink(public_path() . config('app.photo_image_upload_path') . $photo->path);
 
         /* Save original file but rename with prefix "REMOVED_" */
         $original_filepath = public_path() . config('app.original_image_upload_path');
@@ -97,18 +99,18 @@ final class PhotosController extends Controller
             ]);
         }
 
-
         return $this->jsonResponse(['success' => 'ok']);
     }
 
-    public function upload()
+    public function upload(): JsonResponse
     {
-        return json_encode($this->doUploadImage());
+        return $this->jsonResponse($this->doUploadImage());
     }
 
-    public function uploadAndCreate()
+    public function uploadAndCreate(): JsonResponse
     {
         $result = $this->doUploadImage();
+
         if (isset($result['path'])) {
             $photo = new Photo();
             $photo->setUserId();
@@ -123,62 +125,84 @@ final class PhotosController extends Controller
         return $this->jsonResponse($result);
     }
 
-    public function getAllImagesList()
+    public function getAllImagesList(): JsonResponse
     {
-        $photos = Photo::ofCurrentUser()->latest()->get();
-        $result = [
+        return $this->jsonResponse([
             'success' => 1,
-            'content' => view('partials.images-list', compact('photos'))->render(),
-        ];
-
-        return $this->jsonResponse($result);
+            'content' => view(
+                'partials.images-list',
+                [
+                    'photos' => Photo::ofCurrentUser()->latest()->get()
+                ]
+            )->render(),
+        ]);
     }
 
-    private function doUploadImage()
+    private function getFilePath(string $path): string
+    {
+        $file_path = public_path() . $path . $this->path_prefix;
+
+        if (! file_exists($file_path)) {
+            mkdir($file_path, 750, true);
+        }
+
+        return $file_path;
+    }
+
+    private function getFileLink(string $path, string $filename): string
+    {
+        return url($path . $this->path_prefix . $filename);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private function doUploadImage(): array
     {
         $result_array = [];
+
         if ($this->request->get('key')) {
             $result_array['key'] = $this->request->get('key');
         }
+
         if ($this->request->hasFile('image') || $this->request->hasFile('file')) {
 
             /**
-             * @var \Illuminate\Http\UploadedFile|\Illuminate\Http\UploadedFile[]|array|null
+             * @var \Illuminate\Http\UploadedFile $image
              */
             $image = $this->request->hasFile('image') ? $this->request->file('image') : $this->request->file('file');
 
-            if (is_array($image) && count($image) > 0) {
-                $image = $image[0];
-            }
-
             if ($image->isValid()) {
-                $filename = $this->addUniqueID($image->getClientOriginalName());
+                $filename = $this->getUniqueFilename($image->getClientOriginalName());
 
-                $filepath_original = self::getFilePath(config('app.original_image_upload_path'));
+                $filepath_original = $this->getFilePath(config('app.original_image_upload_path'));
+
                 $image->move($filepath_original, $filename);
 
                 if ($setup = $this->request->get('setup')) {
                     switch ($setup) {
                         case 'photo':
                             $this->createPhotoImage($filepath_original, $filename);
+
                             $this->createThumbImage($filepath_original, $filename);
-                            $result_array['filelink'] = self::getFileLink(config('app.thumb_image_upload_path'), $filename);
+
+                            $result_array['filelink'] = $this->getFileLink(config('app.thumb_image_upload_path'), $filename);
+
                             break;
 
                         case 'editor':
                             $this->createEditorImage($filepath_original, $filename);
 
                             $result_array['filekey'] = [
-                                'url' => self::getFileLink(config('app.editor_image_upload_path'), $filename),
+                                'url' => $this->getFileLink(config('app.editor_image_upload_path'), $filename),
                             ];
 
-                            //$result_array['link'] = self::getFileLink(config('app.editor_image_upload_path'), $filename);
                             break;
                     }
                 }
 
                 $result_array['success'] = 'OK';
-                $result_array['path'] = date('/Y/m/') . $filename;
+                $result_array['path'] = $this->path_prefix . $filename;
                 $result_array['type'] = $setup;
             } else {
                 $result_array['message'] = trans('app.incorrect_image_format');
@@ -190,104 +214,52 @@ final class PhotosController extends Controller
         return $result_array;
     }
 
-    private function manipulateImagebyInvervention(
-        $filepath_original,
-        $filepath_new,
-        $filename,
-        $width = null,
-        $height = null,
-        $crop = false,
-        $quality = null,
-    ): void {
-        $ii = InterventionImage::getManager();
-        $ii->configure(['driver' => 'imagick']);
-        $img = $ii->make($filepath_original . $filename);
-
-        if ($width && $height) {
-            if (($img->height() / $img->width()) < ($height / $width)) {
-                $img->resize(null, $height, function ($constraint): void {
-                    $constraint->aspectRatio();
-                    /*$constraint->upsize();*/
-                });
-            } else {
-                $img->resize($width, null, function ($constraint): void {
-                    $constraint->aspectRatio();
-                    /*$constraint->upsize();*/
-                });
-            }
-            if ($crop) {
-                $img->crop($width, $height);
-            }
-        } else {
-            if ($width || $height) {
-                $img->resize($width, $height, function ($constraint): void {
-                    $constraint->aspectRatio();
-                    $constraint->upsize();
-                });
-            }
-        }
-
-        /* Optimizations */
-        $img->getCore()->stripImage();
-        $img->sharpen(8);
-        //$img->getCore()->setImageProperty('jpeg:sampling-factor', '4:4:1');
-
-        $img->save($filepath_new . $filename, $quality);
-
-        $this->mozJpegOptimize($filepath_new . $filename);
-    }
-
-    private function mozJpegOptimize($original, $options = []): void
-    {
-        $new = $options['output_filename'] ?? $original;
-        $suffix = '.TEST';
-
-        $quality = $options['quality'] ?? '';
-        $quality = $quality ? '-quality ' . $quality : '';
-
-        $cmd = "mozjpeg -optimize -progressive {$quality} {$original} > {$new}{$suffix}";
-
-        $result = exec($cmd);
-
-        if (filesize($new . $suffix)) {
-            exec("mv {$new}{$suffix} {$new}");
-        } else {
-            @unlink($new . $suffix);
-            Log::warning('Can not create MozJpeg image for: ' . $new . '. Exec returns: ' . $result);
-        }
-    }
-
     /*
-     * Post Image
+     * General Image
      */
-    private function createPhotoImage($filepath_original, $filename): void
+    private function createPhotoImage(string $filepath_original, string $filename): void
     {
-        $filepath = self::getFilePath(config('app.photo_image_upload_path'));
-        $this->manipulateImagebyInvervention($filepath_original, $filepath, $filename);
+        ImageService::manipulate(
+            $filepath_original . $filename,
+            $this->getFilePath(config('app.photo_image_upload_path')) . $filename,
+        );
     }
 
     /*
      * Thumb Image
      */
-    private function createThumbImage($filepath_original, $filename): void
+    private function createThumbImage(string $filepath_original, string $filename): void
     {
-        $filepath_small = self::getFilePath(config('app.thumb_image_upload_path'));
-        $this->manipulateImagebyInvervention($filepath_original, $filepath_small, $filename, 175, 130, true);
+        ImageService::manipulate(
+            $filepath_original . $filename,
+            $this->getFilePath(config('app.thumb_image_upload_path')) . $filename,
+            [
+                'width' => 175,
+                'height' => 130,
+                'crop' => true,
+            ],
+        );
     }
 
     /*
      * Editor Image
      */
-    private function createEditorImage($filepath_original, $filename): void
+    private function createEditorImage(string $filepath_original, string $filename): void
     {
-        $filepath = self::getFilePath(config('app.editor_image_upload_path'));
-        $this->manipulateImagebyInvervention($filepath_original, $filepath, $filename, 1080, null, false);
+        ImageService::manipulate(
+            $filepath_original . $filename,
+            $this->getFilePath(config('app.editor_image_upload_path')) . $filename,
+            [
+                'width' => 960,
+                'height' => 720,
+            ],
+        );
     }
 
-    private function addUniqueID($filename)
+    private function getUniqueFilename(string $filename): string
     {
-        $ext = pathinfo($filename, PATHINFO_EXTENSION);
-        $name = pathinfo($filename, PATHINFO_FILENAME);
+        $ext = pathinfo($filename, \PATHINFO_EXTENSION);
+        $name = pathinfo($filename, \PATHINFO_FILENAME);
 
         if (mb_strlen($name) > 100) {
             $name = mb_substr($name, 0, 100);

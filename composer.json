@@ -10,7 +10,7 @@
         "gulch/collective-html": "^6.5",
         "gulch/minify": "^1.0",
         "gulch/transliterato": "^1.0",
-        "intervention/image": "^2.5",
+        "intervention/image": "^3.8",
         "laravel/framework": "^11.0",
         "laravel/ui": "^4.1"
     },
