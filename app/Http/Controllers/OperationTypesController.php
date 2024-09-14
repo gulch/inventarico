@@ -107,7 +107,7 @@ final class OperationTypesController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, int|string>
      */
     private function validateData(): array
     {

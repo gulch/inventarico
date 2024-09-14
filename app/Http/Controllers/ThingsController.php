@@ -209,7 +209,7 @@ final class ThingsController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, int|string>
      */
     private function validateData(): array
     {
@@ -262,7 +262,7 @@ final class ThingsController extends Controller
             }
         }
 
-        return json_encode($overview, JSON_UNESCAPED_UNICODE);
+        return (string) json_encode($overview, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -372,10 +372,10 @@ final class ThingsController extends Controller
     }
 
     /**
-     * @param array<string, string> $input
-     * @return array<string, string>
+     * @param array<string, int|string> $input
+     * @return array<string, int|string>
      */
-    private function setCheckboxesValues($input)
+    private function setCheckboxesValues(array $input): array
     {
         if (! isset($input['is_archived'])) {
             $input['is_archived'] = 0;

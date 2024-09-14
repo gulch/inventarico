@@ -160,7 +160,7 @@ final class OperationsController extends Controller
             }
 
             if ($id) {
-                $operation = Operation::findOrFail($id);
+                $operation = Operation::query()->findOrFail($id);
                 $this->ownerAccess($operation);
             } else {
                 $operation = new Operation();
@@ -190,7 +190,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, int|string>
      */
     private function validateData(): array
     {
@@ -225,7 +225,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return array<int|string, int|string>
      */
     private function getOperationTypesForDropdown(): array
     {

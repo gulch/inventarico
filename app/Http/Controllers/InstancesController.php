@@ -150,11 +150,11 @@ final class InstancesController extends Controller
             }
         }
 
-        return json_encode($overview, \JSON_UNESCAPED_UNICODE);
+        return (string) json_encode($overview, \JSON_UNESCAPED_UNICODE);
     }
 
     /**
-     * @return array<string, string> $input
+     * @return array<string, int|string> $input
      */
     private function validateData(): array
     {
@@ -181,8 +181,8 @@ final class InstancesController extends Controller
     }
 
     /**
-     * @param array<string, string> $input
-     * @return array<string, string>
+     * @param array<string, int|string> $input
+     * @return array<string, int|string>
      */
     private function setCheckboxesValues(array $input): array
     {

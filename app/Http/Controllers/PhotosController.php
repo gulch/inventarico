@@ -8,6 +8,7 @@ use App\Models\Photo;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -15,6 +16,7 @@ use function config;
 use function date;
 use function file_exists;
 use function mb_strlen;
+use function mb_strtolower;
 use function mb_substr;
 use function mkdir;
 use function pathinfo;
@@ -28,7 +30,14 @@ use function view;
 
 final class PhotosController extends Controller
 {
-    private string $path_prefix = date('/Y/m/');
+    private string $path_prefix;
+
+    function __construct(Request $request)
+    {
+        $this->path_prefix = date('/Y/m/');
+
+        parent::__construct($request);
+    }
 
     public function index(): View
     {

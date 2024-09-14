@@ -24,7 +24,7 @@ final class MinifyHTML
         $start_time = microtime(true);
 
         $response->setContent(
-            MinifierService::handle($response->getContent()),
+            MinifierService::handle((string)$response->getContent()),
         );
 
         $duration = microtime(true) - $start_time;
