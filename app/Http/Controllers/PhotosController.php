@@ -164,7 +164,7 @@ final class PhotosController extends Controller
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, mixed|string>
      */
     private function doUploadImage(): array
     {

@@ -225,7 +225,7 @@ final class OperationsController extends Controller
     }
 
     /**
-     * @return array<int|string, int|string>
+     * @return array<string, string>
      */
     private function getOperationTypesForDropdown(): array
     {

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 trait ModelTrait
 {
@@ -18,7 +20,9 @@ trait ModelTrait
     public function setUserId(?int $id = null): void
     {
         if (null === $id) {
-            $id = auth()->user()->id;
+            /** @var User $user */
+            $user = Auth::user();
+            $id = $user->id;
         }
         $this->id__User = $id;
     }
@@ -28,7 +32,9 @@ trait ModelTrait
      */
     public function scopeOfCurrentUser(Builder $query): void
     {
-        $query->where('id__User', auth()->user()->id);
+        /** @var User $user */
+        $user = Auth::user();
+        $query->where('id__User', $user->id);
     }
 
 }

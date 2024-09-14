@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 
 use function abort;
-use function auth;
 
 use const JSON_PRETTY_PRINT;
 use const JSON_UNESCAPED_UNICODE;
@@ -40,7 +41,9 @@ class Controller extends BaseController
 
     protected function ownerAccess(?object $item): void
     {
-        if (auth()->user()->id !== $item?->id__User) {
+        /** @var User $user */
+        $user = Auth::user();
+        if ($user->id !== $item?->id__User) {
             abort(403, 'Forbidden');
         }
     }

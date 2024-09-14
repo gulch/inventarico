@@ -12,7 +12,7 @@ use function array_merge;
 final class ImageService
 {
     /**
-     * @param array<string, mixed> $options
+     * @param array<string, int|string|bool> $options
      */
     public static function manipulate(string $original, string $new, array $options = []): void
     {
