@@ -7,6 +7,9 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Thing;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -14,8 +17,6 @@ use gulch\Transliterato\Scheme\RusToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
-use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 use function array_map;
 use function array_merge;
@@ -26,6 +27,9 @@ final class ThingsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
 
+    /**
+     * @return array<int, string>
+     */
     public static function transliterato(string $q): array
     {
         $processor = new BatchProcessor(
@@ -42,22 +46,20 @@ final class ThingsController extends Controller
 
     public function index(): View
     {
-        $things = Thing::query()
+        $query = Thing::query()
             ->with('photo', 'category', 'instances')
             ->ofCurrentUser();
 
-        $things = $this->applyCategory($things);
+        $query = $this->applyCategory($query);
 
-        $things = $this->applySort($things);
+        $query = $this->applySort($query);
 
-        $things = $this->applyAvailability($things);
+        $query = $this->applyAvailability($query);
 
-        $things = $this->applySearch($things);
-
-        $things = $things->paginate(self::PAGINATE_COUNT);
+        $query = $this->applySearch($query);
 
         $data = [
-            'things' => $things,
+            'things' => $query->paginate(self::PAGINATE_COUNT),
             'categories' => $this->getCategoriesForDropdown(),
             'selected_category' => $this->request->input('category') ?? 0,
         ];
@@ -206,6 +208,9 @@ final class ThingsController extends Controller
         return $this->jsonResponse($validation);
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function validateData(): array
     {
         $data = [];
@@ -235,7 +240,7 @@ final class ThingsController extends Controller
         return CategoriesController::getCategoriesForDropdown();
     }
 
-    private function getOverview()
+    private function getOverview(): string
     {
         $title = $this->request->get('o_title');
         $description = $this->request->get('o_description');
@@ -260,84 +265,100 @@ final class ThingsController extends Controller
         return json_encode($overview, JSON_UNESCAPED_UNICODE);
     }
 
-    private function applyCategory($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applyCategory(Builder $query): Builder
     {
         $category_id = $this->request->input('category');
 
         if (! $category_id) {
-            return $things;
+            return $query;
         }
 
         $category = Category::find($category_id);
 
         if (! $category) {
-            return $things;
+            return $query;
         }
 
-        $things->whereIn(
+        $query->whereIn(
             'id__Category',
             array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()),
         );
 
-        return $things;
+        return $query;
     }
 
-    private function applySort($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applySort(Builder $query): Builder
     {
         $sort = $this->request->input('sort');
 
         switch ($sort) {
             case 'published_desc':
-                $things->orderBy('published_at', 'desc');
+                $query->orderBy('published_at', 'desc');
                 break;
             case 'published_asc':
-                $things->orderBy('published_at');
+                $query->orderBy('published_at');
                 break;
             case 'updated_desc':
-                $things->orderBy('updated_at', 'desc');
+                $query->orderBy('updated_at', 'desc');
                 break;
             case 'updated_asc':
-                $things->orderBy('updated_at');
+                $query->orderBy('updated_at');
                 break;
             case 'alphabet_desc':
-                $things->orderBy('title', 'desc');
+                $query->orderBy('title', 'desc');
                 break;
             case 'alphabet_asc':
-                $things->orderBy('title', 'asc');
+                $query->orderBy('title', 'asc');
                 break;
             case 'created_asc':
-                $things->orderBy('created_at');
+                $query->orderBy('created_at');
                 break;
             case 'created_desc':
             default:
-                $things->orderBy('published_at', 'desc');
+                $query->orderBy('published_at', 'desc');
         }
 
-        return $things;
+        return $query;
     }
 
-    private function applyAvailability($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applyAvailability(Builder $query): Builder
     {
         $availability = $this->request->input('availability');
 
         switch ($availability) {
             case 'available':
-                $things->available();
+                $query->available();
                 break;
             case 'archived':
-                $things->archived();
+                $query->archived();
                 break;
         }
 
-        return $things;
+        return $query;
     }
 
-    private function applySearch($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applySearch(Builder $query): Builder
     {
         $q = $this->request->input('q');
 
         if ($q) {
-            $things->where(function ($query) use ($q): void {
+            $query->where(function ($query) use ($q): void {
                 $query->where('title', 'like', '%' . $q . '%');
                 // transliterato
                 $results = self::transliterato($q);
@@ -347,9 +368,13 @@ final class ThingsController extends Controller
             });
         }
 
-        return $things;
+        return $query;
     }
 
+    /**
+     * @param array<string, string> $input
+     * @return array<string, string>
+     */
     private function setCheckboxesValues($input)
     {
         if (! isset($input['is_archived'])) {
