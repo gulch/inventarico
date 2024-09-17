@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreInstanceRequest;
 use App\Models\Instance;
 use App\Models\Thing;
 use Illuminate\Http\JsonResponse;
@@ -50,14 +51,14 @@ final class InstancesController extends Controller
         return view('instances.edit', $data);
     }
 
-    public function store(): JsonResponse
+    public function store(StoreInstanceRequest $request): JsonResponse
     {
-        return $this->saveInstance();
+        return $this->saveInstance($request);
     }
 
-    public function update(int $id): JsonResponse
+    public function update(int $id, StoreInstanceRequest $request): JsonResponse
     {
-        return $this->saveInstance($id);
+        return $this->saveInstance($request, $id);
     }
 
     public function destroy(int $id): JsonResponse
@@ -79,53 +80,38 @@ final class InstancesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveInstance(?int $id = null): JsonResponse
+    private function saveInstance(StoreInstanceRequest $request, ?int $id = null): JsonResponse
     {
+        $result = [];
+
+        $validated_input = $request->validated();
+
+        $result['message'] = '✔️ ' . trans('app.saved');
+        $result['success'] = 1;
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/instances');
+        }
+
         if (! $id) {
-            $id = $this->request->get('id');
+            $instance = new Instance();
+            $instance->setUserId();
+            $instance->save();
+        } else {
+            $instance = Instance::findOrFail($id);
+            $this->ownerAccess($instance);
         }
 
-        $validation = $this->validateData();
+        $result['id'] = $instance->id;
 
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/instances');
-            }
+        // trim values
+        $validated_input = array_map('trim', $validated_input);
 
-            if ($id) {
-                $instance = Instance::findOrFail($id);
-                $this->ownerAccess($instance);
-            } else {
-                $instance = new Instance();
-                $instance->setUserId();
-                $instance->save();
-            }
+        $validated_input = array_merge($validated_input, ['overview' => $this->getOverview()]);
 
-            $validation['id'] = $instance->id;
+        $instance->update($validated_input);
 
-            $instance_input = array_map(
-                'trim',
-                $this->request->only([
-                    'title',
-                    'description',
-                    'is_archived',
-                    'published_at',
-                    'price',
-                    'id__Thing',
-                ]),
-            );
-
-            $overview = $this->getOverview();
-
-            $instance_input = array_merge($instance_input, compact('overview'));
-
-            $instance_input = $this->setCheckboxesValues($instance_input);
-
-            $instance->update($instance_input);
-        }
-
-        return $this->jsonResponse($validation);
+        return $this->jsonResponse($result);
     }
 
     private function getOverview(): string
@@ -184,50 +170,12 @@ final class InstancesController extends Controller
      * @param array<string, int|string> $input
      * @return array<string, int|string>
      */
-    private function setCheckboxesValues(array $input): array
+    /* private function setCheckboxesValues(array $input): array
     {
         if (! isset($input['is_archived'])) {
             $input['is_archived'] = 0;
         }
 
         return $input;
-    }
-
-    /* TODO: remove later */
-    /* public function generate()
-    {
-        $operations = Operation::query()
-            ->with('item')
-            ->where('id__OperationType', 2)
-            ->get();
-
-        foreach ($operations as $operation) {
-
-            $instance = new Instance();
-
-            //$instance->id = $operation->item->id;
-
-            $instance->title = $operation->item->title;
-            $instance->price = $operation->price;
-            $instance->is_archived = $operation->item->is_archived;
-            $instance->id__Instance = $operation->item->id;
-            $instance->id__User = $operation->item->id__User;
-            $instance->created_at = $operation->created_at;
-
-            $instance->save();
-
-            Operation::find($operation->id)->update([
-                'id__Instance' => $instance->id,
-            ]);
-
-            Operation::where('id__Item', $operation->item->id)
-            ->where('id__OperationType', '<>', 2)
-            ->update([
-                'id__Instance' => $instance->id,
-            ]);
-
-            echo 'Instance created: ' . $instance->title;
-            echo PHP_EOL;
-        }
     } */
 }
