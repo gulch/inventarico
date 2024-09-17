@@ -91,10 +91,8 @@ final class CategoriesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveCategory(
-        StoreCategoryRequest $request,
-        ?Category $category = null
-    ): JsonResponse {
+    private function saveCategory(StoreCategoryRequest $request, ?Category $category = null): JsonResponse
+    {
         if ($category) {
             $this->ownerAccess($category);
         } else {

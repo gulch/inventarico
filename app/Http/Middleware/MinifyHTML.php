@@ -7,7 +7,7 @@ namespace App\Http\Middleware;
 use App\Services\MinifierService;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 
 use function microtime;
 use function sprintf;
@@ -20,6 +20,11 @@ final class MinifyHTML
          * @var Response $response
          */
         $response = $next($request);
+
+        // if redirect response
+        if($response->getStatusCode() > 300 && $response->getStatusCode() < 400) {
+            return $response;
+        }
 
         $start_time = microtime(true);
 
