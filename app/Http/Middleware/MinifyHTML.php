@@ -34,10 +34,10 @@ final class MinifyHTML
 
         $duration = microtime(true) - $start_time;
 
-        $response->headers->set(
+        /* $response->headers->set(
             'X-Minify-Time',
             sprintf('%2.3f ms', $duration * 1000),
-        );
+        ); */
 
         return $response;
     }
