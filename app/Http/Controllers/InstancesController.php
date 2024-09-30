@@ -10,11 +10,12 @@ use App\Models\Thing;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
-use function array_map;
 use function array_merge;
 use function count;
 use function is_array;
+use function json_encode;
 use function session;
+use function trim;
 use function url;
 
 final class InstancesController extends Controller
@@ -104,9 +105,6 @@ final class InstancesController extends Controller
 
         $result['id'] = $instance->id;
 
-        // trim values
-        $validated_input = array_map('trim', $validated_input);
-
         $validated_input = array_merge($validated_input, ['overview' => $this->getOverview()]);
 
         $instance->update($validated_input);
@@ -138,44 +136,4 @@ final class InstancesController extends Controller
 
         return (string) json_encode($overview, \JSON_UNESCAPED_UNICODE);
     }
-
-    /**
-     * @return array<string, int|string> $input
-     */
-    private function validateData(): array
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), [
-            'title' => 'required',
-            'id__Thing' => 'required|numeric|min:1',
-        ]);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
-        } else {
-            $data['success'] = 'OK';
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param array<string, int|string> $input
-     * @return array<string, int|string>
-     */
-    /* private function setCheckboxesValues(array $input): array
-    {
-        if (! isset($input['is_archived'])) {
-            $input['is_archived'] = 0;
-        }
-
-        return $input;
-    } */
 }
