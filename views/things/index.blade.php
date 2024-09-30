@@ -100,9 +100,9 @@
                 >
                     <div class="image">
                         @if ($thing->photo)
-                            <img src="{{ config('app.thumb_image_upload_path') . $thing->photo->path }}">
+                            <img src="{{ config('inco.thumb_image_upload_path') . $thing->photo->path }}">
                         @else
-                            <img src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg">
+                            <img src="{{ config('inco.assets_img_path') }}/placeholder-white-175x130.svg">
                         @endif
                     </div>
 

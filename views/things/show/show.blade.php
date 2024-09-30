@@ -67,7 +67,7 @@
     <div class="ui segment">
 
         @if ($thing->photo)
-            <img src="{{ config('app.photo_image_upload_path') . $thing->photo->path }}"
+            <img src="{{ config('inco.photo_image_upload_path') . $thing->photo->path }}"
                 alt="{{ $thing->photo->description }}" class="ui fluid image">
         @endif
 

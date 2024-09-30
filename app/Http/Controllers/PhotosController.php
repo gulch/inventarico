@@ -94,11 +94,11 @@ final class PhotosController extends Controller
             ]);
         }
 
-        @unlink(public_path() . config('app.thumb_image_upload_path') . $photo->path);
-        @unlink(public_path() . config('app.photo_image_upload_path') . $photo->path);
+        @unlink(public_path() . config('inco.thumb_image_upload_path') . $photo->path);
+        @unlink(public_path() . config('inco.photo_image_upload_path') . $photo->path);
 
         /* Save original file but rename with prefix "REMOVED_" */
-        $original_filepath = public_path() . config('app.original_image_upload_path');
+        $original_filepath = public_path() . config('inco.original_image_upload_path');
         @rename($original_filepath . $photo->path, $original_filepath . 'REMOVED_' . $photo->path);
 
         /* Delete from DB */
@@ -184,7 +184,7 @@ final class PhotosController extends Controller
             if ($image->isValid()) {
                 $filename = $this->getUniqueFilename($image->getClientOriginalName());
 
-                $filepath_original = $this->getFilePath(config('app.original_image_upload_path'));
+                $filepath_original = $this->getFilePath(config('inco.original_image_upload_path'));
 
                 $image->move($filepath_original, $filename);
 
@@ -195,7 +195,7 @@ final class PhotosController extends Controller
 
                             $this->createThumbImage($filepath_original, $filename);
 
-                            $result_array['filelink'] = $this->getFileLink(config('app.thumb_image_upload_path'), $filename);
+                            $result_array['filelink'] = $this->getFileLink(config('inco.thumb_image_upload_path'), $filename);
 
                             break;
 
@@ -203,7 +203,7 @@ final class PhotosController extends Controller
                             $this->createEditorImage($filepath_original, $filename);
 
                             $result_array['filekey'] = [
-                                'url' => $this->getFileLink(config('app.editor_image_upload_path'), $filename),
+                                'url' => $this->getFileLink(config('inco.editor_image_upload_path'), $filename),
                             ];
 
                             break;
@@ -230,7 +230,7 @@ final class PhotosController extends Controller
     {
         ImageService::manipulate(
             $filepath_original . $filename,
-            $this->getFilePath(config('app.photo_image_upload_path')) . $filename,
+            $this->getFilePath(config('inco.photo_image_upload_path')) . $filename,
         );
     }
 
@@ -241,7 +241,7 @@ final class PhotosController extends Controller
     {
         ImageService::manipulate(
             $filepath_original . $filename,
-            $this->getFilePath(config('app.thumb_image_upload_path')) . $filename,
+            $this->getFilePath(config('inco.thumb_image_upload_path')) . $filename,
             [
                 'width' => 175,
                 'height' => 130,
@@ -257,7 +257,7 @@ final class PhotosController extends Controller
     {
         ImageService::manipulate(
             $filepath_original . $filename,
-            $this->getFilePath(config('app.editor_image_upload_path')) . $filename,
+            $this->getFilePath(config('inco.editor_image_upload_path')) . $filename,
             [
                 'width' => 960,
                 'height' => 720,

@@ -44,9 +44,9 @@
                 @if (sizeof($operation->photos))
                     <div class="extra images gallery">
                         @foreach ($operation->photos as $photo)
-                            <a href="{{ config('app.photo_image_upload_path') . $photo->path }}">
+                            <a href="{{ config('inco.photo_image_upload_path') . $photo->path }}">
                                 <img class="ui rounded image"
-                                    src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
+                                    src="{{ config('inco.thumb_image_upload_path') . $photo->path }}">
                             </a>
                         @endforeach
                     </div>

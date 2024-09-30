@@ -14,7 +14,7 @@
         @endforeach
     @endif
 
-    <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('app.version') }}">
+    <link rel="stylesheet" type="text/css" href="/assets/css/app.css?v={{ config('inco.version') }}">
 
     {{-- jQuery --}}
     <script src="/assets/vendor/jquery/3.7.1/jquery.min.js"></script>
@@ -106,6 +106,6 @@
 @endif
 
 <script defer src="/assets/vendor/fomantic/2.9.3/semantic.min.js"></script>
-<script defer src="/assets/js/app.js?v={{ config('app.version') }}"></script>
+<script defer src="/assets/js/app.js?v={{ config('inco.version') }}"></script>
 </body>
 </html>

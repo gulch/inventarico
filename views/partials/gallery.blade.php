@@ -23,7 +23,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <img src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
+                                <img src="{{ config('inco.thumb_image_upload_path') . $photo->path }}">
                                 <input type="hidden" name="{{ $field_name }}[]" value="{{ $photo->id }}">
                             </div>
                         </div>
@@ -107,7 +107,7 @@
                         if (formData) {
                             var local_key = ++temp_key;
                             var image_preview = $('#image_preview_' + key);
-                            image_preview.find('.row').append('<div class="one column attachment-thumbnail" data-id="" data-key="' + local_key + '"><div class="ui image segment"><img width="175" src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg"><div class=\"ui active inverted dimmer\"><div class=\"ui loader\"></div></div></div></div>');
+                            image_preview.find('.row').append('<div class="one column attachment-thumbnail" data-id="" data-key="' + local_key + '"><div class="ui image segment"><img width="175" src="{{ config('inco.assets_img_path') }}/placeholder-white-175x130.svg"><div class=\"ui active inverted dimmer\"><div class=\"ui loader\"></div></div></div></div>');
                             image_preview.removeClass('hide').show();
                             formData.append('image', files[i]);
                             formData.append('key', local_key);
@@ -199,7 +199,7 @@
                             if (image_id !== undefined) {
                                 var image_preview = $('#image_preview_' + key);
                                 image_preview.removeClass('hide').show();
-                                image_preview.find('.row').append('<div class="one column attachment-thumbnail" data-id="" data-key="' + temp_key + '"><div class="ui image segment"><img src="{{ config('app.assets_img_path') }}/placeholder-white-175x130.svg"></div></div>');
+                                image_preview.find('.row').append('<div class="one column attachment-thumbnail" data-id="" data-key="' + temp_key + '"><div class="ui image segment"><img src="{{ config('inco.assets_img_path') }}/placeholder-white-175x130.svg"></div></div>');
                                 var local_temp_key = temp_key;
                                 temp_key++;
                                 var thumb = $(image_preview).find('div[data-key="' + local_temp_key + '"]');

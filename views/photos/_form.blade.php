@@ -19,7 +19,7 @@
 
     <div id="image_preview" class="ui segment @if(!isset($photo)) hide @endif">
         @if(isset($photo))
-            <img class="ui centered image" src="{{ config('app.photo_image_upload_path') . $photo->path }}">
+            <img class="ui centered image" src="{{ config('inco.photo_image_upload_path') . $photo->path }}">
         @else
             <img class="ui centered image">
         @endif

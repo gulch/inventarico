@@ -41,9 +41,7 @@ class Controller extends BaseController
 
     protected function ownerAccess(?object $item): void
     {
-        /** @var User $user */
-        $user = Auth::user();
-        if ($user->id !== $item?->id__User) {
+        if (Auth::user()->id !== $item?->id__User) {
             abort(403, 'Forbidden');
         }
     }

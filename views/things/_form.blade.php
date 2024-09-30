@@ -51,7 +51,7 @@
         'image' => $thing?->photo,
         'key' => uniqid(),
         'setup' => 'photo',
-        'path' => config('app.photo_image_upload_path'),
+        'path' => config('inco.photo_image_upload_path'),
     ])
 </div>
 

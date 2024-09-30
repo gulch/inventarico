@@ -2,10 +2,10 @@
     @if($photos)
         @foreach($photos as $photo)
             <div class="card segment action-segment">
-                <a href="{{ config('app.photo_image_upload_path') . $photo->path }}"
+                <a href="{{ config('inco.photo_image_upload_path') . $photo->path }}"
                    class="image text-centered lightbox"
                 >
-                    <img src="{{ config('app.thumb_image_upload_path') . $photo->path }}">
+                    <img src="{{ config('inco.thumb_image_upload_path') . $photo->path }}">
                 </a>
 
                 <div class="content">
