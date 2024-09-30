@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-final class StoreInstanceRequest extends FormRequest
+class StoreThingRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,10 @@ final class StoreInstanceRequest extends FormRequest
     {
         return [
             'description' => 'string',
-            'id__Thing' => 'required|numeric|min:1',
+            'id__Photo' => 'numeric',
             'is_archived' => 'boolean',
-            'price' => 'int',
             'published_at' => 'required',
+            'id__Category' => 'required|numeric|min:1',
             'title' => 'required',
         ];
     }

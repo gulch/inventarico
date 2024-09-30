@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOperationTypeRequest;
 use App\Models\OperationType;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -46,14 +47,14 @@ final class OperationTypesController extends Controller
         return view('operation-types.edit', $data);
     }
 
-    public function store(): JsonResponse
+    public function store(StoreOperationTypeRequest $request): JsonResponse
     {
-        return $this->saveItem();
+        return $this->saveItem($request);
     }
 
-    public function update(int $id): JsonResponse
+    public function update(StoreOperationTypeRequest $request, int $id): JsonResponse
     {
-        return $this->saveItem($id);
+        return $this->saveItem($request, $id);
     }
 
     public function destroy(int $id): JsonResponse
@@ -77,56 +78,34 @@ final class OperationTypesController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem(?int $id = null): JsonResponse
+    private function saveItem(StoreOperationTypeRequest $request, ?int $id = null): JsonResponse
     {
-        if ( ! $id) {
-            $id = $this->request->get('id');
+        $id ??= $request->get('id');
+
+        $result = [];
+
+        $validated_input = $request->validated();
+
+        $result['message'] = '✔️ ' . trans('app.saved');
+        $result['success'] = 1;
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/operation-types');
         }
 
-        $validation = $this->validateData();
-
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/operation-types');
-            }
-
-            if ($id) {
-                $operationType = OperationType::findOrFail($id);
-                $this->ownerAccess($operationType);
-            } else {
-                $operationType = new OperationType();
-                $operationType->setUserId();
-                $operationType->save();
-            }
-            $operationType->update($this->request->all());
-            $validation['id'] = $operationType->id;
-        }
-
-        return $this->jsonResponse($validation);
-    }
-
-    /**
-     * @return array<string, int|string>
-     */
-    private function validateData(): array
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), ['title' => 'required']);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
+        if (! $id) {
+            $operationType = new OperationType();
+            $operationType->setUserId();
+            $operationType->save();
         } else {
-            $data['success'] = 'OK';
+            $operationType = OperationType::findOrFail($id);
+            $this->ownerAccess($operationType);
         }
 
-        return $data;
+        $operationType->update($$validated_input);
+
+        $request['id'] = $operationType->id;
+
+        return $this->jsonResponse($result);
     }
 }

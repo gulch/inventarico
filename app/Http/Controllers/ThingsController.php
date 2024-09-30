@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreThingRequest;
 use App\Models\Category;
+use App\Models\Instance;
 use App\Models\Thing;
 use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
 use Illuminate\Database\Eloquent\Builder;
@@ -120,14 +122,14 @@ final class ThingsController extends Controller
         return view('things.edit', $data);
     }
 
-    public function store(): JsonResponse
+    public function store(StoreThingRequest $request): JsonResponse
     {
-        return $this->saveThing();
+        return $this->saveThing($request);
     }
 
-    public function update(int $id): JsonResponse
+    public function update(int $id, StoreThingRequest $request): JsonResponse
     {
-        return $this->saveThing($id);
+        return $this->saveThing($request, $id);
     }
 
     public function destroy(int $id): JsonResponse
@@ -140,99 +142,63 @@ final class ThingsController extends Controller
             return $this->jsonResponse(['message' => trans('app.item_not_found')]);
         }
 
+        // TODO: ??? Don't remove not empty thing
+
+        foreach ($thing->instances as $instance) {
+
+            foreach($instance->operations as $operation) {
+                // unsync photos from instance operations
+                $operation->photos()->sync([]);
+            }
+
+            // Delete operations of instance
+            $instance->operations()->delete();
+        }
+
         // remove instances
-
-        // TODO: Unsync photos from instance operations
-
         $thing->instances()->delete();
 
-        // TODO: Unsync photos from instance operations
-        /* if ($thing->operations) {
-            foreach ($thing->operations as $o) {
-                $o->photos()->sync([]);
-            }
-            // Delete operations
-            $thing->operations()->delete();
-        } */
-
-        // Delete item
+        // Delete thing
         $thing->delete();
 
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveThing(?int $id = null): JsonResponse
+    private function saveThing(StoreThingRequest $request, ?int $id = null): JsonResponse
     {
+        $id ??= $request->get('id');
+
+        $result = [];
+
+        $validated_input = $request->validated();
+
+        $result['message'] = '✔️ ' . trans('app.saved');
+        $result['success'] = 1;
+
+        $result['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/things');
+        }
+
         if (! $id) {
-            $id = $this->request->get('id');
-        }
-
-        $validation = $this->validateData();
-
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/things');
-            }
-
-            if ($id) {
-                $thing = Thing::findOrFail($id);
-                $this->ownerAccess($thing);
-            } else {
-                $thing = new Thing();
-                $thing->setUserId();
-                $thing->save();
-            }
-
-            $validation['id'] = $thing->id;
-
-            $thing_input = array_map(
-                'trim',
-                $this->request->only([
-                    'title',
-                    'description',
-                    'is_archived',
-                    'id__Photo',
-                    'id__Category',
-                    'published_at',
-                ]),
-            );
-            $overview = $this->getOverview();
-            $thing_input = array_merge($thing_input, compact('overview'));
-
-            $thing_input = $this->setCheckboxesValues($thing_input);
-
-            $thing->update($thing_input);
-        }
-
-        return $this->jsonResponse($validation);
-    }
-
-    /**
-     * @return array<string, int|string>
-     */
-    private function validateData(): array
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), [
-            'title' => 'required',
-            'id__Category' => 'required|numeric|min:1',
-        ]);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
+            $thing = new Thing();
+            $thing->setUserId();
+            $thing->save();
         } else {
-            $data['success'] = 'OK';
+            $thing = Thing::findOrFail($id);
+            $this->ownerAccess($thing);
         }
 
-        return $data;
+        $result['id'] = $thing->id;
+
+        $overview = $this->getOverview();
+
+        $validated_input = array_merge($validated_input, compact('overview'));
+
+        $thing->update($validated_input);
+
+        return $this->jsonResponse($result);
     }
 
     private function getCategoriesForDropdown(): ClosureTableCollection
@@ -369,18 +335,5 @@ final class ThingsController extends Controller
         }
 
         return $query;
-    }
-
-    /**
-     * @param array<string, int|string> $input
-     * @return array<string, int|string>
-     */
-    private function setCheckboxesValues(array $input): array
-    {
-        if (! isset($input['is_archived'])) {
-            $input['is_archived'] = 0;
-        }
-
-        return $input;
     }
 }

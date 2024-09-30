@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreOperationRequest;
 use App\Models\Instance;
 use App\Models\Operation;
 use App\Models\OperationType;
@@ -104,14 +105,14 @@ final class OperationsController extends Controller
         return view('operations.edit', $data);
     }
 
-    public function store(): JsonResponse
+    public function store(StoreOperationRequest $request): JsonResponse
     {
-        return $this->saveItem();
+        return $this->saveItem($request);
     }
 
-    public function update(int $id): JsonResponse
+    public function update(StoreOperationRequest $request, int $id): JsonResponse
     {
-        return $this->saveItem($id);
+        return $this->saveItem($request, $id);
     }
 
     public function destroy(int $id): JsonResponse
@@ -129,11 +130,11 @@ final class OperationsController extends Controller
         return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveItem(?int $id = null): JsonResponse
+    private function saveItem(StoreOperationRequest $request, ?int $id = null): JsonResponse
     {
-        $id__Instance = $this->request->get('id__Instance');
+        $id__Instance = $request->get('id__Instance');
 
-        if ( ! $id__Instance) {
+        if (! $id__Instance) {
             return $this->jsonResponse([
                 'message' => trans('app.id_of_instance_not_exists'),
             ]);
@@ -141,7 +142,7 @@ final class OperationsController extends Controller
 
         $instance = Instance::find($id__Instance);
 
-        if ( ! $instance) {
+        if (null === $instance) {
             return $this->jsonResponse([
                 'message' => trans('app.item_non_exists'),
             ]);
@@ -149,71 +150,36 @@ final class OperationsController extends Controller
 
         $this->ownerAccess($instance);
 
-        $id ??= $this->request->get('id');
+        $id ??= $request->get('id');
 
-        $validation = $this->validateData();
+        $result = [];
 
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/operations');
-            }
+        $validated_input = $request->validated();
 
-            if ($id) {
-                $operation = Operation::query()->findOrFail($id);
-                $this->ownerAccess($operation);
-            } else {
-                $operation = new Operation();
-                $operation->setUserId();
-                $operation->save();
-            }
+        $result['message'] = '✔️ ' . trans('app.saved');
+        $result['success'] = 1;
 
-            $validation['id'] = $operation->id;
-
-            $operation_input = array_map('trim', $this->request->only([
-                'id__OperationType',
-                'id__Instance',
-                'operated_at',
-                'note',
-                'condition',
-                'price',
-                'currency',
-            ]));
-
-            $operation->update($operation_input);
-
-            // Save operation Photos
-            $this->syncPhotos($operation, $this->request->get('operation_photos'));
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/instances');
         }
 
-        return $this->jsonResponse($validation);
-    }
-
-    /**
-     * @return array<string, int|string>
-     */
-    private function validateData(): array
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), [
-            'id__OperationType' => 'required|numeric|min:1',
-            'operated_at' => 'required',
-        ]);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
+        if (! $id) {
+            $operation = new Operation();
+            $operation->setUserId();
+            $operation->save();
         } else {
-            $data['success'] = 'OK';
+            $operation = Operation::findOrFail($id);
+            $this->ownerAccess($operation);
         }
 
-        return $data;
+        $result['id'] = $operation->id;
+
+        $operation->update($validated_input);
+
+        // Save operation Photos
+        $this->syncPhotos($operation, $this->request->get('operation_photos'));
+
+        return $this->jsonResponse($result);
     }
 
     /**

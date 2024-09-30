@@ -24,13 +24,13 @@ final class Operation extends Model
     ];
 
     protected $fillable = [
-        'operated_at',
         'condition',
-        'price',
         'currency',
-        'note',
         'id__Instance',
         'id__OperationType',
+        'note',
+        'operated_at',
+        'price',
     ];
 
     public function setOperatedAtAttribute(string $date): void
