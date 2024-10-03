@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-class LoginController extends Controller
+final class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -20,18 +22,11 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
-    /**
+    /*
      * Where to redirect users after login / registration.
-     *
-     * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected string $redirectTo = '/dashboard';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'logout']);

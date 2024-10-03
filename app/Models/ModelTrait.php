@@ -1,24 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
+
+use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 trait ModelTrait
 {
-    public static function getTableName()
+    /* TODO: remove unused */
+    /* public static function getTableName(): string
     {
-        return (new static)->getTable();
-    }
+        return (new static())->getTable();
+    } */
 
-    public function setUserId($id = null)
+    public function setUserId(?int $id = null): void
     {
         if (null === $id) {
-            $id = auth()->user()->id;
+            /** @var User $user */
+            $user = Auth::user();
+            $id = $user->id;
         }
         $this->id__User = $id;
     }
 
-    public function scopeOfCurrentUser($query)
+    /**
+     * @param Builder<Model> $query
+     */
+    public function scopeOfCurrentUser(Builder $query): void
     {
-        return $query = $query->where('id__User', auth()->user()->id);
+        /** @var User $user */
+        $user = Auth::user();
+        $query->where('id__User', $user->id);
     }
+
 }

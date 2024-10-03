@@ -1,9 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreThingRequest;
 use App\Models\Category;
+use App\Models\Instance;
 use App\Models\Thing;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use gulch\Transliterato\BatchProcessor;
 use gulch\Transliterato\Scheme\EngToRusKeyboardLayout;
 use gulch\Transliterato\Scheme\EngToUkrKeyboardLayout;
@@ -12,28 +20,48 @@ use gulch\Transliterato\Scheme\RusToUkrKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToEngKeyboardLayout;
 use gulch\Transliterato\Scheme\UkrToRusKeyboardLayout;
 
-class ThingsController extends Controller
+use function array_map;
+use function array_merge;
+use function count;
+use function is_array;
+
+final class ThingsController extends Controller
 {
     private const PAGINATE_COUNT = 25;
 
-    public function index()
+    /**
+     * @return array<int, string>
+     */
+    public static function transliterato(string $q): array
     {
-        $things = Thing::query()
+        $processor = new BatchProcessor(
+            new EngToRusKeyboardLayout(),
+            new EngToUkrKeyboardLayout(),
+            new RusToEngKeyboardLayout(),
+            new RusToUkrKeyboardLayout(),
+            new UkrToEngKeyboardLayout(),
+            new UkrToRusKeyboardLayout(),
+        );
+
+        return $processor->process($q);
+    }
+
+    public function index(): View
+    {
+        $query = Thing::query()
             ->with('photo', 'category', 'instances')
             ->ofCurrentUser();
 
-        $things = $this->applyCategory($things);
+        $query = $this->applyCategory($query);
 
-        $things = $this->applySort($things);
+        $query = $this->applySort($query);
 
-        $things = $this->applyAvailability($things);
+        $query = $this->applyAvailability($query);
 
-        $things = $this->applySearch($things);
-
-        $things = $things->paginate(self::PAGINATE_COUNT);
+        $query = $this->applySearch($query);
 
         $data = [
-            'things' => $things,
+            'things' => $query->paginate(self::PAGINATE_COUNT),
             'categories' => $this->getCategoriesForDropdown(),
             'selected_category' => $this->request->input('category') ?? 0,
         ];
@@ -41,7 +69,7 @@ class ThingsController extends Controller
         return view('things.index', $data);
     }
 
-    public function show($id)
+    public function show(int $id): View
     {
         $thing = Thing::findOrFail($id);
 
@@ -49,10 +77,11 @@ class ThingsController extends Controller
 
         $thing->instances = $thing->instances()
             ->with([
-                'operations' => function($query) {
+                'operations' => function ($query): void {
                     $query->orderBy('operated_at', 'desc');
-                }
+                },
             ])
+            ->orderBy('is_archived', 'asc')
             ->orderBy('published_at', 'desc')
             ->get();
 
@@ -63,7 +92,7 @@ class ThingsController extends Controller
         return view('things.show.show', $data);
     }
 
-    public function create()
+    public function create(): View
     {
         $data = [
             'thing' => null,
@@ -76,7 +105,7 @@ class ThingsController extends Controller
         return view('things.create', $data);
     }
 
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $thing = Thing::findOrFail($id);
 
@@ -93,125 +122,91 @@ class ThingsController extends Controller
         return view('things.edit', $data);
     }
 
-    public function store()
+    public function store(StoreThingRequest $request): JsonResponse
     {
-        return $this->saveThing();
+        return $this->saveThing($request);
     }
 
-    public function update(int $id)
+    public function update(int $id, StoreThingRequest $request): JsonResponse
     {
-        return $this->saveThing($id);
+        return $this->saveThing($request, $id);
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id): JsonResponse
     {
         $thing = Thing::find($id);
 
         $this->ownerAccess($thing);
 
-        if (is_null($thing)) {
-            return json_encode(['message' => trans('app.item_not_found')]);
+        if (null === $thing) {
+            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
+        }
+
+        // TODO: ??? Don't remove not empty thing
+
+        foreach ($thing->instances as $instance) {
+
+            foreach($instance->operations as $operation) {
+                // unsync photos from instance operations
+                $operation->photos()->sync([]);
+            }
+
+            // Delete operations of instance
+            $instance->operations()->delete();
         }
 
         // remove instances
-        if ($thing->instances) {
+        $thing->instances()->delete();
 
-            // TODO: Unsync photos from instance operations
-
-            $thing->instances()->delete();
-        }
-
-        // TODO: Unsync photos from instance operations
-        /* if ($thing->operations) {
-            foreach ($thing->operations as $o) {
-                $o->photos()->sync([]);
-            }
-            // Delete operations
-            $thing->operations()->delete();
-        } */
-
-        // Delete item
+        // Delete thing
         $thing->delete();
 
-        return json_encode(['success' => 'OK']);
+        return $this->jsonResponse(['success' => 'OK']);
     }
 
-    private function saveThing(?int $id = null)
+    private function saveThing(StoreThingRequest $request, ?int $id = null): JsonResponse
     {
-        if (!$id) {
-            $id = $this->request->get('id');
+        $id ??= $request->get('id');
+
+        $result = [];
+
+        $validated_input = $request->validated();
+
+        $result['message'] = '✔️ ' . trans('app.saved');
+        $result['success'] = 1;
+
+        $result['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/things');
         }
 
-        $validation = $this->validateData();
-
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = session()->pull('url.intended', '/things');
-            }
-
-            if ($id) {
-                $thing = Thing::findOrFail($id);
-                $this->ownerAccess($thing);
-            } else {
-                $thing = new Thing;
-                $thing->setUserId();
-                $thing->save();
-            }
-
-            $validation['id'] = $thing->id;
-
-            $thing_input = \array_map(
-                'trim',
-                $this->request->only([
-                    'title',
-                    'description',
-                    'is_archived',
-                    'id__Photo',
-                    'id__Category'
-                ])
-            );
-            $overview = $this->getOverview();
-            $thing_input = \array_merge($thing_input, compact('overview'));
-
-            $thing_input = $this->setCheckboxesValues($thing_input);
-
-            $thing->update($thing_input);
-        }
-
-        return $this->jsonResponse($validation);
-    }
-
-    private function validateData()
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), [
-            'title' => 'required',
-            'id__Category' => 'required|numeric|min:1',
-        ]);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
+        if (! $id) {
+            $thing = new Thing();
+            $thing->setUserId();
+            $thing->save();
         } else {
-            $data['success'] = 'OK';
+            $thing = Thing::findOrFail($id);
+            $this->ownerAccess($thing);
         }
 
-        return $data;
+        $result['id'] = $thing->id;
+
+        $overview = $this->getOverview();
+
+        $validated_input = array_merge($validated_input, compact('overview'));
+
+        $thing->update($validated_input);
+
+        return $this->jsonResponse($result);
     }
 
-    private function getCategoriesForDropdown()
+    private function getCategoriesForDropdown(): ClosureTableCollection
     {
         return CategoriesController::getCategoriesForDropdown();
     }
 
-    private function getOverview()
+    private function getOverview(): string
     {
         $title = $this->request->get('o_title');
         $description = $this->request->get('o_description');
@@ -219,9 +214,9 @@ class ThingsController extends Controller
 
         $overview = [];
 
-        if (\is_array($title)) {
-            $count = \sizeof($title);
-            for ($i = 0; $i < $count; ++$i) {
+        if (is_array($title)) {
+            $count = count($title);
+            for ($i = 0; $i < $count; $i++) {
                 if ($value[$i] && $title[$i]) {
                     $o = [];
                     $o['title'] = trim($title[$i]);
@@ -233,87 +228,103 @@ class ThingsController extends Controller
             }
         }
 
-        return json_encode($overview, JSON_UNESCAPED_UNICODE);
+        return (string) json_encode($overview, JSON_UNESCAPED_UNICODE);
     }
 
-    private function applyCategory($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applyCategory(Builder $query): Builder
     {
         $category_id = $this->request->input('category');
 
-        if (!$category_id) {
-            return $things;
+        if (! $category_id) {
+            return $query;
         }
 
         $category = Category::find($category_id);
 
-        if (!$category) {
-            return $things;
+        if (! $category) {
+            return $query;
         }
 
-        $things->whereIn(
+        $query->whereIn(
             'id__Category',
-            \array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray())
+            array_merge([$category_id], $category->getDescendants()->pluck('id')->toArray()),
         );
 
-        return $things;
+        return $query;
     }
 
-    private function applySort($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applySort(Builder $query): Builder
     {
         $sort = $this->request->input('sort');
 
         switch ($sort) {
             case 'published_desc':
-                $things->orderBy('published_at', 'desc');
+                $query->orderBy('published_at', 'desc');
                 break;
             case 'published_asc':
-                $things->orderBy('published_at');
+                $query->orderBy('published_at');
                 break;
             case 'updated_desc':
-                $things->orderBy('updated_at', 'desc');
+                $query->orderBy('updated_at', 'desc');
                 break;
             case 'updated_asc':
-                $things->orderBy('updated_at');
+                $query->orderBy('updated_at');
                 break;
             case 'alphabet_desc':
-                $things->orderBy('title', 'desc');
+                $query->orderBy('title', 'desc');
                 break;
             case 'alphabet_asc':
-                $things->orderBy('title', 'asc');
+                $query->orderBy('title', 'asc');
                 break;
             case 'created_asc':
-                $things->orderBy('created_at');
+                $query->orderBy('created_at');
                 break;
             case 'created_desc':
             default:
-                $things->orderBy('created_at', 'desc');
+                $query->orderBy('published_at', 'desc');
         }
 
-        return $things;
+        return $query;
     }
 
-    private function applyAvailability($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applyAvailability(Builder $query): Builder
     {
         $availability = $this->request->input('availability');
 
         switch ($availability) {
             case 'available':
-                $things->available();
+                $query->available();
                 break;
             case 'archived':
-                $things->archived();
+                $query->archived();
                 break;
         }
 
-        return $things;
+        return $query;
     }
 
-    private function applySearch($things)
+    /**
+     * @param Builder<Thing> $query
+     * @return Builder<Thing>
+     */
+    private function applySearch(Builder $query): Builder
     {
         $q = $this->request->input('q');
 
         if ($q) {
-            $things->where(function ($query) use ($q) {
+            $query->where(function ($query) use ($q): void {
                 $query->where('title', 'like', '%' . $q . '%');
                 // transliterato
                 $results = self::transliterato($q);
@@ -323,29 +334,6 @@ class ThingsController extends Controller
             });
         }
 
-        return $things;
-    }
-
-    public static function transliterato(string $q): array
-    {
-        $processor = new BatchProcessor(
-            new EngToRusKeyboardLayout(),
-            new EngToUkrKeyboardLayout(),
-            new RusToEngKeyboardLayout(),
-            new RusToUkrKeyboardLayout(),
-            new UkrToEngKeyboardLayout(),
-            new UkrToRusKeyboardLayout()
-        );
-
-        return $processor->process($q);
-    }
-
-    private function setCheckboxesValues($input)
-    {
-        if (!isset($input['is_archived'])) {
-            $input['is_archived'] = 0;
-        }
-
-        return $input;
+        return $query;
     }
 }

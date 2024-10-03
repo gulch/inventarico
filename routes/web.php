@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InstancesController;
-use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\OperationsController;
+use App\Http\Controllers\OperationTypesController;
 use App\Http\Controllers\PhotosController;
 use App\Http\Controllers\ThingsController;
 use Illuminate\Routing\Router;
@@ -16,7 +18,7 @@ use Illuminate\Routing\Router;
 $router->get('/', [HomeController::class, 'index']);
 $router->auth();
 
-$router->group(['middleware' => 'auth'], function () use ($router) {
+$router->group(['middleware' => 'auth'], function () use ($router): void {
 
     $router->get('dashboard', [DashboardController::class, 'index']);
 
@@ -30,12 +32,13 @@ $router->group(['middleware' => 'auth'], function () use ($router) {
     $router->post('photos/all/list', [PhotosController::class, 'getAllImagesList']);
 
     /* Categories */
-    $router->get('categories', [CategoriesController::class, 'index']);
+    $router->resource('categories', CategoriesController::class);
+    /* $router->get('categories', [CategoriesController::class, 'index']);
     $router->get('categories/create', [CategoriesController::class, 'create']);
     $router->get('categories/{id}/edit', [CategoriesController::class, 'edit']);
     $router->post('categories', [CategoriesController::class, 'store']);
     $router->patch('categories/{id}', [CategoriesController::class, 'update']);
-    $router->delete('categories/{id}', [CategoriesController::class, 'destroy']);
+    $router->delete('categories/{id}', [CategoriesController::class, 'destroy']); */
 
     /* Operation Types */
     $router->get('operation-types', [OperationTypesController::class, 'index']);

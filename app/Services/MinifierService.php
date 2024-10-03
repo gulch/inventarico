@@ -1,33 +1,33 @@
 <?php
 
-namespace App\Services;
+declare(strict_types=1);
 
-use gulch\Minify\Minifier;
-use gulch\Minify\Processor\AttributesSimplifier;
-use gulch\Minify\Processor\HtmlCommentsRemover;
-use gulch\Minify\Processor\QuotesRemover;
-use gulch\Minify\Processor\WhitespacesRemover;
+namespace App\Services;
 
 use function app;
 
-class MinifierService
+use gulch\Minify\Minifier;
+use gulch\Minify\Processor\HtmlCommentsRemover;
+use gulch\Minify\Processor\WhitespacesRemover;
+
+final class MinifierService
 {
-    public static function handle(string $html)
+    public static function handle(string $html): string
     {
         return self::getMinifier()->process($html);
     }
 
-    protected static function getMinifier()
+    private static function getMinifier(): Minifier
     {
-        if (!app()->has('html-minifier')) {
+        if ( ! app()->has('html-minifier')) {
             app()->singleton(
                 'html-minifier',
                 function () {
                     return new Minifier(
-                        new HtmlCommentsRemover,
-                        new WhitespacesRemover,
+                        new HtmlCommentsRemover(),
+                        new WhitespacesRemover(),
                     );
-                }
+                },
             );
         }
 

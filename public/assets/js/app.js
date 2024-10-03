@@ -12,7 +12,7 @@ function activateDataAction() {
 
         if (action) {
             segment.addClass('ui basic segment');
-            segment.append("<div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Wait please</div></div>");
+            segment.append("<div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Please wait</div></div>");
             $.post(action, params, function (result) {
                 if (result) {
                     segment.find('.dimmer').remove();

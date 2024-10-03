@@ -1,19 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+declare(strict_types=1);
 
-class CreateCategoriesClosureTable extends Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+final class CreateCategoriesClosureTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('CategoryClosure', function (Blueprint $table) {
+        Schema::create('CategoryClosure', function (Blueprint $table): void {
             $table->increments('closure_id');
             $table->integer('ancestor', false, true);
             $table->integer('descendant', false, true);
@@ -36,7 +38,7 @@ class CreateCategoriesClosureTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('CategoryClosure');
     }

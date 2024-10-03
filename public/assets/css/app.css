@@ -1,18 +1,11 @@
 @font-face {
     font-family: 'Lato';
     font-weight: 1 999;
-    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2'),
-         url(/assets/fonts/lato/3.002/min/vf.woff) format('woff');
-}
-
-@font-face {
-    font-family: 'Lato-fallback';
-    letter-spacing: -0.25px;
-    src: local('Segoe UI');
+    src: url(/assets/fonts/lato/3.002/min/vf.woff2) format('woff2');
 }
 
 body {
-    font-family: Lato, Lato-fallback, sans-serif !important;
+    font-family: 'Lato' !important;
 
     /* Support for all WebKit browsers. */
     -webkit-font-smoothing: subpixel-antialiased;
@@ -23,7 +16,7 @@ body {
     /* Support for Firefox. */
     -moz-osx-font-smoothing: grayscale;
 
-     /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
+    /* MORE INFO -> https://developers.google.com/fonts/docs/material_icons */
 }
 
 .hide {
@@ -51,20 +44,21 @@ body {
     display: inline-block;
     min-width: 2em;
     min-height: 2em;
-    line-height: 2em;
-    font-size: 1.4em;
+    line-height: 1.9em;
+    font-size: 1.6em;
     margin: 1px;
     vertical-align: middle;
     color: gray;
     text-align: center;
 }
 
-.pagination li:not(.active):not(.disabled){
-    border: 1px solid rgba(34,36,38,.15);
-    box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+.pagination li:not(.active):not(.disabled) {
+    border: 1px solid rgba(34, 36, 38, .15);
+    box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
     border-radius: 2em;
     color: black;
 }
+
 /* Pagination styles --END-- */
 
 .ui.cards>.card>.image>img,
@@ -111,4 +105,20 @@ body {
 .header-margins {
     margin-top: 1rem !important;
     margin-bottom: 1rem !important;
+}
+
+.archived-item {
+    background-color: hsl(0deg 0% 55% / 10%) !important;
+    background-image: repeating-linear-gradient(-45deg, transparent, transparent 35px, hsla(0, 0%, 100%, .5) 0, hsla(0, 0%, 100%, .5) 70px) !important;
+}
+
+.things-items .item img {
+    border-radius: 1em !important;
+    border: solid 1px #dbdbdb !important;
+    margin-left: 1rem !important;
+}
+
+.things-items .item .content {
+    padding-left: 2rem !important;
+    padding-right: 1rem !important;
 }

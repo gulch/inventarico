@@ -1,16 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Franzose\ClosureTable\Models\ClosureTable;
-use Franzose\ClosureTable\Contracts\ClosureTableInterface;
 
-class CategoryClosure extends ClosureTable implements ClosureTableInterface
+final class CategoryClosure extends ClosureTable
 {
-    /**
-     * The table associated with the model.
-     *
-     * @var string
-     */
+    /* The table associated with the model. */
     protected $table = 'CategoryClosure';
 }

@@ -1,32 +1,46 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
+
+use function abort;
+
+use const JSON_PRETTY_PRINT;
+use const JSON_UNESCAPED_UNICODE;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+    use AuthorizesRequests;
+    use DispatchesJobs;
+    use ValidatesRequests;
 
-    protected $request;
+    protected Request $request;
 
     public function __construct(Request $request)
     {
         $this->request = $request;
     }
 
-    protected function jsonResponse($data) : string
+    protected function jsonResponse(mixed $data): JsonResponse
     {
-        return json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return new JsonResponse(
+            data: $data,
+            options: JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT,
+        );
     }
 
-    protected function ownerAccess($item)
+    protected function ownerAccess(?object $item): void
     {
-        if (auth()->user()->id !== $item->id__User) {
+        if (Auth::user()?->id !== $item?->id__User) {
             abort(403, 'Forbidden');
         }
     }

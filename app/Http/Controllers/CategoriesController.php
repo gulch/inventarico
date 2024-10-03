@@ -1,22 +1,41 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Session;
+use App\Http\Requests\StoreCategoryRequest;
 use App\Models\Category;
+use Franzose\ClosureTable\Extensions\Collection as ClosureTableCollection;
+use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 
-class CategoriesController extends Controller
+use function session;
+use function trans;
+use function view;
+
+final class CategoriesController extends Controller
 {
-    public function index()
+    public static function getCategoriesForDropdown(): ClosureTableCollection
+    {
+        $categories = Category::query()
+            ->ofCurrentUser()
+            ->orderBy('title')
+            ->get();
+
+        return (new ClosureTableCollection($categories))->toTree();
+    }
+
+    public function index(): View
     {
         $data = [
-            'categories' => Category::ofCurrentUser()->orderBy('title')->paginate(10)
+            'categories' => Category::query()->ofCurrentUser()->orderBy('title')->paginate(10),
         ];
 
         return view('categories.index', $data);
     }
 
-    public function create()
+    public function create(): View
     {
         $data = [
             'parent_category' => 0,
@@ -26,10 +45,10 @@ class CategoriesController extends Controller
         return view('categories.create', $data);
     }
 
-    public function edit($id)
+    public function edit(Category $category): View
     {
-        $category = Category::findOrFail($id);
         $this->ownerAccess($category);
+
         $data = [
             'category' => $category,
             'parent_category' => $category->parent_id,
@@ -39,101 +58,69 @@ class CategoriesController extends Controller
         return view('categories.edit', $data);
     }
 
-    public function store()
+    public function store(StoreCategoryRequest $request): JsonResponse
     {
-        return $this->saveItem();
+        return $this->saveCategory($request);
     }
 
-    public function update($id)
+    public function update(StoreCategoryRequest $request, Category $category): JsonResponse
     {
-        return $this->saveItem($id);
+        return $this->saveCategory($request, $category);
     }
 
-    public function destroy($id)
+    public function destroy(Category $category): JsonResponse
     {
-        $category = Category::find($id);
         $this->ownerAccess($category);
 
-        if (is_null($category)) {
-            return $this->jsonResponse(['message' => trans('app.item_not_found')]);
+        /* Check if category has things */
+        if ($category->things->count() > 0) {
+            return $this->jsonResponse([
+                'message' => trans('app.category_has_things_cant_delete'),
+            ]);
+        }
+
+        /* Check if category is parent and has children */
+        if ($category->isParent()) {
+            return $this->jsonResponse([
+                'message' => trans('app.category_is_parent_cant_delete'),
+            ]);
+        }
+
+        $category->delete();
+
+        return $this->jsonResponse(['success' => 'OK']);
+    }
+
+    private function saveCategory(StoreCategoryRequest $request, ?Category $category = null): JsonResponse
+    {
+        if ($category) {
+            $this->ownerAccess($category);
         } else {
-            if (sizeof($category->items)) {
-                return $this->jsonResponse([
-                    'message' => trans('app.category_has_things_cant_delete')
-                ]);
-            }
-
-            $category->delete();
+            $category = new Category();
+            $category->setUserId();
+            $category->save();
         }
 
-        return json_encode(['success' => 'OK']);
-    }
+        $category->update($request->validated());
 
-    private function saveItem($id = null)
-    {
-        if (!$id) {
-            $id = $this->request->get('id');
+        $result = [
+            'id' => $category->id,
+            'success' => 1,
+            'message' => '✔️ ' . trans('app.saved'),
+        ];
+
+        if ($request->get('do_redirect')) {
+            $result['redirect'] = session()->pull('url.intended', '/categories');
         }
 
-        $validation = $this->validateData();
+        if ($parent_id = $request->get('parent_id')) {
+            $parent_category = Category::find($parent_id);
 
-        if ($validation['success']) {
-            $validation['message'] = '<i class="ui green check icon"></i>' . trans('app.saved');
-            if ($this->request->get('do_redirect')) {
-                $validation['redirect'] = Session::pull('url.intended', '/categories');
+            if ($parent_category) {
+                $category->moveTo(0, $parent_category);
             }
-
-            if ($id) {
-                $category = Category::findOrFail($id);
-                $this->ownerAccess($category);
-            } else {
-                $category = new Category;
-                $category->setUserId();
-                $category->save();
-            }
-            $category->update($this->request->all());
-
-            if ($parent_id = \request('parent_id')) {
-                $parent_category = Category::find($parent_id);
-
-                if ($parent_category) {
-                    $category->moveTo(0, $parent_category);
-                    //$parent_category->addChild($category);
-                }
-            }
-
-            $validation['id'] = $category->id;
         }
 
-        return $this->jsonResponse($validation);
-    }
-
-    private function validateData()
-    {
-        $data = [];
-
-        $v = $this->getValidationFactory()->make($this->request->all(), ['title' => 'required']);
-
-        if ($v->fails()) {
-            $data['success'] = 0;
-            $data['message'] = '<ul>';
-            $messages = $v->errors()->all();
-            foreach ($messages as $m) {
-                $data['message'] .= '<li>' . $m . '</li>';
-            }
-            $data['message'] .= '</ul>';
-        } else {
-            $data['success'] = 'OK';
-        }
-
-        return $data;
-    }
-
-    public static function getCategoriesForDropdown()
-    {
-        return Category::ofCurrentUser()
-            ->orderBy('title')
-            ->get()
-            ->toTree();
+        return $this->jsonResponse($result);
     }
 }

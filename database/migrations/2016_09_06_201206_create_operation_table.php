@@ -1,19 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+declare(strict_types=1);
 
-class CreateOperationTable extends Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+final class CreateOperationTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('Operation', function (Blueprint $table) {
+        Schema::create('Operation', function (Blueprint $table): void {
             $table->increments('id');
             $table->integer('id__OperationType')->unsigned();
             $table->timestamp('operated_at')->nullable();
@@ -33,7 +35,7 @@ class CreateOperationTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::drop('Operation');
     }

@@ -1,12 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Auth;
 
-use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\Hash;
 
-class RegisterController extends Controller
+final class RegisterController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
@@ -21,18 +25,11 @@ class RegisterController extends Controller
 
     use RegistersUsers;
 
-    /**
+    /*
      * Where to redirect users after login / registration.
-     *
-     * @var string
      */
-    protected $redirectTo = '/dashboard';
+    protected string $redirectTo = '/dashboard';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('guest');
@@ -40,11 +37,9 @@ class RegisterController extends Controller
 
     /**
      * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @param array<string, string> $data
      */
-    protected function validator(array $data)
+    protected function validator(array $data): Validator
     {
         return $this->getValidationFactory()->make($data, [
             'name' => 'required|max:255',
@@ -55,16 +50,14 @@ class RegisterController extends Controller
 
     /**
      * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
+     * @param array<string, string> $data
      */
-    protected function create(array $data)
+    protected function create(array $data): User
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => bcrypt($data['password']),
+            'password' => Hash::make($data['password']),
         ]);
     }
 }

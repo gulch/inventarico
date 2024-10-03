@@ -1,29 +1,43 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Middleware;
 
 use App\Services\MinifierService;
 use Closure;
-use function microtime, sprintf;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class MinifyHTML
+use function microtime;
+use function sprintf;
+
+final class MinifyHTML
 {
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next): Response
     {
+        /**
+         * @var Response $response
+         */
         $response = $next($request);
+
+        // if redirect response
+        if($response->getStatusCode() > 300 && $response->getStatusCode() < 400) {
+            return $response;
+        }
 
         $start_time = microtime(true);
 
         $response->setContent(
-            MinifierService::handle($response->getContent())
+            MinifierService::handle((string)$response->getContent()),
         );
 
         $duration = microtime(true) - $start_time;
 
-        $response->headers->set(
+        /* $response->headers->set(
             'X-Minify-Time',
-            sprintf('%2.3f ms', $duration * 1000)
-        );
+            sprintf('%2.3f ms', $duration * 1000),
+        ); */
 
         return $response;
     }

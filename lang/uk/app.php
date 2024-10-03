@@ -128,6 +128,7 @@ return [
     'photo_is_use_in_some_things' => 'Ця фотографія використовується в речах',
     'photo_is_use_in_some_operation' => 'Ця фотографія використовується в операції(ях)',
     'category_has_things_cant_delete' => 'В цій категорії є речі. Видалення неможливо!',
+    'category_is_parent_cant_delete' => 'В цій категорії є підкатегорії. Видалення неможливо!',
     'operationtype_has_operations_cant_delete' => 'Є операції з цим типом операцій. Видалення неможливо!',
 
     'ph_search' => 'Введіть пошуковий запит',
@@ -141,8 +142,6 @@ return [
     'archived_things_count' => 'Всього<br>архівних речей',
     'active_instances_count' => 'Всього<br>наявних екземплярів',
     'archived_instances_count' => 'Всього<br>архівних екземплярів',
-
-
 
     /*'' => '',*/
 ];

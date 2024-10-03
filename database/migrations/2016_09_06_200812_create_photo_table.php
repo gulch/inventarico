@@ -1,19 +1,21 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+declare(strict_types=1);
 
-class CreatePhotoTable extends Migration
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+final class CreatePhotoTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('Photo', function (Blueprint $table) {
+        Schema::create('Photo', function (Blueprint $table): void {
             $table->increments('id');
             $table->string('path')->nullable();
             $table->text('description')->nullable();
@@ -27,7 +29,7 @@ class CreatePhotoTable extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::drop('Photo');
     }
