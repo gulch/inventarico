@@ -34,7 +34,7 @@ final class StoreInstanceRequest extends FormRequest
     /**
      * Get data to be validated from the request.
      *
-     * @return array
+     * @return array<string, int|string>
      */
     public function validationData(): array
     {

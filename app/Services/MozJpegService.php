@@ -13,7 +13,7 @@ use function unlink;
 final class MozJpegService
 {
     /**
-     * @param array<string, int|string> $options
+     * @param array<string, bool|int|string> $options
      */
     public static function manipulate(string $original, array $options = []): void
     {
