@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         // OVERRIDING GLOBAL MIDDLEWARES
         $middleware->use([
+            \App\Http\Middleware\ServerTiming::class,
             \App\Http\Middleware\MinifyHTML::class,
             \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
         ]);
