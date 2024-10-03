@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <link rel="stylesheet" type="text/css" href="/assets/vendor/fomantic/2.9.3/semantic.css">
+    <link rel="stylesheet" type="text/css" href="/assets/vendor/fomantic/2.9.3/semantic.min.css">
 
     @if(isset($styles))
         @foreach($styles as $style)

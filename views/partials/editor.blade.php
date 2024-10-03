@@ -4,8 +4,8 @@
 <script src="/assets/vendor/codemirror/5.62.0/xml.min.js"></script>
 
 {{-- Redactor --}}
-<link href="/assets/vendor/redactor/3.5.2/redactor.css" rel="stylesheet" type="text/css">
-<script src="/assets/vendor/redactor/3.5.2/redactor.js"></script>
+<link href="/assets/vendor/redactor/3.5.2/min.css" rel="stylesheet" type="text/css">
+<script src="/assets/vendor/redactor/3.5.2/min.js"></script>
 
 {{-- Redactor Plugins --}}
 <script src="/assets/vendor/redactor/3.5.2/plugins/alignment.js"></script>
