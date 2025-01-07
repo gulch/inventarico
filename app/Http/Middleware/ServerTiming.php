@@ -7,6 +7,9 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
+use function microtime;
+use function sprintf;
+
 final class ServerTiming
 {
     private $metrics = [];
@@ -15,7 +18,7 @@ final class ServerTiming
     {
         $server = $request->server();
 
-        $bootstrap_mark = \microtime(true);
+        $bootstrap_mark = microtime(true);
 
         // nginx handle time
         if (isset($server['REQUEST_START_TIME_USEC'])) {
@@ -30,22 +33,22 @@ final class ServerTiming
 
         // bootstrap
         $duration = ($bootstrap_mark - \LARAVEL_START) * 1000;
-        $this->addMetric('01_boot', \sprintf('%2.1f', $duration));
+        $this->addMetric('01_boot', sprintf('%2.1f', $duration));
 
         $response = $next($request);
 
         // application (my code)
-        $duration = (\microtime(true) - $bootstrap_mark) * 1000;
-        $this->addMetric('02_app', \sprintf('%2.2f', $duration));
+        $duration = (microtime(true) - $bootstrap_mark) * 1000;
+        $this->addMetric('02_app', sprintf('%2.2f', $duration));
 
         // database
         if(isset($GLOBALS['db_time'])) {
-            $this->addMetric('0x_db', \sprintf('%2.2f', $GLOBALS['db_time']));
+            $this->addMetric('0x_db', sprintf('%2.2f', $GLOBALS['db_time']));
         }
 
         // total
-        $duration = (\microtime(true) - $server['REQUEST_TIME_FLOAT']) * 1000;
-        $this->addMetric('total', \sprintf('%2.2f', $duration));
+        $duration = (microtime(true) - $server['REQUEST_TIME_FLOAT']) * 1000;
+        $this->addMetric('total', sprintf('%2.2f', $duration));
 
         $response->headers->set(
             'Server-Timing',

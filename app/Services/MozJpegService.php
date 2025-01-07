@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 use function exec;
 use function filesize;
+use function print_r;
 use function unlink;
 
 final class MozJpegService
@@ -34,7 +35,7 @@ final class MozJpegService
             exec("mv {$new}{$suffix} {$new}");
         } else {
             @unlink($new . $suffix);
-            Log::warning('Can not create MozJpeg image for: ' . $new . '. Exec output: ' . print_r($output));
+            Log::warning('Can not create MozJpeg image for: ' . $new . '. Exec output: ' . print_r($output, true));
         }
     }
 }
