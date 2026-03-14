@@ -5,18 +5,18 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=8.3",
+        "php": ">=8.4",
         "franzose/closure-table": "^6.1",
         "gulch/collective-html": "^6.5",
         "gulch/minify": "^1.0",
         "gulch/transliterato": "^1.0",
-        "intervention/image": "^3.8",
-        "laravel/framework": "^11.26",
-        "laravel/ui": "^4.1"
+        "intervention/image": "^3.11",
+        "laravel/framework": "^12.54",
+        "laravel/ui": "^4.6"
     },
     "require-dev": {
-        "larastan/larastan": "^3.0",
-        "laravel/pint": "^1.15"
+        "larastan/larastan": "^3.9",
+        "laravel/pint": "^1.29"
     },
     "repositories": [
         {
